@@ -1,14 +1,12 @@
 <?php
 
+use App\Enums\MaintenanceStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('maintenance_tickets', function (Blueprint $table) {
@@ -21,7 +19,8 @@ return new class extends Migration
             $table->date('started_date')->nullable();
             $table->date('expected_return_date')->nullable();
             $table->date('return_date')->nullable();
-            $table->string('status', 30)->default('OPEN');
+            $table->enum('status', MaintenanceStatus::values())
+                ->default(MaintenanceStatus::OPEN->value);
             $table->string('vendor')->nullable();
             $table->decimal('cost', 15, 2)->nullable();
             $table->text('remarks')->nullable();
@@ -32,9 +31,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('maintenance_tickets');

@@ -1,11 +1,17 @@
 <?php
 
-namespace  App\Enums;
+namespace App\Enums;
+
+use App\Enums\Concerns\HasValues;
 
 enum EquipmentStatus: string
 {
-    case AVAILABLE = 'available';         // Tốt
-    case DAMAGED = 'DAMAGED';   // Hỏng
-    case MAINTENANCE = 'MAINTENANCE'; // Đang bảo trì
-    case LOST = 'LOST';         // Mất
+    use HasValues;
+
+    case AVAILABLE = 'AVAILABLE';
+    case IN_USE = 'IN_USE';
+    case DAMAGED = 'DAMAGED';
+    case MAINTENANCE = 'MAINTENANCE';
+    case LOST = 'LOST';
+    case LIQUIDATED = 'LIQUIDATED';
 }

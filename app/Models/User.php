@@ -11,16 +11,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory;
 
     protected $authPasswordName = 'password_hash';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'username',
         'email',
@@ -31,20 +25,10 @@ class User extends Authenticatable implements JWTSubject
         'is_active',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password_hash',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -62,25 +46,29 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeRole(Builder $query, UserRole|string $role): Builder
     {
-        return $query->where('role', $role instanceof UserRole ? $role->value : $role);
+        $value = $role instanceof UserRole ? $role->value : strtoupper($role);
+
+        return $query->where('role', $value);
     }
 
     public function hasRole(UserRole|string $role): bool
     {
-        $currentRole = $this->role?->value ?? $this->role;
-        $expectedRole = $role instanceof UserRole ? $role->value : $role;
+        $currentRole = strtoupper((string) ($this->role?->value ?? $this->role));
+        $expectedRole = $role instanceof UserRole ? $role->value : strtoupper($role);
 
         return $currentRole === $expectedRole;
     }
 
     public function hasAnyRole(array $roles): bool
     {
+        $currentRole = strtoupper((string) ($this->role?->value ?? $this->role));
+
         $expectedRoles = array_map(
-            fn (UserRole|string $role) => $role instanceof UserRole ? $role->value : $role,
+            fn (UserRole|string $role) => $role instanceof UserRole ? $role->value : strtoupper($role),
             $roles
         );
 
-        return in_array($this->role?->value ?? $this->role, $expectedRoles, true);
+        return in_array($currentRole, $expectedRoles, true);
     }
 
     public function isEnabled(): bool

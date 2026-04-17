@@ -8,14 +8,14 @@ enum Position: string
 {
     use HasValues;
 
-    case SINGER = 'Singer';
+    case SINGER = 'SINGER';
     case MC = 'MC';
-    case RAPPER = 'Rapper';
-    case DANCER = 'Dancer';
-    case CHOREOGRAPHER = 'Chorographer'; //Biên đạo múa/ nhảy
-    case LOGISTICS_STAFF = 'Logistics Staff'; //Nhân viên hậu cần
-    case SOUND_TECHNICIAN = 'Sound Technician';
-    case LIGHTING_TECHNICIAN = 'Lighting Technician';
-    case WAREHOUSE_STAFF = 'Warehouse Staff';
-    case OFFICE_STAFF = 'Office Staff';
+    case RAPPER = 'RAPPER';
+    case DANCER = 'DANCER';
+    case CHOREOGRAPHER = 'CHOREOGRAPHER';
+    case LOGISTICS_STAFF = 'LOGISTICS_STAFF';
+    case SOUND_TECHNICIAN = 'SOUND_TECHNICIAN';
+    case LIGHTING_TECHNICIAN = 'LIGHTING_TECHNICIAN';
+    case WAREHOUSE_STAFF = 'WAREHOUSE_STAFF';
+    case OFFICE_STAFF = 'OFFICE_STAFF';
 }

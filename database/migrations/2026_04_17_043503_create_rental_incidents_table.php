@@ -9,11 +9,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('internal_incidents', function (Blueprint $table) {
+        Schema::create('rental_incidents', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_active')->default(true);
             $table->string('code')->unique();
-            $table->foreignId('internal_borrow_detail_id')->constrained('internal_borrow_details')->cascadeOnDelete();
+            $table->foreignId('rental_detail_id')->constrained('rental_details')->cascadeOnDelete();
             $table->text('incident_description');
             $table->enum('status', IncidentStatus::values())
                 ->default(IncidentStatus::OPEN->value);
@@ -29,6 +29,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('internal_incidents');
+        Schema::dropIfExists('rental_incidents');
     }
 };

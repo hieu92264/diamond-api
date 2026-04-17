@@ -8,8 +8,8 @@ enum UserRole: string
 {
     use HasValues;
 
-    case ADMIN = 'admin';
-    case MANAGER = 'manager';
-    case HR_STAFF = 'hr_staff';
-    case WAREHOUSE_STAFF = 'warehouse_staff';
+    case ADMIN = 'ADMIN';
+    case MANAGER = 'MANAGER';
+    case HR_STAFF = 'HR_STAFF';
+    case WAREHOUSE_STAFF = 'WAREHOUSE_STAFF';
 }

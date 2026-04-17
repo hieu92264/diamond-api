@@ -7,7 +7,8 @@ use App\Enums\Concerns\HasValues;
 enum Gender: string
 {
     use HasValues;
-    case MALE = 'male';
-    case FEMALE = 'female';
-    case UNKNOWN = 'unknown';
+
+    case MALE = 'MALE';
+    case FEMALE = 'FEMALE';
+    case UNKNOWN = 'UNKNOWN';
 }

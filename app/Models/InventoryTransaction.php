@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\InventoryReferenceType;
+use App\Enums\InventoryTransactionType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,22 +25,35 @@ class InventoryTransaction extends Model
     protected function casts(): array
     {
         return [
+            'transaction_type' => InventoryTransactionType::class,
             'quantity' => 'integer',
             'quantity_before' => 'integer',
             'quantity_after' => 'integer',
+            'reference_type' => InventoryReferenceType::class,
             'reference_id' => 'integer',
         ];
     }
 
-    public function scopeOfType(Builder $query, string $type): Builder
+    public function scopeTransactionType(Builder $query, InventoryTransactionType|string $type): Builder
     {
-        return $query->where('transaction_type', $type);
+        $value = $type instanceof InventoryTransactionType ? $type->value : strtoupper($type);
+
+        return $query->where('transaction_type', $value);
     }
 
-    public function scopeForReference(Builder $query, string $referenceType, int $referenceId): Builder
+    public function scopeReferenceType(Builder $query, InventoryReferenceType|string $type): Builder
     {
+        $value = $type instanceof InventoryReferenceType ? $type->value : strtoupper($type);
+
+        return $query->where('reference_type', $value);
+    }
+
+    public function scopeForReference(Builder $query, InventoryReferenceType|string $type, int|string $referenceId): Builder
+    {
+        $value = $type instanceof InventoryReferenceType ? $type->value : strtoupper($type);
+
         return $query
-            ->where('reference_type', $referenceType)
+            ->where('reference_type', $value)
             ->where('reference_id', $referenceId);
     }
 

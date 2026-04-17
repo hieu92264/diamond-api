@@ -43,18 +43,16 @@ class Contract extends Model
 
     public function scopeStatus(Builder $query, ContractStatus|string $status): Builder
     {
-        return $query->where(
-            'status',
-            $status instanceof ContractStatus ? $status->value : $status
-        );
+        $value = $status instanceof ContractStatus ? $status->value : strtoupper($status);
+
+        return $query->where('status', $value);
     }
 
     public function scopeType(Builder $query, ContractType|string $type): Builder
     {
-        return $query->where(
-            'type',
-            $type instanceof ContractType ? $type->value : $type
-        );
+        $value = $type instanceof ContractType ? $type->value : strtoupper($type);
+
+        return $query->where('type', $value);
     }
 
     public function scopeCurrent(Builder $query): Builder

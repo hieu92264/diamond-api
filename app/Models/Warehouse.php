@@ -33,9 +33,8 @@ class Warehouse extends Model
 
     public function scopeType(Builder $query, WarehouseType|string $type): Builder
     {
-        return $query->where(
-            'type',
-            $type instanceof WarehouseType ? $type->value : $type
-        );
+        $value = $type instanceof WarehouseType ? $type->value : strtoupper($type);
+
+        return $query->where('type', $value);
     }
 }

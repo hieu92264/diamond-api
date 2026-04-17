@@ -8,10 +8,10 @@ enum WarehouseType: string
 {
     use HasValues;
 
-    case COSTUME = 'COSTUME';   // Kho Trang phục
-    case PROP = 'PROP';         // Kho Đạo cụ
-    case EQUIPMENT = 'EQUIPMENT'; // Kho Thiết bị (Âm thanh, ánh sáng, máy móc)
-    case GENERAL = 'GENERAL';   // Kho tổng hợp
-    case CONSUMABLE = 'CONSUMABLE';// Kho vật tư tiêu hao (Băng keo, pin, nước uống...)
-    case DEFAULT = 'UNKNOWN';
+    case COSTUME = 'COSTUME';
+    case PROP = 'PROP';
+    case EQUIPMENT = 'EQUIPMENT';
+    case GENERAL = 'GENERAL';
+    case CONSUMABLE = 'CONSUMABLE';
+    case UNKNOWN = 'UNKNOWN';
 }

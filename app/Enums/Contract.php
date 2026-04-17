@@ -8,9 +8,9 @@ enum Contract: string
 {
     use HasValues;
 
-    case FULL_TIME  = 'Full-time';
-    case PART_TIME  = 'Part-time';
-    case INTERN = 'Intern';
-    case COLLABORATOR = 'Collaborator';
-    case SEASONAL = 'Seasonal';
+    case FULL_TIME = 'FULL_TIME';
+    case PART_TIME = 'PART_TIME';
+    case INTERN = 'INTERN';
+    case COLLABORATOR = 'COLLABORATOR';
+    case SEASONAL = 'SEASONAL';
 }

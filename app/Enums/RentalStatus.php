@@ -4,16 +4,17 @@ namespace App\Enums;
 
 use App\Enums\Concerns\HasValues;
 
-enum BorrowStatus: string
+enum RentalStatus: string
 {
     use HasValues;
 
-    case PENDING = 'PENDING';
+    case DRAFT = 'DRAFT';
+    case PENDING_APPROVAL = 'PENDING_APPROVAL';
     case APPROVED = 'APPROVED';
-    case REJECTED = 'REJECTED';
-    case BORROWING = 'BORROWING';
+    case ACTIVE = 'ACTIVE';
     case PARTIALLY_RETURNED = 'PARTIALLY_RETURNED';
     case RETURNED = 'RETURNED';
     case OVERDUE = 'OVERDUE';
     case CANCELLED = 'CANCELLED';
+    case CLOSED = 'CLOSED';
 }

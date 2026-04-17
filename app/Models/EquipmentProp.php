@@ -21,6 +21,8 @@ class EquipmentProp extends Model
         'minimum_quantity',
         'purchase_date',
         'item_value',
+        'default_rental_price',
+        'default_deposit_price',
         'remarks',
         'image_path',
     ];
@@ -35,6 +37,8 @@ class EquipmentProp extends Model
             'minimum_quantity' => 'integer',
             'purchase_date' => 'date',
             'item_value' => 'decimal:2',
+            'default_rental_price' => 'decimal:2',
+            'default_deposit_price' => 'decimal:2',
         ];
     }
 
@@ -45,10 +49,9 @@ class EquipmentProp extends Model
 
     public function scopeStatus(Builder $query, EquipmentStatus|string $status): Builder
     {
-        return $query->where(
-            'status',
-            $status instanceof EquipmentStatus ? $status->value : $status
-        );
+        $value = $status instanceof EquipmentStatus ? $status->value : strtoupper($status);
+
+        return $query->where('status', $value);
     }
 
     public function scopeInWarehouse(Builder $query, int $warehouseId): Builder

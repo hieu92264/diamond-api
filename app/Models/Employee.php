@@ -46,25 +46,22 @@ class Employee extends Model
 
     public function scopeDepartment(Builder $query, Department|string $department): Builder
     {
-        return $query->where(
-            'department',
-            $department instanceof Department ? $department->value : $department
-        );
+        $value = $department instanceof Department ? $department->value : strtoupper($department);
+
+        return $query->where('department', $value);
     }
 
     public function scopePosition(Builder $query, Position|string $position): Builder
     {
-        return $query->where(
-            'position',
-            $position instanceof Position ? $position->value : $position
-        );
+        $value = $position instanceof Position ? $position->value : strtoupper($position);
+
+        return $query->where('position', $value);
     }
 
     public function scopeWorkStatus(Builder $query, Work|string $status): Builder
     {
-        return $query->where(
-            'work_status',
-            $status instanceof Work ? $status->value : $status
-        );
+        $value = $status instanceof Work ? $status->value : strtoupper($status);
+
+        return $query->where('work_status', $value);
     }
 }

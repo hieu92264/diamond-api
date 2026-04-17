@@ -8,8 +8,8 @@ enum ContractStatus: string
 {
     use HasValues;
 
-    case ACTIVE = 'ACTIVE';                     // Đang có hiệu lực
-    case EXPIRED = 'EXPIRED';                   // Đã hết hạn
-    case TERMINATED = 'TERMINATED';             // Chấm dứt trước hạn
-    case RENEWED = 'RENEWED';                   // Đã gia hạn
+    case ACTIVE = 'ACTIVE';
+    case EXPIRED = 'EXPIRED';
+    case TERMINATED = 'TERMINATED';
+    case RENEWED = 'RENEWED';
 }

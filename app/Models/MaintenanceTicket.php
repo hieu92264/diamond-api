@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MaintenanceStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,7 @@ class MaintenanceTicket extends Model
             'started_date' => 'date',
             'expected_return_date' => 'date',
             'return_date' => 'date',
+            'status' => MaintenanceStatus::class,
             'cost' => 'decimal:2',
         ];
     }
@@ -40,18 +42,20 @@ class MaintenanceTicket extends Model
         return $query->where('is_active', true);
     }
 
-    public function scopeStatus(Builder $query, string $status): Builder
+    public function scopeStatus(Builder $query, MaintenanceStatus|string $status): Builder
     {
-        return $query->where('status', $status);
+        $value = $status instanceof MaintenanceStatus ? $status->value : strtoupper($status);
+
+        return $query->where('status', $value);
     }
 
     public function scopeOpen(Builder $query): Builder
     {
-        return $query->where('status', 'OPEN');
+        return $query->where('status', MaintenanceStatus::OPEN->value);
     }
 
     public function scopeInProgress(Builder $query): Builder
     {
-        return $query->whereNotNull('started_date')->whereNull('return_date');
+        return $query->where('status', MaintenanceStatus::IN_PROGRESS->value);
     }
 }

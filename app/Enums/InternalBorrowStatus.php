@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use App\Enums\Concerns\HasValues;
 
-enum BorrowStatus: string
+enum InternalBorrowStatus: string
 {
     use HasValues;
 
