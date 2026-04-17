@@ -38,7 +38,7 @@ class EnsureUserHasRole
             ], 'Bạn không có quyền truy cập.', Response::HTTP_FORBIDDEN);
         }
 
-        if ($currentRole === UserRole::SYSTEM_ADMIN->value) {
+        if ($currentRole === UserRole::ADMIN->value) {
             return $next($request);
         }
 

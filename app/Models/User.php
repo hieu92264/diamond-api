@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\UserRole;
-use App\Enums\UserStatus;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,7 +25,6 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password_hash',
         'role',
-        'status',
         'last_login_at',
         'is_active',
     ];
@@ -50,7 +48,6 @@ class User extends Authenticatable implements JWTSubject
         return [
             'password_hash' => 'hashed',
             'role' => UserRole::class,
-            'status' => UserStatus::class,
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
         ];
@@ -76,8 +73,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function isEnabled(): bool
     {
-        return $this->status === UserStatus::ACTIVE
-            && $this->is_active === true;
+        return $this->is_active === true;
     }
 
     public function getJWTIdentifier()

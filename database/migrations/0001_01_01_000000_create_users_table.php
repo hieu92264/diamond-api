@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\UserRole;
-use App\Enums\UserStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,12 +18,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password_hash');
             $table->enum('role', UserRole::values());
-            $table->enum('status', UserStatus::values())->default(UserStatus::ACTIVE->value);
             $table->dateTime('last_login_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            $table->index(['role', 'status']);
+            $table->index('role');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

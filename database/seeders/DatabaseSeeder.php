@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
-use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,8 +21,7 @@ class DatabaseSeeder extends Seeder
             [
                 'email' => 'admin@diamond.local',
                 'password_hash' => 'password',
-                'role' => UserRole::SYSTEM_ADMIN,
-                'status' => UserStatus::ACTIVE,
+                'role' => UserRole::ADMIN,
                 'is_active' => true,
                 'last_login_at' => null,
             ]
@@ -34,8 +32,7 @@ class DatabaseSeeder extends Seeder
             [
                 'email' => 'operator@diamond.local',
                 'password_hash' => 'password',
-                'role' => UserRole::EVENT_OPERATOR,
-                'status' => UserStatus::ACTIVE,
+                'role' => UserRole::MANAGER,
                 'is_active' => true,
                 'last_login_at' => null,
             ]

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
@@ -19,7 +18,6 @@ class AuthController extends Controller
         if (! $token = auth('api')->attempt([
             $field => $data['username'],
             'password' => $data['password'],
-            'status' => UserStatus::ACTIVE->value,
             'is_active' => true,
         ])) {
             return $this->error(null, 'Tên đăng nhập hoặc mật khẩu không đúng, hoặc tài khoản đang bị khóa.', Response::HTTP_UNAUTHORIZED);
@@ -76,7 +74,6 @@ class AuthController extends Controller
             'username' => $user->username,
             'email' => $user->email,
             'role' => $user->role?->value,
-            'status' => $user->status?->value,
             'is_active' => $user->is_active,
             'last_login_at' => $user->last_login_at?->toISOString(),
             'created_at' => $user->created_at?->toISOString(),
