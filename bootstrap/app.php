@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -15,10 +16,22 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
-        apiPrefix: env('APP_API_PREFIX', 'api'),
+        then: function (): void {
+            $apiPrefix = config('app.api_prefix', 'api');
+            $routePath = base_path('routes');
+            $apiFile = array_filter(
+                glob($routePath.'/*.php'),
+                fn($file) => !in_array(basename($file), ['web.php', 'console.php'])
+            );
+
+            foreach ($apiFile as $file) {
+                Route::prefix($apiPrefix)
+                    ->middleware('api')
+                    ->group($file);
+            }
+        },
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
@@ -27,7 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->respond(function (HttpResponse $response, Throwable $exception, Request $request) {
-            $apiPrefix = trim(config('app.api_prefix', env('APP_API_PREFIX', 'api')), '/');
+            $apiPrefix = trim((string) config('app.api_prefix', 'api'), '/');
             $isApiRequest = $request->is($apiPrefix) || $request->is($apiPrefix.'/*');
 
             if (! $isApiRequest) {

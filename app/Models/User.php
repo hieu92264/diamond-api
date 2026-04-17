@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -25,6 +26,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password_hash',
         'role',
+        'employee_id',
         'last_login_at',
         'is_active',
     ];
@@ -51,6 +53,16 @@ class User extends Authenticatable implements JWTSubject
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
         ];
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeRole(Builder $query, UserRole|string $role): Builder
+    {
+        return $query->where('role', $role instanceof UserRole ? $role->value : $role);
     }
 
     public function hasRole(UserRole|string $role): bool
