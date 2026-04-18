@@ -16,26 +16,40 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()->updateOrCreate(
-            ['username' => 'admin'],
+        $users = [
             [
+                'username' => 'admin',
                 'email' => 'admin@diamond.local',
-                'password' => 'password',
                 'role' => UserRole::ADMIN,
-                'is_active' => true,
-                'last_login_at' => null,
-            ]
-        );
-
-        User::query()->updateOrCreate(
-            ['username' => 'operator'],
+            ],
             [
-                'email' => 'operator@diamond.local',
-                'password' => 'password',
+                'username' => 'manager',
+                'email' => 'manager@diamond.local',
                 'role' => UserRole::MANAGER,
-                'is_active' => true,
-                'last_login_at' => null,
-            ]
-        );
+            ],
+            [
+                'username' => 'hr.staff',
+                'email' => 'hr.staff@diamond.local',
+                'role' => UserRole::HR_STAFF,
+            ],
+            [
+                'username' => 'warehouse.staff',
+                'email' => 'warehouse.staff@diamond.local',
+                'role' => UserRole::WAREHOUSE_STAFF,
+            ],
+        ];
+
+        foreach ($users as $user) {
+            User::query()->updateOrCreate(
+                ['username' => $user['username']],
+                [
+                    'email' => $user['email'],
+                    'password' => 'password',
+                    'role' => $user['role'],
+                    'is_active' => true,
+                    'last_login_at' => null,
+                ]
+            );
+        }
     }
 }
