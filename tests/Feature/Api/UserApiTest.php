@@ -1,0 +1,158 @@
+<?php
+
+namespace Tests\Feature\Api;
+
+use App\Enums\UserRole;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class UserApiTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function authenticateAs(UserRole $role = UserRole::ADMIN): array
+    {
+        $user = User::factory()->create([
+            'role' => $role,
+            'is_active' => true,
+        ]);
+
+        $token = auth('api')->login($user);
+
+        return [
+            'Authorization' => 'Bearer '.$token,
+        ];
+    }
+
+    public function test_user_api_requires_authentication(): void
+    {
+        $this->getJson('/api/users')
+            ->assertUnauthorized()
+            ->assertJsonPath('statusCode', 401);
+    }
+
+    public function test_admin_can_list_users(): void
+    {
+        User::factory()->count(2)->create();
+
+        $this->withHeaders($this->authenticateAs())
+            ->getJson('/api/users')
+            ->assertOk()
+            ->assertJsonPath('statusCode', 200)
+            ->assertJsonCount(3, 'metadata');
+    }
+
+    public function test_admin_can_show_a_user(): void
+    {
+        $targetUser = User::factory()->create([
+            'username' => 'target-user',
+        ]);
+
+        $this->withHeaders($this->authenticateAs())
+            ->getJson("/api/users/{$targetUser->id}")
+            ->assertOk()
+            ->assertJsonPath('metadata.id', $targetUser->id)
+            ->assertJsonPath('metadata.username', 'target-user');
+    }
+
+    public function test_admin_can_create_a_user(): void
+    {
+        $payload = [
+            'username' => 'new-admin',
+            'email' => 'new-admin@example.com',
+            'password' => 'secret123',
+            'role' => UserRole::MANAGER->value,
+            'is_active' => true,
+        ];
+
+        $this->withHeaders($this->authenticateAs())
+            ->postJson('/api/users/create', $payload)
+            ->assertCreated()
+            ->assertJsonPath('statusCode', 201)
+            ->assertJsonPath('metadata.username', 'new-admin')
+            ->assertJsonPath('metadata.email', 'new-admin@example.com')
+            ->assertJsonPath('metadata.role', UserRole::MANAGER->value);
+
+        $this->assertDatabaseHas('users', [
+            'username' => 'new-admin',
+            'email' => 'new-admin@example.com',
+            'role' => UserRole::MANAGER->value,
+            'is_active' => 1,
+        ]);
+    }
+
+    public function test_admin_can_update_a_user(): void
+    {
+        $targetUser = User::factory()->create([
+            'username' => 'old-name',
+            'email' => 'old@example.com',
+            'role' => UserRole::WAREHOUSE_STAFF,
+        ]);
+
+        $payload = [
+            'username' => 'updated-name',
+            'email' => 'updated@example.com',
+            'role' => UserRole::HR_STAFF->value,
+            'is_active' => false,
+        ];
+
+        $this->withHeaders($this->authenticateAs())
+            ->patchJson("/api/users/update/{$targetUser->id}", $payload)
+            ->assertOk()
+            ->assertJsonPath('statusCode', 200)
+            ->assertJsonPath('metadata.username', 'updated-name')
+            ->assertJsonPath('metadata.email', 'updated@example.com')
+            ->assertJsonPath('metadata.role', UserRole::HR_STAFF->value)
+            ->assertJsonPath('metadata.is_active', false);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $targetUser->id,
+            'username' => 'updated-name',
+            'email' => 'updated@example.com',
+            'role' => UserRole::HR_STAFF->value,
+            'is_active' => 0,
+        ]);
+    }
+
+    public function test_admin_can_soft_delete_a_user(): void
+    {
+        $targetUser = User::factory()->create([
+            'is_active' => true,
+        ]);
+
+        $this->withHeaders($this->authenticateAs())
+            ->deleteJson("/api/users/delete/{$targetUser->id}")
+            ->assertOk()
+            ->assertJsonPath('statusCode', 200)
+            ->assertJsonPath('metadata', null);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $targetUser->id,
+            'is_active' => 0,
+        ]);
+    }
+
+    public function test_store_user_validates_unique_username_and_email(): void
+    {
+        User::factory()->create([
+            'username' => 'existing-user',
+            'email' => 'existing@example.com',
+        ]);
+
+        $payload = [
+            'username' => 'existing-user',
+            'email' => 'existing@example.com',
+            'password' => 'secret123',
+            'role' => UserRole::MANAGER->value,
+        ];
+
+        $this->withHeaders($this->authenticateAs())
+            ->postJson('/api/users/create', $payload)
+            ->assertUnprocessable()
+            ->assertJsonPath('statusCode', 422)
+            ->assertJsonStructure([
+                'metadata' => ['username', 'email'],
+            ]);
+    }
+}
