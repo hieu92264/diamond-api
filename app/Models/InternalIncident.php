@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\IncidentStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InternalIncident extends Model
 {
@@ -52,5 +53,15 @@ class InternalIncident extends Model
     public function scopeResolved(Builder $query): Builder
     {
         return $query->whereNotNull('resolved_at');
+    }
+
+    public function borrowDetail(): BelongsTo
+    {
+        return $this->belongsTo(InternalBorrowDetail::class, 'internal_borrow_detail_id', 'id');
+    }
+
+    public function resolvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'resolved_by_id', 'id');
     }
 }

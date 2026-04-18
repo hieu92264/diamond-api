@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\EquipmentStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EquipmentProp extends Model
 {
@@ -69,5 +71,20 @@ class EquipmentProp extends Model
     public function scopeLowStock(Builder $query): Builder
     {
         return $query->whereColumn('quantity_available', '<=', 'minimum_quantity');
+    }
+
+    public function itemCategory(): BelongsTo
+    {
+        return $this->belongsTo(ItemCategory::class, 'item_category_id', 'id');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
+
+    public function inventoryTransactions(): HasMany
+    {
+        return $this->hasMany(InventoryTransaction::class, 'equipment_prop_id', 'id');
     }
 }

@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -13,12 +14,12 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
-    protected $authPasswordName = 'password_hash';
+    protected $authPasswordName = 'password';
 
     protected $fillable = [
         'username',
         'email',
-        'password_hash',
+        'password',
         'role',
         'employee_id',
         'last_login_at',
@@ -26,13 +27,13 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $hidden = [
-        'password_hash',
+        'password',
     ];
 
     protected function casts(): array
     {
         return [
-            'password_hash' => 'hashed',
+            'password' => 'hashed',
             'role' => UserRole::class,
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
@@ -87,5 +88,15 @@ class User extends Authenticatable implements JWTSubject
             'role' => $this->role?->value,
             'username' => $this->username,
         ];
+    }
+
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'employee_id', 'id');
+    }
+
+    public function employee(): BelongsTo
+    {
+        return $this->profile();
     }
 }

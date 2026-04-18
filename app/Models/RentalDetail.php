@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RentalDetail extends Model
 {
@@ -57,5 +59,20 @@ class RentalDetail extends Model
             $query->where('lost_quantity', '>', 0)
                 ->orWhere('damaged_quantity', '>', 0);
         });
+    }
+
+    public function rentalSlip(): BelongsTo
+    {
+        return $this->belongsTo(RentalSlip::class, 'rental_slip_id', 'id');
+    }
+
+    public function equipmentProp(): BelongsTo
+    {
+        return $this->belongsTo(EquipmentProp::class, 'equipment_prop_id', 'id');
+    }
+
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(RentalIncident::class, 'rental_detail_id', 'id');
     }
 }

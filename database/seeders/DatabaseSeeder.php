@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             ['username' => 'admin'],
             [
                 'email' => 'admin@diamond.local',
-                'password_hash' => 'password',
+                'password' => 'password',
                 'role' => UserRole::ADMIN,
                 'is_active' => true,
                 'last_login_at' => null,
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             ['username' => 'operator'],
             [
                 'email' => 'operator@diamond.local',
-                'password_hash' => 'password',
+                'password' => 'password',
                 'role' => UserRole::MANAGER,
                 'is_active' => true,
                 'last_login_at' => null,

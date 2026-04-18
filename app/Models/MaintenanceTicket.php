@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MaintenanceStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MaintenanceTicket extends Model
 {
@@ -57,5 +58,15 @@ class MaintenanceTicket extends Model
     public function scopeInProgress(Builder $query): Builder
     {
         return $query->where('status', MaintenanceStatus::IN_PROGRESS->value);
+    }
+
+    public function item(): BelongsTo
+    {
+        return $this->belongsTo(EquipmentProp::class, 'item_id', 'id');
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\WarehouseType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Warehouse extends Model
 {
@@ -36,5 +38,35 @@ class Warehouse extends Model
         $value = $type instanceof WarehouseType ? $type->value : strtoupper($type);
 
         return $query->where('type', $value);
+    }
+
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'manager_employee_id', 'id');
+    }
+
+    public function manager(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'manager_employee_id', 'id');
+    }
+
+    public function equipments(): HasMany
+    {
+        return $this->hasMany(EquipmentProp::class, 'warehouse_id', 'id');
+    }
+
+    public function internalBorrowSlips(): HasMany
+    {
+        return $this->hasMany(InternalBorrowSlip::class, 'warehouse_id', 'id');
+    }
+
+    public function rentalSlips(): HasMany
+    {
+        return $this->hasMany(RentalSlip::class, 'warehouse_id', 'id');
+    }
+
+    public function inventoryTransactions(): HasMany
+    {
+        return $this->hasMany(InventoryTransaction::class, 'warehouse_id', 'id');
     }
 }

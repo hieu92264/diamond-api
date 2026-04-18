@@ -16,7 +16,7 @@ class UserFactory extends Factory
         return [
             'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
-            'password_hash' => 'password',
+            'password' => 'password',
             'role' => UserRole::WAREHOUSE_STAFF,
             'is_active' => true,
             'last_login_at' => null,

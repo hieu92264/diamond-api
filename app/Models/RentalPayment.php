@@ -6,6 +6,7 @@ use App\Enums\PaymentMethod;
 use App\Enums\RentalPaymentType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RentalPayment extends Model
 {
@@ -47,5 +48,10 @@ class RentalPayment extends Model
     public function scopeLatestFirst(Builder $query): Builder
     {
         return $query->orderByDesc('payment_date');
+    }
+
+    public function rentalSlip(): BelongsTo
+    {
+        return $this->belongsTo(RentalSlip::class, 'rental_slip_id', 'id');
     }
 }

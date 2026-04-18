@@ -6,6 +6,7 @@ use App\Enums\InventoryReferenceType;
 use App\Enums\InventoryTransactionType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InventoryTransaction extends Model
 {
@@ -60,5 +61,25 @@ class InventoryTransaction extends Model
     public function scopeLatestFirst(Builder $query): Builder
     {
         return $query->orderByDesc('created_at');
+    }
+
+    public function equipment(): BelongsTo
+    {
+        return $this->belongsTo(EquipmentProp::class, 'equipment_prop_id', 'id');
+    }
+
+    public function equipmentProp(): BelongsTo
+    {
+        return $this->belongsTo(EquipmentProp::class, 'equipment_prop_id', 'id');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
+
+    public function performer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'performed_by', 'id');
     }
 }

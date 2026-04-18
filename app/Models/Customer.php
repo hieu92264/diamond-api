@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\CustomerType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
@@ -53,5 +54,10 @@ class Customer extends Model
                 ->orWhere('company_name', 'like', "%{$keyword}%")
                 ->orWhere('phone', 'like', "%{$keyword}%");
         });
+    }
+
+    public function rentalSlips(): HasMany
+    {
+        return $this->hasMany(RentalSlip::class, 'customer_id', 'id');
     }
 }

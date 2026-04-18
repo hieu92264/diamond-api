@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class InternalBorrowDetail extends Model
 {
@@ -49,5 +51,20 @@ class InternalBorrowDetail extends Model
             $query->where('lost_quantity', '>', 0)
                 ->orWhere('damaged_quantity', '>', 0);
         });
+    }
+
+    public function borrowSlip(): BelongsTo
+    {
+        return $this->belongsTo(InternalBorrowSlip::class, 'internal_borrow_slip_id', 'id');
+    }
+
+    public function equipmentProp(): BelongsTo
+    {
+        return $this->belongsTo(EquipmentProp::class, 'equipment_prop_id', 'id');
+    }
+
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(InternalIncident::class, 'internal_borrow_detail_id', 'id');
     }
 }

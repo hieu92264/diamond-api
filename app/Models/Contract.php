@@ -6,6 +6,7 @@ use App\Enums\Contract as ContractType;
 use App\Enums\ContractStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Contract extends Model
 {
@@ -63,5 +64,10 @@ class Contract extends Model
                 $query->whereNull('end_date')
                     ->orWhereDate('end_date', '>=', today());
             });
+    }
+
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'employee_id', 'id');
     }
 }

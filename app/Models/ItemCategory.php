@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ItemCategory extends Model
 {
@@ -24,5 +25,10 @@ class ItemCategory extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    public function equipments():HasMany
+    {
+        return $this->hasMany(EquipmentProp::class, 'item_category_id', 'id');
     }
 }

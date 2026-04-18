@@ -3,7 +3,6 @@
 namespace Tests\Feature\Api;
 
 use App\Enums\UserRole;
-use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
@@ -18,9 +17,8 @@ class AuthTest extends TestCase
         User::factory()->create([
             'username' => 'admin',
             'email' => 'admin@example.com',
-            'password_hash' => 'secret123',
-            'role' => UserRole::SYSTEM_ADMIN,
-            'status' => UserStatus::ACTIVE,
+            'password' => 'secret123',
+            'role' => UserRole::ADMIN,
             'is_active' => true,
         ]);
 
@@ -33,7 +31,7 @@ class AuthTest extends TestCase
         $loginResponse
             ->assertOk()
             ->assertJsonPath('metadata.user.username', 'admin')
-            ->assertJsonPath('metadata.user.role', UserRole::SYSTEM_ADMIN->value);
+            ->assertJsonPath('metadata.user.role', UserRole::ADMIN->value);
 
         $token = $loginResponse->json('metadata.access_token');
 
@@ -41,17 +39,16 @@ class AuthTest extends TestCase
             ->getJson('/api/auth/me')
             ->assertOk()
             ->assertJsonPath('metadata.username', 'admin')
-            ->assertJsonPath('metadata.role', UserRole::SYSTEM_ADMIN->value);
+            ->assertJsonPath('metadata.role', UserRole::ADMIN->value);
     }
 
     public function test_role_middleware_blocks_non_matching_roles(): void
     {
-        Route::middleware(['auth:api', 'role:system_admin'])
+        Route::middleware(['auth:api', 'role:MANAGER'])
             ->get('/api/_test/admin-only', fn () => response()->json(['ok' => true]));
 
         $user = User::factory()->create([
-            'role' => UserRole::EVENT_OPERATOR,
-            'status' => UserStatus::ACTIVE,
+            'role' => UserRole::WAREHOUSE_STAFF,
             'is_active' => true,
         ]);
 

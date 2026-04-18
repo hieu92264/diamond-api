@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\InternalBorrowStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class InternalBorrowSlip extends Model
 {
@@ -62,5 +64,35 @@ class InternalBorrowSlip extends Model
                 InternalBorrowStatus::RETURNED->value,
                 InternalBorrowStatus::CANCELLED->value,
             ]);
+    }
+
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'employee_id', 'id');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
+
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_user_id', 'id');
+    }
+
+    public function rejectedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'rejected_user_id', 'id');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function details(): HasMany
+    {
+        return $this->hasMany(InternalBorrowDetail::class, 'internal_borrow_slip_id', 'id');
     }
 }
