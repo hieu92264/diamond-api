@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, windows, x64, laravel-dev]
+    runs-on: [self-hosted, Windows, X64, laravel-dev]
 
     steps:
       - name: Deploy on VPS
