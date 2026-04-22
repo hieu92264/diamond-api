@@ -1,0 +1,32 @@
+name: Deploy dev to Windows VPS
+
+on:
+  push:
+    branches:
+      - dev
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, windows, x64, laravel-dev]
+
+    steps:
+      - name: Deploy on VPS
+        shell: powershell
+        run: |
+          Set-Location 'C:\www\api\diamond-api'
+
+          git fetch origin
+          git checkout dev
+          git reset --hard origin/dev
+
+          composer install --no-dev --optimize-autoloader
+          C:\php\php.exe artisan migrate --force
+          C:\php\php.exe artisan optimize:clear
+          C:\php\php.exe artisan config:cache
+          C:\php\php.exe artisan route:cache
+          C:\php\php.exe artisan view:cache
+          C:\php\php.exe artisan queue:restart
