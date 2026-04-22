@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Interfaces\EmployeeServiceInterface;
+use App\Http\Requests\Employee\StoreEmployeeRequest;
+use App\Http\Requests\Employee\UpdateEmployeeRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class EmployeeController extends Controller
+{
+    public function __construct(protected EmployeeServiceInterface $employeeService)
+    {
+
+    }
+
+    public function index(Request $request): JsonResponse {
+        $expand = array_filter(
+            array_map('trim', explode(',', (string) $request->query('_expand', '')))
+        );
+        $result = $this->employeeService->all($expand);
+        return $this->success($result, 'Lấy danh sách profile thành công!');
+    }
+
+    public function show(int $id): JsonResponse {
+        $result = $this->employeeService->find($id);
+        return $this->success($result, 'Lấy thông tin profile thành công!');
+    }
+
+    public function store(StoreEmployeeRequest $request): JsonResponse
+    {
+        $result = $this->employeeService->create($request->validated());
+        return $this->success($result, 'Tạo profile thành công!', Response::HTTP_CREATED);
+    }
+
+    public function update(UpdateEmployeeRequest $request, int $id): JsonResponse
+    {
+        $result = $this->employeeService->update($request->validated(), $id);
+        return $this->success($result, 'Cập nhật profile thành công!');
+    }
+
+    public function delete(int $id): JsonResponse
+    {
+        $result = $this->employeeService->delete($id);
+        return $this->success($result, 'Xóa profile thành công!');
+    }
+}

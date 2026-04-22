@@ -17,8 +17,11 @@ class UserController extends Controller
 
     }
 
-    public function index(): JsonResponse {
-        $result = $this->userService->all();
+    public function index(Request $request): JsonResponse {
+        $expand = array_filter(
+            array_map('trim', explode(',', (string) $request->query('_expand', '')))
+        );
+        $result = $this->userService->all($expand);
         return $this->success($result, 'Lấy danh sách tài khoản thành công!');
     }
 

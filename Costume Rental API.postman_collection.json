@@ -1,0 +1,463 @@
+{
+    "info": {
+        "_postman_id": "0fc296a0-5bdb-441e-8078-3998b3792cfc",
+        "name": "Costume Rental API",
+        "description": "# Costume Rental API\n\nCollection này được cập nhật theo các route đang chạy thực tế của backend Laravel vào ngày 2026-04-21.\n\n## Cấu hình cơ bản\n\n| Key | Value | Ghi chú |\n| --- | --- | --- |\n| `base_url` | `{{base_url}}` | Cần bao gồm sẵn prefix API |\n| Ví dụ local | `http://localhost:8000/api` | Dùng khi chạy local |\n| Kiểu xác thực | Bearer token | Token được lưu trong `{{access_token}}` |\n\n## Cấu trúc response chung\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `message` | string | Thông báo từ backend |\n| `statusCode` | number | Mã trạng thái HTTP |\n| `metadata` | mixed | Dữ liệu chính mà frontend sẽ sử dụng |\n| `path` | string | API path đã được gọi |\n| `timestamp` | ISO datetime string | Thời điểm trả response |\n\n## Luồng xác thực\n\n| Bước | Endpoint | Ghi chú |\n| --- | --- | --- |\n| 1 | `POST /auth/login` | Đăng nhập để lấy JWT |\n| 2 | `GET /auth/me` | Lấy thông tin user hiện tại |\n| 3 | `GET /auth/refresh` | Làm mới token |\n| 4 | `POST /auth/logout` | Đăng xuất |\n\n## Tài nguyên hiện có\n\n| Resource | Table | Ghi chú |\n| --- | --- | --- |\n| `Users` | `users` | Đã có đầy đủ route CRUD |\n| `Employees` | `employees` | Đã có đầy đủ route CRUD |\n| Các model khác | nhiều bảng khác | Đã có model nhưng chưa mở route trong collection này |\n\n## `_expand`\n\n| Query param | Type | Example | Ghi chú |\n| --- | --- | --- | --- |\n| `_expand` | string CSV | `_expand=employee` | Dùng để eager load relation, có thể truyền nhiều giá trị |\n\n## Các enum hiện có trong backend\n\n| Enum | Values |\n| --- | --- |\n| `UserRole` | `ADMIN`, `MANAGER`, `HR_STAFF`, `WAREHOUSE_STAFF` |\n| `Gender` | `MALE`, `FEMALE`, `UNKNOWN` |\n| `Department` | `BOARD_OF_DIRECTORS`, `ACCOUNTING_ADMIN`, `HR`, `EVENT_ORGANIZATION`, `TECHNICAL` |\n| `Position` | `SINGER`, `MC`, `RAPPER`, `DANCER`, `CHOREOGRAPHER`, `LOGISTICS_STAFF`, `SOUND_TECHNICIAN`, `LIGHTING_TECHNICIAN`, `WAREHOUSE_STAFF`, `OFFICE_STAFF` |\n| `Work` | `PROBATION`, `ON_LEAVE`, `OFFICIAL`, `TERMINATED` |\n\n## Các model đã có trong backend nhưng hiện chưa được mở route trong collection này\n\n| Model |\n| --- |\n| `BorrowReturnDetail` |\n| `BorrowReturnSlip` |\n| `Contract` |\n| `Customer` |\n| `EquipmentProp` |\n| `Incident` |\n| `InternalBorrowDetail` |\n| `InternalBorrowSlip` |\n| `InternalIncident` |\n| `InventoryTransaction` |\n| `ItemCategory` |\n| `MaintenanceTicket` |\n| `RentalDetail` |\n| `RentalIncident` |\n| `RentalPayment` |\n| `RentalSlip` |\n| `Warehouse` |",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "54156297"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{access_token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "user_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "employee_id",
+            "value": "1",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "description": "# Auth\n\nNhóm API dùng để xác thực bằng JWT.\n\n| Endpoint | Method | Ghi chú |\n| --- | --- | --- |\n| `/auth/login` | `POST` | Đăng nhập bằng username hoặc email |\n| `/auth/me` | `GET` | Lấy thông tin user hiện tại |\n| `/auth/refresh` | `GET` | Làm mới access token |\n| `/auth/logout` | `POST` | Đăng xuất |\n\n| Collection variable | Nguồn | Ghi chú |\n| --- | --- | --- |\n| `access_token` | Script sau login | Dùng cho bearer auth |\n| `user_id` | Script sau login | ID của user hiện tại |\n| `employee_id` | Script sau login | ID nhân viên nếu user có liên kết employee |",
+            "item": [
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "",
+                                    "pm.test('Login status is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(jsonData).to.have.property('metadata');",
+                                    "    pm.expect(jsonData.metadata).to.have.property('access_token');",
+                                    "    pm.expect(jsonData.metadata).to.have.property('user');",
+                                    "});",
+                                    "",
+                                    "if (pm.response.code === 200 && jsonData.metadata) {",
+                                    "    const token = jsonData.metadata.access_token;",
+                                    "    const user = jsonData.metadata.user || {};",
+                                    "",
+                                    "    if (token) pm.collectionVariables.set('access_token', token);",
+                                    "    if (user.id) pm.collectionVariables.set('user_id', String(user.id));",
+                                    "    if (user.employee_id) pm.collectionVariables.set('employee_id', String(user.employee_id));",
+                                    "}",
+                                    "",
+                                    "pm.test('Response time is less than 2000ms', function () {",
+                                    "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "## Login\n\nDùng để đăng nhập hệ thống bằng username hoặc email, sau đó nhận về access token để gọi các API cần xác thực.\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `username` | string | Yes | Có thể nhập username hoặc email |\n| `password` | string | Yes | Mật khẩu đăng nhập |\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `access_token` | string | JWT token dùng cho các request tiếp theo |\n| `token_type` | string | Thông thường là `bearer` |\n| `expires_in` | number | Thời gian hết hạn của token, tính bằng giây |\n| `user` | object | Thông tin user hiện tại, có thể kèm employee rút gọn |",
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Me",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "description": "## Me\n\nTrả về thông tin của user hiện đang đăng nhập dựa trên access token gửi kèm.\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của user |\n| `username` | string | Tên đăng nhập |\n| `email` | string | Email |\n| `role` | string | Vai trò hiện tại |\n| `employee_id` | number nullable | Khóa ngoại sang employee |\n| `employee` | object nullable | Thông tin employee rút gọn gồm `id`, `employee_code`, `full_name`, `phone`, `department`, `position`, `work_status` |\n| `is_active` | boolean | Trạng thái hoạt động |\n| `last_login_at` | ISO datetime nullable | Thời điểm đăng nhập gần nhất |",
+                        "url": {
+                            "raw": "{{base_url}}/auth/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "me"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Refresh Token",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "description": "## Refresh Token\n\nDùng để cấp lại access token mới khi token cũ gần hết hạn hoặc cần làm mới phiên đăng nhập.\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `access_token` | string | Token mới |\n| `token_type` | string | Thông thường là `bearer` |\n| `expires_in` | number | Thời gian hết hạn của token mới, tính bằng giây |\n| `user` | object | Thông tin user mới nhất |",
+                        "url": {
+                            "raw": "{{base_url}}/auth/refresh",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "refresh"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "description": "## Logout\n\nDùng để đăng xuất khỏi hệ thống và vô hiệu hóa token hiện tại.\n\n| Item | Value |\n| --- | --- |\n| Auth required | `Yes` |\n| Method | `POST` |\n| Effect | Token hiện tại sẽ không còn sử dụng được |",
+                        "url": {
+                            "raw": "{{base_url}}/auth/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "logout"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "description": "# Users\n\nNhóm API quản lý tài khoản người dùng. Toàn bộ route trong nhóm này yêu cầu quyền `ADMIN`.\n\n## Bảng: `users`\n\n| Col name | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | bigint / primary key | Khóa chính |\n| `username` | string | Bắt buộc, duy nhất, tối đa 50 ký tự |\n| `email` | string | Bắt buộc, duy nhất |\n| `password` | string | Được hash qua cast của model, không trả về trong response |\n| `role` | enum | `ADMIN`, `MANAGER`, `HR_STAFF`, `WAREHOUSE_STAFF` |\n| `employee_id` | bigint nullable / foreign key | Tham chiếu đến `employees.id`, mỗi employee chỉ gắn tối đa với 1 user |\n| `last_login_at` | datetime nullable | Thời điểm đăng nhập gần nhất |\n| `is_active` | boolean | Trạng thái hoạt động; thao tác delete hiện tại sẽ chuyển về `false` |\n| `created_at` | timestamp | Tự sinh bởi Laravel |\n| `updated_at` | timestamp | Tự sinh bởi Laravel |\n\n## Quan hệ\n\n| Relation | Type | Ghi chú |\n| --- | --- | --- |\n| `employee` | belongsTo | Liên kết qua `employee_id` -> `employees.id` |\n\n## Query support\n\n| Query param | Type | Example |\n| --- | --- | --- |\n| `_expand` | string CSV | `_expand=employee` |\n\n## Ghi chú cho frontend\n\n- Dữ liệu chính luôn nằm trong `metadata`.\n- Khi cần lấy user kèm hồ sơ nhân viên, hãy gọi `GET /users?_expand=employee`.\n- Trường password sẽ không bao giờ được trả về trong response.",
+            "item": [
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "description": "## Get All Users\n\nLấy danh sách toàn bộ tài khoản người dùng. Có thể dùng `_expand` để load thêm quan hệ liên quan.\n\n### Query params\n\n| Param | Type | Required | Example | Ghi chú |\n| --- | --- | --- | --- | --- |\n| `_expand` | string CSV | No | `employee` | Có thể truyền nhiều relation, ngăn cách bằng dấu phẩy |\n\n### Response `metadata[]`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của user |\n| `username` | string | Tên đăng nhập |\n| `email` | string | Email |\n| `role` | string | Giá trị role enum |\n| `employee_id` | number nullable | ID nhân viên liên kết |\n| `employee` | object nullable | Chỉ xuất hiện khi dùng `_expand=employee` |\n| `is_active` | boolean | Trạng thái hoạt động |\n| `last_login_at` | ISO datetime nullable | Thời điểm đăng nhập gần nhất |",
+                        "url": {
+                            "raw": "{{base_url}}/users?_expand=employee",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users"
+                            ],
+                            "query": [
+                                {
+                                    "key": "_expand",
+                                    "value": "employee",
+                                    "description": "Danh sách relation cần eager load, ngăn cách bằng dấu phẩy."
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get User Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "description": "## Get User Detail\n\nLấy thông tin chi tiết của một user theo `id`.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của user |\n\n### Response\n\n`metadata` trả về một object user theo schema đã mô tả trong folder `Users`.",
+                        "url": {
+                            "raw": "{{base_url}}/users/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                "{{user_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"admin02\",\n  \"email\": \"admin02@example.com\",\n  \"password\": \"123123\",\n  \"role\": \"ADMIN\",\n  \"employee_id\": 1,\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "## Create User\n\nTạo mới một tài khoản người dùng.\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `username` | string | Yes | Phải là duy nhất, tối đa 50 ký tự |\n| `email` | string | Yes | Email hợp lệ và không được trùng |\n| `password` | string | Yes | Tối thiểu 6 ký tự |\n| `role` | enum `UserRole` | Yes | `ADMIN`, `MANAGER`, `HR_STAFF`, `WAREHOUSE_STAFF` |\n| `employee_id` | number nullable | No | Phải tồn tại trong `employees.id` và không được trùng trong bảng `users` |\n| `is_active` | boolean | No | Nếu không gửi thì tùy xử lý mặc định của backend |\n| `last_login_at` | date/datetime | No | Thông thường frontend không cần gửi trường này |\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của user vừa tạo |\n| `username` | string | Username đã lưu |\n| `email` | string | Email đã lưu |\n| `role` | string | Role đã lưu |\n| `employee` | object nullable | Có thể xuất hiện nếu service load relation |",
+                        "url": {
+                            "raw": "{{base_url}}/users/create",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update User",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"role\": \"MANAGER\",\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "## Update User\n\nCập nhật thông tin của một user theo `id`. API hỗ trợ cập nhật từng phần.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của user |\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `username` | string | No | `sometimes|required`, cần unique khi cập nhật |\n| `email` | string | No | `sometimes|required`, cần unique khi cập nhật |\n| `password` | string nullable | No | Nếu gửi thì tối thiểu 6 ký tự |\n| `role` | enum `UserRole` | No | `sometimes|required` |\n| `employee_id` | number nullable | No | Phải tồn tại và cần unique nếu có gửi |\n| `is_active` | boolean | No | Hỗ trợ cập nhật từng phần |\n| `last_login_at` | date/datetime nullable | No | Hỗ trợ cập nhật từng phần |",
+                        "url": {
+                            "raw": "{{base_url}}/users/update/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                "update",
+                                "{{user_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "description": "## Delete User\n\nXóa user theo `id`. Cách triển khai hiện tại là soft delete theo logic nghiệp vụ.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của user |\n\n| Behavior | Value |\n| --- | --- |\n| Delete type | Soft delete logic |\n| Implementation | Nếu model có cột `is_active` thì sẽ chuyển sang `false` |",
+                        "url": {
+                            "raw": "{{base_url}}/users/delete/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                "delete",
+                                "{{user_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Employees",
+            "description": "# Employees\n\nNhóm API quản lý hồ sơ nhân viên. Toàn bộ route trong nhóm này yêu cầu quyền `ADMIN`.\n\n## Bảng: `employees`\n\n| Col name | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | bigint / primary key | Khóa chính |\n| `employee_code` | string | Backend tự sinh theo định dạng `EMP0001`, `EMP0002`, ... |\n| `full_name` | string | Họ và tên nhân viên |\n| `dob` | date nullable | Ngày sinh |\n| `gender` | enum nullable | `MALE`, `FEMALE`, `UNKNOWN` |\n| `phone` | string nullable | Số điện thoại |\n| `address` | string nullable | Địa chỉ |\n| `department` | enum | Cột này có trong DB, nhưng validation hiện tại đang bị comment |\n| `position` | enum | Chức danh |\n| `hire_date` | date nullable | Ngày vào làm |\n| `work_status` | enum | Trạng thái làm việc |\n| `remarks` | text nullable | Ghi chú |\n| `is_active` | boolean | Trạng thái hoạt động |\n| `created_at` | timestamp | Tự sinh bởi Laravel |\n| `updated_at` | timestamp | Tự sinh bởi Laravel |\n\n## Quan hệ\n\n| Relation | Type | Ghi chú |\n| --- | --- | --- |\n| `user` | hasOne | Một nhân viên có thể gắn với 1 user |\n| `contracts` | hasMany | Danh sách hợp đồng |\n| `internalBorrowSlips` | hasMany | Danh sách phiếu mượn nội bộ |\n| `warehouses` | hasMany | Các kho do nhân viên quản lý |\n\n## Enum\n\n| Field | Values |\n| --- | --- |\n| `gender` | `MALE`, `FEMALE`, `UNKNOWN` |\n| `department` | `BOARD_OF_DIRECTORS`, `ACCOUNTING_ADMIN`, `HR`, `EVENT_ORGANIZATION`, `TECHNICAL` |\n| `position` | `SINGER`, `MC`, `RAPPER`, `DANCER`, `CHOREOGRAPHER`, `LOGISTICS_STAFF`, `SOUND_TECHNICIAN`, `LIGHTING_TECHNICIAN`, `WAREHOUSE_STAFF`, `OFFICE_STAFF` |\n| `work_status` | `PROBATION`, `ON_LEAVE`, `OFFICIAL`, `TERMINATED` |\n\n## Ghi chú cho frontend\n\n- Không cần gửi `employee_code` khi tạo mới vì backend sẽ tự sinh.\n- Migration có cột `department`, nhưng rule validate hiện tại đang bị comment.\n- Nếu frontend cần chốt payload liên quan đến hợp đồng, nên xác nhận lại trường `department` với backend.",
+            "item": [
+                {
+                    "name": "Get All Employees",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "description": "## Get All Employees\n\nLấy danh sách toàn bộ nhân viên. Có thể dùng `_expand` để load thêm các quan hệ liên quan.\n\n### Query params\n\n| Param | Type | Required | Example | Ghi chú |\n| --- | --- | --- | --- | --- |\n| `_expand` | string CSV | No | `user,contracts` | Hỗ trợ eager load nhiều relation |\n\n### Response `metadata[]`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của employee |\n| `employee_code` | string | Mã nhân viên |\n| `full_name` | string | Họ tên đầy đủ |\n| `position` | string | Giá trị position enum |\n| `work_status` | string | Giá trị work enum |\n| `user` | object nullable | Có khi dùng `_expand=user` |\n| `contracts` | array | Có khi dùng `_expand=contracts` |",
+                        "url": {
+                            "raw": "{{base_url}}/employees?_expand=user",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees"
+                            ],
+                            "query": [
+                                {
+                                    "key": "_expand",
+                                    "value": "user",
+                                    "description": "Danh sách relation cần eager load, ngăn cách bằng dấu phẩy."
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Employee Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "description": "## Get Employee Detail\n\nLấy thông tin chi tiết của một nhân viên theo `id`.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của employee |\n\n### Response\n\n`metadata` trả về một object employee theo schema đã mô tả trong folder `Employees`.",
+                        "url": {
+                            "raw": "{{base_url}}/employees/{{employee_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees",
+                                "{{employee_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Employee",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"full_name\": \"Nguyen Van A\",\n  \"dob\": \"1998-01-01\",\n  \"gender\": \"MALE\",\n  \"phone\": \"0336089900\",\n  \"address\": \"Hai Phong\",\n  \"department\": \"TECHNICAL\",\n  \"position\": \"CHOREOGRAPHER\",\n  \"hire_date\": \"2025-01-01\",\n  \"work_status\": \"OFFICIAL\",\n  \"remarks\": \"Created from Postman\",\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "## Create Employee\n\nTạo mới hồ sơ nhân viên.\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `full_name` | string | Yes | Họ và tên nhân viên |\n| `dob` | date | No | Định dạng `YYYY-MM-DD` |\n| `gender` | enum `Gender` | No | `MALE`, `FEMALE`, `UNKNOWN` |\n| `phone` | string | No | Số điện thoại |\n| `address` | string | No | Địa chỉ |\n| `department` | enum `Department` | No/DB has field | Hiện tại DB có cột này nhưng validator đang comment rule |\n| `position` | enum `Position` | Yes | Chức danh |\n| `hire_date` | date | No | Định dạng `YYYY-MM-DD` |\n| `work_status` | enum `Work` | Yes | Trạng thái làm việc |\n| `remarks` | string | No | Ghi chú thêm |\n| `is_active` | boolean | No | Trạng thái hoạt động |\n| `employee_code` | string | No | Không cần gửi vì backend tự sinh |\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của employee vừa tạo |\n| `employee_code` | string | Mã nhân viên do backend tự sinh |\n| `full_name` | string | Họ tên đã lưu |",
+                        "url": {
+                            "raw": "{{base_url}}/employees/create",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees",
+                                "create"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Employee",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"phone\": \"0988123456\",\n  \"address\": \"Ha Noi\",\n  \"work_status\": \"ON_LEAVE\",\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "## Update Employee\n\nCập nhật thông tin của nhân viên theo `id`. API hỗ trợ cập nhật từng phần.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của employee |\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `full_name` | string | No | `sometimes|required` |\n| `dob` | date nullable | No | Hỗ trợ cập nhật từng phần |\n| `gender` | enum `Gender` nullable | No | Hỗ trợ cập nhật từng phần |\n| `phone` | string nullable | No | Hỗ trợ cập nhật từng phần |\n| `address` | string nullable | No | Hỗ trợ cập nhật từng phần |\n| `department` | enum `Department` | No | Hiện validator đang comment rule |\n| `position` | enum `Position` | No | `sometimes|required` |\n| `hire_date` | date nullable | No | Hỗ trợ cập nhật từng phần |\n| `work_status` | enum `Work` | No | `sometimes|required` |\n| `remarks` | string nullable | No | Hỗ trợ cập nhật từng phần |\n| `is_active` | boolean | No | Hỗ trợ cập nhật từng phần |",
+                        "url": {
+                            "raw": "{{base_url}}/employees/update/{{employee_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees",
+                                "update",
+                                "{{employee_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Employee",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "description": "## Delete Employee\n\nXóa nhân viên theo `id`. Cách triển khai hiện tại là soft delete theo logic nghiệp vụ.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của employee |\n\n| Behavior | Value |\n| --- | --- |\n| Delete type | Soft delete logic |\n| Implementation | Nếu model có cột `is_active` thì sẽ chuyển sang `false` |",
+                        "url": {
+                            "raw": "{{base_url}}/employees/delete/{{employee_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "employees",
+                                "delete",
+                                "{{employee_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": []
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": []
+            }
+        }
+    ]
+}

@@ -35,7 +35,7 @@ class AuthController extends Controller
     public function me(): JsonResponse
     {
         /** @var User $user */
-        $user = auth('api')->user();
+        $user = auth('api')->user()->loadMissing('employee');
 
         return $this->success($this->transformUser($user));
     }
@@ -69,11 +69,23 @@ class AuthController extends Controller
 
     private function transformUser(User $user): array
     {
+        $user->loadMissing('employee');
+
         return [
             'id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
             'role' => $user->role?->value,
+            'employee_id' => $user->employee_id,
+            'employee' => $user->employee ? [
+                'id' => $user->employee->id,
+                'employee_code' => $user->employee->employee_code,
+                'full_name' => $user->employee->full_name,
+                'phone' => $user->employee->phone,
+                'department' => $user->employee->department?->value,
+                'position' => $user->employee->position?->value,
+                'work_status' => $user->employee->work_status?->value,
+            ] : null,
             'is_active' => $user->is_active,
             'last_login_at' => $user->last_login_at?->toISOString(),
             'created_at' => $user->created_at?->toISOString(),

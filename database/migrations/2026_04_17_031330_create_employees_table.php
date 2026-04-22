@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('gender', Gender::values())->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
-            $table->enum('department', \App\Enums\Department::values());
+            $table->enum('department', \App\Enums\Department::values())->nullable();
             $table->enum('position', \App\Enums\Position::values());
             $table->date('hire_date')->nullable();
             $table->enum('work_status', \App\Enums\Work::values());

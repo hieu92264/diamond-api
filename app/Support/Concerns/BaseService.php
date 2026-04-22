@@ -21,16 +21,16 @@ abstract class BaseService implements BaseServiceInterface
         $this->select = $select;
     }
 
-    public function all(): array
+    public function all(array $relations = []): array
     {
-        return $this->newQuery()
+        return $this->newQuery($relations)
             ->get()
             ->toArray();
     }
 
-    public function find(int $id): array
+    public function find(int $id, array $relations = []): array
     {
-        return $this->newQuery()
+        return $this->newQuery($relations)
             ->whereKey($id)
             ->firstOrFail()
             ->toArray();
@@ -92,9 +92,10 @@ abstract class BaseService implements BaseServiceInterface
         }
     }
 
-    protected function newQuery(): Builder
+    protected function newQuery(array $relations = []): Builder
     {
-        $query = $this->model->newQuery()->with($this->relations);
+        $relations = $relations !== [] ? $relations : $this->relations;
+        $query = $this->model->newQuery()->with($relations);
 
         if ($this->select !== []) {
             $query->select($this->select);
