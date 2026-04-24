@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\EquipmentStatus;
+use App\Enums\Gender;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EquipmentProp extends Model
@@ -14,6 +16,9 @@ class EquipmentProp extends Model
         'is_active',
         'code',
         'name',
+        'color',
+        'sizes',
+        'gender',
         'item_category_id',
         'unit',
         'warehouse_id',
@@ -25,6 +30,11 @@ class EquipmentProp extends Model
         'item_value',
         'default_rental_price',
         'default_deposit_price',
+        'weight_kg',
+        'dimensions',
+        'is_fragile',
+        'tags',
+        'description',
         'remarks',
         'image_path',
     ];
@@ -34,6 +44,8 @@ class EquipmentProp extends Model
         return [
             'is_active' => 'boolean',
             'status' => EquipmentStatus::class,
+            'sizes' => 'array',
+            'gender' => Gender::class,
             'quantity_total' => 'integer',
             'quantity_available' => 'integer',
             'minimum_quantity' => 'integer',
@@ -41,6 +53,10 @@ class EquipmentProp extends Model
             'item_value' => 'decimal:2',
             'default_rental_price' => 'decimal:2',
             'default_deposit_price' => 'decimal:2',
+            'weight_kg' => 'decimal:2',
+            'dimensions' => 'array',
+            'is_fragile' => 'boolean',
+            'tags' => 'array',
         ];
     }
 
@@ -86,5 +102,15 @@ class EquipmentProp extends Model
     public function inventoryTransactions(): HasMany
     {
         return $this->hasMany(InventoryTransaction::class, 'equipment_prop_id', 'id');
+    }
+
+    public function galleryImages(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            GalleryImage::class,
+            'equipment_prop_gallery_image',
+            'equipment_prop_id',
+            'gallery_image_id'
+        )->withTimestamps();
     }
 }

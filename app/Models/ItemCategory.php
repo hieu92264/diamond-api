@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ItemCategoryType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +13,7 @@ class ItemCategory extends Model
         'is_active',
         'code',
         'name',
+        'type',
         'remarks',
     ];
 
@@ -19,6 +21,7 @@ class ItemCategory extends Model
     {
         return [
             'is_active' => 'boolean',
+            'type' => ItemCategoryType::class,
         ];
     }
 
@@ -27,8 +30,13 @@ class ItemCategory extends Model
         return $query->where('is_active', true);
     }
 
-    public function equipments():HasMany
+    public function equipments(): HasMany
     {
         return $this->hasMany(EquipmentProp::class, 'item_category_id', 'id');
+    }
+
+    public function equipmentProps(): HasMany
+    {
+        return $this->equipments();
     }
 }
