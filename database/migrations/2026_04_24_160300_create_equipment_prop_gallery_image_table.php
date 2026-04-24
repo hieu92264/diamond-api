@@ -14,7 +14,10 @@ return new class extends Migration
             $table->foreignId('gallery_image_id')->constrained('gallery_images')->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['equipment_prop_id', 'gallery_image_id']);
+            $table->unique(
+                ['equipment_prop_id', 'gallery_image_id'],
+                'eq_prop_gallery_unique'
+            );
         });
     }
 
