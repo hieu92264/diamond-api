@@ -99,9 +99,14 @@ class CatalogApiTest extends TestCase
         $uploadResponse
             ->assertCreated()
             ->assertJsonCount(2, 'metadata')
-            ->assertJsonPath('metadata.0.category_id', $category->id);
+            ->assertJsonPath('metadata.0.category_id', $category->id)
+            ->assertJsonPath('metadata.0.mime_type', 'image/webp');
 
         $imageId = $uploadResponse->json('metadata.0.id');
+        $fileName = $uploadResponse->json('metadata.0.file_name');
+
+        $this->assertStringEndsWith('.webp', $fileName);
+        Storage::disk('public')->assertExists("images-gallery/{$category->id}/{$fileName}");
 
         $this->withHeaders($headers)
             ->getJson('/api/images-gallery?_expand=category')

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class ImageGalleryController extends Controller
@@ -64,14 +65,17 @@ class ImageGalleryController extends Controller
 
         $images = collect($request->file('files'))
             ->map(function (UploadedFile $file) use ($category): array {
-                $fileName = Str::uuid().'.'.$file->getClientOriginalExtension();
-                $path = $file->storeAs('images-gallery/'.$category->id, $fileName, 'public');
+                $fileName = Str::uuid().'.webp';
+                $path = 'images-gallery/'.$category->id.'/'.$fileName;
+                $webpContents = $this->convertToWebp($file);
+
+                Storage::disk('public')->put($path, $webpContents);
 
                 $image = GalleryImage::query()->create([
                     'category_id' => $category->id,
                     'file_name' => basename($path),
-                    'mime_type' => $file->getClientMimeType(),
-                    'size' => $file->getSize(),
+                    'mime_type' => 'image/webp',
+                    'size' => strlen($webpContents),
                     'dest' => Storage::disk('public')->url($path),
                     'created_by' => auth('api')->id(),
                     'is_active' => true,
@@ -83,6 +87,42 @@ class ImageGalleryController extends Controller
             ->all();
 
         return $this->success($images, 'Tai anh len thanh cong!', Response::HTTP_CREATED);
+    }
+
+    private function convertToWebp(UploadedFile $file): string
+    {
+        if (! function_exists('imagecreatefromstring') || ! function_exists('imagewebp')) {
+            throw ValidationException::withMessages([
+                'files' => ['Server does not support WebP conversion.'],
+            ]);
+        }
+
+        $contents = file_get_contents($file->getRealPath());
+        $image = $contents === false ? false : @imagecreatefromstring($contents);
+
+        if ($image === false) {
+            throw ValidationException::withMessages([
+                'files' => ['Cannot read uploaded image.'],
+            ]);
+        }
+
+        imagepalettetotruecolor($image);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+
+        ob_start();
+        $success = imagewebp($image, null, 85);
+        $webpContents = ob_get_clean();
+
+        imagedestroy($image);
+
+        if (! $success || ! is_string($webpContents) || $webpContents === '') {
+            throw ValidationException::withMessages([
+                'files' => ['Cannot convert uploaded image to WebP.'],
+            ]);
+        }
+
+        return $webpContents;
     }
 
     public function show(int $id): JsonResponse
