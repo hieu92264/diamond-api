@@ -13,10 +13,8 @@ class AuthController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $field = filter_var($data['username'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-
         if (! $token = auth('api')->attempt([
-            $field => $data['username'],
+            'username' => $data['username'],
             'password' => $data['password'],
             'is_active' => true,
         ])) {
@@ -25,9 +23,6 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = auth('api')->user();
-        $user->forceFill([
-            'last_login_at' => now(),
-        ])->save();
 
         return $this->responseWithToken($token, $user->fresh(), 'Đăng nhập thành công.');
     }
@@ -74,7 +69,6 @@ class AuthController extends Controller
         return [
             'id' => $user->id,
             'username' => $user->username,
-            'email' => $user->email,
             'role' => $user->role?->value,
             'employee_id' => $user->employee_id,
             'employee' => $user->employee ? [
@@ -82,12 +76,12 @@ class AuthController extends Controller
                 'employee_code' => $user->employee->employee_code,
                 'full_name' => $user->employee->full_name,
                 'phone' => $user->employee->phone,
-                'department' => $user->employee->department?->value,
+                'email' => $user->employee->email,
+                'citizen_id_number' => $user->employee->citizen_id_number,
                 'position' => $user->employee->position?->value,
                 'work_status' => $user->employee->work_status?->value,
             ] : null,
             'is_active' => $user->is_active,
-            'last_login_at' => $user->last_login_at?->toISOString(),
             'created_at' => $user->created_at?->toISOString(),
             'updated_at' => $user->updated_at?->toISOString(),
         ];

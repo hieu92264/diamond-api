@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ItemCategoryType;
+use App\Http\Controllers\Api\Concerns\HandlesCatalogItems;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ItemCategory\StoreItemCategoryRequest;
 use App\Http\Requests\ItemCategory\UpdateItemCategoryRequest;
+use App\Models\EquipmentProp;
 use App\Models\ItemCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,36 +15,47 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ItemCategoryController extends Controller
 {
+    use HandlesCatalogItems;
+
     public function index(Request $request): JsonResponse
     {
+        $embed = $this->embedList($request);
         $query = ItemCategory::query()->orderBy('name');
 
         if (! $request->boolean('include_inactive')) {
             $query->where('is_active', true);
         }
 
-        if ($request->filled('type')) {
-            $query->where('type', strtoupper((string) $request->query('type')));
+        $type = $request->query('type:eq', $request->query('type'));
+
+        if ($type !== null && $type !== '') {
+            $query->where('type', strtoupper((string) $type));
+        }
+
+        if (array_intersect($embed, ['costumes', 'equipment_props']) !== []) {
+            $query->with('equipmentProps.galleryImages.category');
         }
 
         $categories = $query->get()
-            ->map(fn (ItemCategory $category) => $this->transformCategory($category))
+            ->map(fn (ItemCategory $category) => $this->transformCategory($category, $embed))
             ->all();
 
-        return $this->success($categories, 'Lấy danh sách danh mục thành công!');
+        return $this->success($categories, 'Lay danh sach danh muc thanh cong!');
     }
 
     public function store(StoreItemCategoryRequest $request): JsonResponse
     {
+        $data = $request->validated();
+
         $category = ItemCategory::query()->create([
-            ...$request->validated(),
-            'code' => $this->nextCategoryCode(),
-            'is_active' => $request->validated('is_active', true),
+            ...$data,
+            'slug' => $this->uniqueSlug(ItemCategory::query(), $data['slug'] ?? $data['name']),
+            'is_active' => $data['is_active'] ?? true,
         ]);
 
         return $this->success(
             $this->transformCategory($category),
-            'Tạo danh mục thành công!',
+            'Tao danh muc thanh cong!',
             Response::HTTP_CREATED
         );
     }
@@ -49,9 +63,17 @@ class ItemCategoryController extends Controller
     public function update(UpdateItemCategoryRequest $request, int $id): JsonResponse
     {
         $category = ItemCategory::query()->findOrFail($id);
-        $category->update($request->validated());
+        $data = $request->validated();
 
-        return $this->success($this->transformCategory($category->fresh()), 'Cập nhật danh mục thành công!');
+        if (array_key_exists('slug', $data)) {
+            $data['slug'] = $this->uniqueSlug(ItemCategory::query(), $data['slug'], $category->id);
+        } elseif (array_key_exists('name', $data)) {
+            $data['slug'] = $this->uniqueSlug(ItemCategory::query(), $data['name'], $category->id);
+        }
+
+        $category->update($data);
+
+        return $this->success($this->transformCategory($category->fresh()), 'Cap nhat danh muc thanh cong!');
     }
 
     public function destroy(Request $request, int $id): JsonResponse
@@ -64,34 +86,54 @@ class ItemCategoryController extends Controller
             $category->update(['is_active' => false]);
         }
 
-        return $this->success(null, 'Xóa danh mục thành công!');
+        return $this->success(null, 'Xoa danh muc thanh cong!');
     }
 
-    private function transformCategory(ItemCategory $category): array
+    private function transformCategory(ItemCategory $category, array $embed = []): array
     {
-        return [
+        $data = [
             'id' => $category->id,
-            'code' => $category->code,
             'name' => $category->name,
+            'slug' => $category->slug,
             'type' => $category->type?->value,
-            'remarks' => $category->remarks,
             'is_active' => $category->is_active,
             'created_at' => $category->created_at?->toISOString(),
             'updated_at' => $category->updated_at?->toISOString(),
         ];
+
+        if (in_array('costumes', $embed, true)) {
+            $data['costumes'] = $this->embeddedItems($category, ItemCategoryType::COSTUME);
+        }
+
+        if (in_array('equipment_props', $embed, true)) {
+            $data['equipment_props'] = $this->embeddedItems($category, ItemCategoryType::EQUIPMENT_PROPS);
+        }
+
+        return $data;
     }
 
-    private function nextCategoryCode(): string
+    private function embeddedItems(ItemCategory $category, ItemCategoryType $type): array
     {
-        $lastCode = ItemCategory::query()
-            ->where('code', 'like', 'CAT%')
-            ->max('code');
+        if (($category->type?->value ?? $category->type) !== $type->value) {
+            return [];
+        }
 
-        $sequence = $lastCode
-            ? ((int) preg_replace('/\D+/', '', $lastCode)) + 1
-            : 1;
+        $category->loadMissing('equipmentProps.galleryImages.category');
 
-        return 'CAT'.str_pad((string) $sequence, 4, '0', STR_PAD_LEFT);
+        return $category->equipmentProps
+            ->where('is_active', true)
+            ->map(fn (EquipmentProp $item) => $this->transformCatalogItem($item))
+            ->values()
+            ->all();
+    }
+
+    private function embedList(Request $request): array
+    {
+        return collect(explode(',', (string) $request->query('_embed', '')))
+            ->map(fn (string $item) => trim($item))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     private function shouldDeletePermanently(Request $request): bool

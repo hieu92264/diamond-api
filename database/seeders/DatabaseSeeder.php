@@ -19,23 +19,11 @@ class DatabaseSeeder extends Seeder
         $users = [
             [
                 'username' => 'admin',
-                'email' => 'admin@diamond.local',
                 'role' => UserRole::ADMIN,
             ],
             [
-                'username' => 'manager',
-                'email' => 'manager@diamond.local',
-                'role' => UserRole::MANAGER,
-            ],
-            [
-                'username' => 'hr.staff',
-                'email' => 'hr.staff@diamond.local',
-                'role' => UserRole::HR_STAFF,
-            ],
-            [
-                'username' => 'warehouse.staff',
-                'email' => 'warehouse.staff@diamond.local',
-                'role' => UserRole::WAREHOUSE_STAFF,
+                'username' => 'user',
+                'role' => UserRole::USER,
             ],
         ];
 
@@ -43,11 +31,9 @@ class DatabaseSeeder extends Seeder
             User::query()->updateOrCreate(
                 ['username' => $user['username']],
                 [
-                    'email' => $user['email'],
                     'password' => 'password',
                     'role' => $user['role'],
                     'is_active' => true,
-                    'last_login_at' => null,
                 ]
             );
         }

@@ -14,6 +14,8 @@ Route::middleware('auth:api')->group(function (): void {
         Route::delete('/{id}', 'destroy');
     });
 
+    Route::get('categories', [ItemCategoryController::class, 'index']);
+
     Route::prefix('costumes')->controller(CostumeController::class)->group(function (): void {
         Route::get('/', 'index');
         Route::post('/', 'store');
@@ -24,12 +26,16 @@ Route::middleware('auth:api')->group(function (): void {
     Route::prefix('equipment-props')->controller(EquipmentPropController::class)->group(function (): void {
         Route::get('/', 'index');
         Route::post('/', 'store');
+        Route::patch('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
     });
 
     Route::prefix('images-gallery')->controller(ImageGalleryController::class)->group(function (): void {
         Route::get('/', 'index');
         Route::post('/upload', 'upload');
         Route::get('/{id}', 'show');
+        Route::patch('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
         Route::patch('/update/{id}', 'update');
     });
 

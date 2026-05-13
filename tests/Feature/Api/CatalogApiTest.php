@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Api;
 
-use App\Enums\GalleryItemType;
 use App\Enums\ItemCategoryType;
 use App\Enums\UserRole;
 use App\Models\GalleryImage;
@@ -44,21 +43,26 @@ class CatalogApiTest extends TestCase
         $createResponse
             ->assertCreated()
             ->assertJsonPath('metadata.name', 'Trang phuc truyen thong')
+            ->assertJsonPath('metadata.slug', 'trang-phuc-truyen-thong')
             ->assertJsonPath('metadata.type', ItemCategoryType::COSTUME->value);
 
         $categoryId = $createResponse->json('metadata.id');
 
         $this->withHeaders($headers)
             ->patchJson("/api/item-categories/{$categoryId}", [
-                'remarks' => 'Danh muc costume',
+                'name' => 'Ao dai',
+                'type' => ItemCategoryType::COSTUME->value,
             ])
             ->assertOk()
-            ->assertJsonPath('metadata.remarks', 'Danh muc costume');
+            ->assertJsonPath('metadata.name', 'Ao dai')
+            ->assertJsonPath('metadata.slug', 'ao-dai');
 
         $this->withHeaders($headers)
-            ->getJson('/api/item-categories')
+            ->getJson('/api/categories?type:eq=COSTUME&_embed=costumes,equipment_props')
             ->assertOk()
-            ->assertJsonCount(1, 'metadata');
+            ->assertJsonCount(1, 'metadata')
+            ->assertJsonPath('metadata.0.costumes', [])
+            ->assertJsonPath('metadata.0.equipment_props', []);
 
         $this->withHeaders($headers)
             ->deleteJson("/api/item-categories/{$categoryId}")
@@ -76,10 +80,17 @@ class CatalogApiTest extends TestCase
         Storage::fake('public');
         $headers = $this->authenticate();
 
+        $category = ItemCategory::query()->create([
+            'name' => 'Ao dai',
+            'slug' => 'ao-dai',
+            'type' => ItemCategoryType::COSTUME,
+            'is_active' => true,
+        ]);
+
         $uploadResponse = $this->withHeaders($headers)
             ->post('/api/images-gallery/upload', [
-                'item_type' => GalleryItemType::COSTUME->value,
-                'file' => [
+                'data' => json_encode(['category_id' => $category->id]),
+                'files' => [
                     UploadedFile::fake()->image('costume-1.jpg'),
                     UploadedFile::fake()->image('costume-2.jpg'),
                 ],
@@ -87,26 +98,28 @@ class CatalogApiTest extends TestCase
 
         $uploadResponse
             ->assertCreated()
-            ->assertJsonCount(2, 'metadata');
+            ->assertJsonCount(2, 'metadata')
+            ->assertJsonPath('metadata.0.category_id', $category->id);
 
         $imageId = $uploadResponse->json('metadata.0.id');
 
         $this->withHeaders($headers)
-            ->getJson('/api/images-gallery?_page=1&_per_page=10')
+            ->getJson('/api/images-gallery?_expand=category')
             ->assertOk()
-            ->assertJsonCount(2, 'metadata.items')
-            ->assertJsonPath('metadata.pagination.total', 2);
+            ->assertJsonCount(2, 'metadata')
+            ->assertJsonPath('metadata.0.category.id', $category->id);
 
         $this->withHeaders($headers)
-            ->patch('/api/images-gallery/update/'.$imageId, [
-                'item_type' => GalleryItemType::COSTUME->value,
+            ->patchJson('/api/images-gallery/'.$imageId, [
+                'file_name' => 'renamed.jpg',
+                'category_id' => $category->id,
             ])
             ->assertOk()
             ->assertJsonPath('metadata.id', $imageId)
-            ->assertJsonPath('metadata.item_type', GalleryItemType::COSTUME->value);
+            ->assertJsonPath('metadata.file_name', 'renamed.jpg');
 
         $this->withHeaders($headers)
-            ->delete('/api/images/delete/'.$imageId)
+            ->delete('/api/images-gallery/'.$imageId)
             ->assertOk()
             ->assertJsonPath('metadata', null);
 
@@ -116,32 +129,39 @@ class CatalogApiTest extends TestCase
         ]);
     }
 
-    public function test_authenticated_user_can_create_and_list_costumes_and_equipment_props(): void
+    public function test_authenticated_user_can_create_update_and_list_costumes_and_equipment_props(): void
     {
-        Storage::fake('public');
         $headers = $this->authenticate();
 
         $costumeCategory = ItemCategory::query()->create([
-            'code' => 'CAT0001',
             'name' => 'Ao dai',
+            'slug' => 'ao-dai',
             'type' => ItemCategoryType::COSTUME,
             'is_active' => true,
         ]);
 
         $propCategory = ItemCategory::query()->create([
-            'code' => 'CAT0002',
             'name' => 'Hoa mua',
+            'slug' => 'hoa-mua',
             'type' => ItemCategoryType::EQUIPMENT_PROPS,
             'is_active' => true,
         ]);
 
-        $image = GalleryImage::query()->create([
-            'item_type' => GalleryItemType::COSTUME,
-            'disk' => 'public',
-            'path' => 'images-gallery/costume/sample.jpg',
-            'original_name' => 'sample.jpg',
+        $costumeImage = GalleryImage::query()->create([
+            'category_id' => $costumeCategory->id,
+            'file_name' => 'costume.jpg',
             'mime_type' => 'image/jpeg',
             'size' => 100,
+            'dest' => '/storage/images-gallery/costume.jpg',
+            'is_active' => true,
+        ]);
+
+        $propImage = GalleryImage::query()->create([
+            'category_id' => $propCategory->id,
+            'file_name' => 'prop.jpg',
+            'mime_type' => 'image/jpeg',
+            'size' => 100,
+            'dest' => '/storage/images-gallery/prop.jpg',
             'is_active' => true,
         ]);
 
@@ -151,18 +171,20 @@ class CatalogApiTest extends TestCase
                 'category_id' => $costumeCategory->id,
                 'color' => '#5b958c',
                 'sizes' => ['S', 'M', 'L'],
+                'unit' => 'SET',
                 'gender' => 'FEMALE',
-                'images_ids' => $image->id,
+                'images' => [$costumeImage->id],
                 'rental_price_per_day' => 200000,
                 'description' => 'Ao tac xanh co truyen',
-                'tags' => ['ao tac'],
+                'hashtags' => ['ao tac'],
             ]);
 
         $costumeResponse
             ->assertCreated()
             ->assertJsonPath('metadata.name', 'Ao tac xanh bac ha')
-            ->assertJsonPath('metadata.item_type', ItemCategoryType::COSTUME->value)
-            ->assertJsonPath('metadata.image_ids.0', $image->id);
+            ->assertJsonPath('metadata.category.type', ItemCategoryType::COSTUME->value)
+            ->assertJsonPath('metadata.images.0', $costumeImage->id)
+            ->assertJsonPath('metadata.hashtags.0', 'ao tac');
 
         $costumeId = $costumeResponse->json('metadata.id');
 
@@ -174,15 +196,16 @@ class CatalogApiTest extends TestCase
 
         $this->withHeaders($headers)
             ->patchJson("/api/costumes/{$costumeId}", [
-                'image_ids' => [],
+                'images' => [],
             ])
             ->assertOk()
-            ->assertJsonPath('metadata.image_ids', []);
+            ->assertJsonPath('metadata.images', []);
 
-        $this->withHeaders($headers)
+        $propResponse = $this->withHeaders($headers)
             ->postJson('/api/equipment-props', [
                 'name' => 'Hoa mua cam tay',
                 'category_id' => $propCategory->id,
+                'unit' => 'Cap',
                 'rental_price_per_day' => 50000,
                 'weight_kg' => 0.5,
                 'demensions' => [
@@ -193,11 +216,28 @@ class CatalogApiTest extends TestCase
                 'is_fragile' => false,
                 'description' => 'Dao cu bieu dien',
                 'tags' => ['hoa mua'],
-            ])
+                'image_id' => $propImage->id,
+            ]);
+
+        $propResponse
             ->assertCreated()
-            ->assertJsonPath('metadata.item_type', ItemCategoryType::EQUIPMENT_PROPS->value)
+            ->assertJsonPath('metadata.category.type', ItemCategoryType::EQUIPMENT_PROPS->value)
             ->assertJsonPath('metadata.dimensions.width_cm', 60)
-            ->assertJsonPath('metadata.weight_kg', 0.5);
+            ->assertJsonPath('metadata.weight_kg', 0.5)
+            ->assertJsonPath('metadata.images.0', $propImage->id);
+
+        $propId = $propResponse->json('metadata.id');
+
+        $this->withHeaders($headers)
+            ->patchJson("/api/equipment-props/{$propId}", [
+                'dimensions' => [
+                    'width_cm' => 40,
+                    'height_cm' => 40,
+                    'depth_cm' => 8,
+                ],
+            ])
+            ->assertOk()
+            ->assertJsonPath('metadata.dimensions.width_cm', 40);
 
         $this->withHeaders($headers)
             ->getJson('/api/equipment-props')

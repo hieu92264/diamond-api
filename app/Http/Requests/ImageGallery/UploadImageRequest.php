@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\ImageGallery;
 
-use App\Enums\GalleryItemType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,18 +14,29 @@ class UploadImageRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->hasFile('file')) {
-            $files = $this->file('file');
-            $this->files->set('file', is_array($files) ? $files : [$files]);
+        $data = $this->input('data');
+
+        if (is_string($data) && $data !== '') {
+            $decoded = json_decode($data, true);
+
+            if (is_array($decoded)) {
+                $this->merge($decoded);
+            }
+        }
+
+        $files = $this->file('files', $this->file('file'));
+
+        if ($files !== null) {
+            $this->files->set('files', is_array($files) ? $files : [$files]);
         }
     }
 
     public function rules(): array
     {
         return [
-            'item_type' => ['required', Rule::enum(GalleryItemType::class)],
-            'file' => ['required', 'array', 'min:1'],
-            'file.*' => ['file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'category_id' => ['required', 'integer', Rule::exists('item_categories', 'id')],
+            'files' => ['required', 'array', 'min:1'],
+            'files.*' => ['file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }

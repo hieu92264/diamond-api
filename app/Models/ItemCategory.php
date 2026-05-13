@@ -11,10 +11,9 @@ class ItemCategory extends Model
 {
     protected $fillable = [
         'is_active',
-        'code',
         'name',
+        'slug',
         'type',
-        'remarks',
     ];
 
     protected function casts(): array
@@ -32,10 +31,15 @@ class ItemCategory extends Model
 
     public function equipments(): HasMany
     {
-        return $this->hasMany(EquipmentProp::class, 'item_category_id', 'id');
+        return $this->hasMany(EquipmentProp::class, 'category_id', 'id');
     }
 
     public function equipmentProps(): HasMany
+    {
+        return $this->equipments();
+    }
+
+    public function costumes(): HasMany
     {
         return $this->equipments();
     }

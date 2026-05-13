@@ -16,7 +16,6 @@ class AuthTest extends TestCase
     {
         User::factory()->create([
             'username' => 'admin',
-            'email' => 'admin@example.com',
             'password' => 'secret123',
             'role' => UserRole::ADMIN,
             'is_active' => true,
@@ -48,7 +47,7 @@ class AuthTest extends TestCase
             ->get('/api/_test/admin-only', fn () => response()->json(['ok' => true]));
 
         $user = User::factory()->create([
-            'role' => UserRole::WAREHOUSE_STAFF,
+            'role' => UserRole::USER,
             'is_active' => true,
         ]);
 

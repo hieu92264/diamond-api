@@ -2,22 +2,21 @@
 
 namespace App\Models;
 
-use App\Enums\GalleryItemType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Facades\Storage;
 
 class GalleryImage extends Model
 {
     protected $fillable = [
         'is_active',
-        'item_type',
-        'disk',
-        'path',
-        'original_name',
+        'file_name',
         'mime_type',
         'size',
+        'dest',
+        'category_id',
+        'created_by',
     ];
 
     protected $appends = [
@@ -28,7 +27,6 @@ class GalleryImage extends Model
     {
         return [
             'is_active' => 'boolean',
-            'item_type' => GalleryItemType::class,
             'size' => 'integer',
         ];
     }
@@ -40,7 +38,12 @@ class GalleryImage extends Model
 
     public function getUrlAttribute(): string
     {
-        return Storage::disk($this->disk)->url($this->path);
+        return $this->dest;
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ItemCategory::class, 'category_id', 'id');
     }
 
     public function equipmentProps(): BelongsToMany

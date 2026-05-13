@@ -17,8 +17,8 @@ class StoreItemCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique('item_categories', 'name')],
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('item_categories', 'slug')],
             'type' => ['required', Rule::enum(ItemCategoryType::class)],
-            'remarks' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
         ];
     }

@@ -60,7 +60,6 @@ class UserApiTest extends TestCase
     {
         $payload = [
             'username' => 'new-admin',
-            'email' => 'new-admin@example.com',
             'password' => 'secret123',
             'role' => UserRole::MANAGER->value,
             'is_active' => true,
@@ -71,12 +70,10 @@ class UserApiTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('statusCode', 201)
             ->assertJsonPath('metadata.username', 'new-admin')
-            ->assertJsonPath('metadata.email', 'new-admin@example.com')
             ->assertJsonPath('metadata.role', UserRole::MANAGER->value);
 
         $this->assertDatabaseHas('users', [
             'username' => 'new-admin',
-            'email' => 'new-admin@example.com',
             'role' => UserRole::MANAGER->value,
             'is_active' => 1,
         ]);
@@ -86,14 +83,12 @@ class UserApiTest extends TestCase
     {
         $targetUser = User::factory()->create([
             'username' => 'old-name',
-            'email' => 'old@example.com',
-            'role' => UserRole::WAREHOUSE_STAFF,
+            'role' => UserRole::USER,
         ]);
 
         $payload = [
             'username' => 'updated-name',
-            'email' => 'updated@example.com',
-            'role' => UserRole::HR_STAFF->value,
+            'role' => UserRole::MANAGER->value,
             'is_active' => false,
         ];
 
@@ -102,15 +97,13 @@ class UserApiTest extends TestCase
             ->assertOk()
             ->assertJsonPath('statusCode', 200)
             ->assertJsonPath('metadata.username', 'updated-name')
-            ->assertJsonPath('metadata.email', 'updated@example.com')
-            ->assertJsonPath('metadata.role', UserRole::HR_STAFF->value)
+            ->assertJsonPath('metadata.role', UserRole::MANAGER->value)
             ->assertJsonPath('metadata.is_active', false);
 
         $this->assertDatabaseHas('users', [
             'id' => $targetUser->id,
             'username' => 'updated-name',
-            'email' => 'updated@example.com',
-            'role' => UserRole::HR_STAFF->value,
+            'role' => UserRole::MANAGER->value,
             'is_active' => 0,
         ]);
     }
@@ -133,16 +126,14 @@ class UserApiTest extends TestCase
         ]);
     }
 
-    public function test_store_user_validates_unique_username_and_email(): void
+    public function test_store_user_validates_unique_username(): void
     {
         User::factory()->create([
             'username' => 'existing-user',
-            'email' => 'existing@example.com',
         ]);
 
         $payload = [
             'username' => 'existing-user',
-            'email' => 'existing@example.com',
             'password' => 'secret123',
             'role' => UserRole::MANAGER->value,
         ];
@@ -152,7 +143,7 @@ class UserApiTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonPath('statusCode', 422)
             ->assertJsonStructure([
-                'metadata' => ['username', 'email'],
+                'metadata' => ['username'],
             ]);
     }
 }

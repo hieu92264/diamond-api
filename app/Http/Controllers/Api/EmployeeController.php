@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Interfaces\EmployeeServiceInterface;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
+use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,23 @@ class EmployeeController extends Controller
         $expand = array_filter(
             array_map('trim', explode(',', (string) $request->query('_expand', '')))
         );
-        $result = $this->employeeService->all($expand);
+        $query = Employee::query()->with($expand);
+
+        foreach (['id', 'position', 'work_status'] as $field) {
+            $inValue = $request->query($field.':in');
+
+            if ($inValue !== null && $inValue !== '') {
+                $query->whereIn($field, array_filter(array_map('trim', explode(',', (string) $inValue))));
+            }
+
+            $eqValue = $request->query($field.':eq');
+
+            if ($eqValue !== null && $eqValue !== '') {
+                $query->where($field, $eqValue);
+            }
+        }
+
+        $result = $query->orderByDesc('id')->get()->toArray();
         return $this->success($result, 'Lấy danh sách profile thành công!');
     }
 

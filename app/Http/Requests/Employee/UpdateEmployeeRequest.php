@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\Employee;
 
-use App\Enums\Department;
-use App\Enums\Gender;
 use App\Enums\Position;
 use App\Enums\Work;
 use App\Models\Employee;
@@ -23,12 +21,12 @@ class UpdateEmployeeRequest extends FormRequest
 
         return [
             'is_active' => ['sometimes', 'boolean'],
+            'user_id' => ['nullable', 'integer', Rule::exists('users', 'id'), Rule::unique('employees', 'user_id')->ignore($employee)],
             'full_name' => ['sometimes', 'required', 'string', 'max:255'],
-            'dob' => ['nullable', 'date'],
-            'gender' => ['nullable', Rule::enum(Gender::class)],
+            'email' => ['sometimes', 'required', 'email', 'max:255', Rule::unique('employees', 'email')->ignore($employee)],
             'phone' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
-//            'department' => ['sometimes', 'required', Rule::enum(Department::class)],
+            'citizen_id_number' => ['sometimes', 'required', 'string', 'max:50', Rule::unique('employees', 'citizen_id_number')->ignore($employee)],
             'position' => ['sometimes', 'required', Rule::enum(Position::class)],
             'hire_date' => ['nullable', 'date'],
             'work_status' => ['sometimes', 'required', Rule::enum(Work::class)],

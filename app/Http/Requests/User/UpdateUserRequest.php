@@ -20,7 +20,6 @@ class UpdateUserRequest extends FormRequest
 
         return [
             'username' => ['sometimes', 'required', 'string', 'max:50', Rule::unique('users', 'username')->ignore($user)],
-            'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user)],
             'password' => ['nullable', 'string', 'min:6'],
             'role' => ['sometimes', 'required', Rule::enum(UserRole::class)],
             'employee_id' => [
@@ -30,7 +29,6 @@ class UpdateUserRequest extends FormRequest
                 Rule::unique('users', 'employee_id')->ignore($user),
             ],
             'is_active' => ['sometimes', 'boolean'],
-            'last_login_at' => ['nullable', 'date'],
         ];
     }
 

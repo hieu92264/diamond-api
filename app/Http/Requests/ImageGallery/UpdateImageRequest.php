@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\ImageGallery;
 
-use App\Enums\GalleryItemType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +15,8 @@ class UpdateImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'item_type' => ['sometimes', 'required', Rule::enum(GalleryItemType::class)],
+            'file_name' => ['sometimes', 'required', 'string', 'max:255'],
+            'category_id' => ['sometimes', 'required', 'integer', Rule::exists('item_categories', 'id')],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }

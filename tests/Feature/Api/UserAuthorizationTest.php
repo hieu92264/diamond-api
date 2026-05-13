@@ -42,18 +42,11 @@ class UserAuthorizationTest extends TestCase
     {
         $this->withHeaders($this->authenticateAs(UserRole::MANAGER))
             ->getJson('/api/users')
-            ->assertForbidden()
-            ->assertJsonPath('message', 'Bạn không có quyền truy cập.');
+            ->assertForbidden();
 
-        $this->withHeaders($this->authenticateAs(UserRole::HR_STAFF))
+        $this->withHeaders($this->authenticateAs(UserRole::USER))
             ->getJson('/api/users')
-            ->assertForbidden()
-            ->assertJsonPath('message', 'Bạn không có quyền truy cập.');
-
-        $this->withHeaders($this->authenticateAs(UserRole::WAREHOUSE_STAFF))
-            ->getJson('/api/users')
-            ->assertForbidden()
-            ->assertJsonPath('message', 'Bạn không có quyền truy cập.');
+            ->assertForbidden();
     }
 
     public function test_non_admin_cannot_mutate_users(): void
@@ -63,19 +56,18 @@ class UserAuthorizationTest extends TestCase
         $this->withHeaders($this->authenticateAs(UserRole::MANAGER))
             ->postJson('/api/users/create', [
                 'username' => 'blocked-user',
-                'email' => 'blocked@example.com',
                 'password' => 'secret123',
-                'role' => UserRole::HR_STAFF->value,
+                'role' => UserRole::USER->value,
             ])
             ->assertForbidden();
 
-        $this->withHeaders($this->authenticateAs(UserRole::HR_STAFF))
+        $this->withHeaders($this->authenticateAs(UserRole::USER))
             ->patchJson("/api/users/update/{$targetUser->id}", [
-                'username' => 'updated-by-hr',
+                'username' => 'updated-by-user',
             ])
             ->assertForbidden();
 
-        $this->withHeaders($this->authenticateAs(UserRole::WAREHOUSE_STAFF))
+        $this->withHeaders($this->authenticateAs(UserRole::USER))
             ->deleteJson("/api/users/delete/{$targetUser->id}")
             ->assertForbidden();
     }

@@ -16,11 +16,9 @@ return new class extends Migration
             $table->id();
             $table->boolean('is_active')->default(true);
             $table->string('username', 50)->unique();
-            $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', UserRole::values());
             $table->foreignId('employee_id')->nullable()->unique()->constrained('employees')->nullOnDelete();
-            $table->dateTime('last_login_at')->nullable();
             $table->timestamps();
 
             $table->index(['role', 'is_active']);

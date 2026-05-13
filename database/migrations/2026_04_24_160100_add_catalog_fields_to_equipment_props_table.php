@@ -12,11 +12,11 @@ return new class extends Migration
             $table->string('color')->nullable()->after('name');
             $table->json('sizes')->nullable()->after('color');
             $table->string('gender')->nullable()->after('sizes');
-            $table->decimal('weight_kg', 8, 2)->nullable()->after('default_deposit_price');
+            $table->decimal('weight_kg', 8, 2)->nullable()->after('rental_price_per_day');
             $table->json('dimensions')->nullable()->after('weight_kg');
             $table->boolean('is_fragile')->default(false)->after('dimensions');
-            $table->json('tags')->nullable()->after('is_fragile');
-            $table->text('description')->nullable()->after('tags');
+            $table->json('hashtags')->nullable()->after('is_fragile');
+            $table->text('description')->nullable()->after('hashtags');
         });
     }
 
@@ -30,7 +30,7 @@ return new class extends Migration
                 'weight_kg',
                 'dimensions',
                 'is_fragile',
-                'tags',
+                'hashtags',
                 'description',
             ]);
         });

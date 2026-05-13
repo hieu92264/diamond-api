@@ -15,11 +15,9 @@ class UserFactory extends Factory
     {
         return [
             'username' => fake()->unique()->userName(),
-            'email' => fake()->unique()->safeEmail(),
             'password' => 'password',
-            'role' => UserRole::WAREHOUSE_STAFF,
+            'role' => UserRole::USER,
             'is_active' => true,
-            'last_login_at' => null,
         ];
     }
 }

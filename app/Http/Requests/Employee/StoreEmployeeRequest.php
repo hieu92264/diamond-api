@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\Employee;
 
-use App\Enums\Department;
-use App\Enums\Gender;
 use App\Enums\Position;
 use App\Enums\Work;
 use Illuminate\Foundation\Http\FormRequest;
@@ -20,15 +18,15 @@ class StoreEmployeeRequest extends FormRequest
     {
         return [
             'is_active' => ['nullable', 'boolean'],
+            'user_id' => ['nullable', 'integer', Rule::exists('users', 'id'), Rule::unique('employees', 'user_id')],
             'full_name' => ['required', 'string', 'max:255'],
-            'dob' => ['nullable', 'date'],
-            'gender' => ['nullable', Rule::enum(Gender::class)],
+            'email' => ['required', 'email', 'max:255', Rule::unique('employees', 'email')],
             'phone' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
-//            'department' => ['required', Rule::enum(Department::class)],
+            'citizen_id_number' => ['required', 'string', 'max:50', Rule::unique('employees', 'citizen_id_number')],
             'position' => ['required', Rule::enum(Position::class)],
             'hire_date' => ['nullable', 'date'],
-            'work_status' => ['required', Rule::enum(Work::class)],
+            'work_status' => ['nullable', Rule::enum(Work::class)],
             'remarks' => ['nullable', 'string'],
         ];
     }

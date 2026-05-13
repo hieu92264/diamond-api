@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\ItemCategoryType;
-use App\Http\Controllers\Api\Concerns\InteractsWithCatalogItems;
+use App\Http\Controllers\Api\Concerns\HandlesCatalogItems;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Costume\StoreCostumeRequest;
 use App\Http\Requests\Costume\UpdateCostumeRequest;
@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CostumeController extends Controller
 {
-    use InteractsWithCatalogItems;
+    use HandlesCatalogItems;
 
     public function index(Request $request): JsonResponse
     {
         $query = $this->catalogItemsQuery(ItemCategoryType::COSTUME);
         $this->applyCatalogFilters($query, $request, [
             'id' => 'id',
-            'category_id' => 'item_category_id',
+            'category_id' => 'category_id',
             'gender' => 'gender',
         ]);
 
@@ -41,7 +41,7 @@ class CostumeController extends Controller
 
         $costume = DB::transaction(function () use ($data): EquipmentProp {
             $item = EquipmentProp::query()->create(
-                $this->buildCatalogPayload($data, 'COS', true)
+                $this->buildCatalogPayload($data, true)
             );
 
             $this->syncGalleryImages($item, $data['image_ids'] ?? null, ItemCategoryType::COSTUME);
@@ -66,7 +66,7 @@ class CostumeController extends Controller
         }
 
         $costume = DB::transaction(function () use ($costume, $data): EquipmentProp {
-            $payload = $this->updateCatalogPayload($data, true);
+            $payload = $this->updateCatalogPayload($data, true, $costume);
 
             if ($payload !== []) {
                 $costume->update($payload);

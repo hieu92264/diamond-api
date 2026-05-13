@@ -15,32 +15,42 @@ class StoreCostumeRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $imageIds = $this->input('image_ids', $this->input('images_ids'));
+        $imageIds = $this->input('images', $this->input('image_ids', $this->input('images_ids', $this->input('image_id'))));
 
         if ($imageIds !== null && ! is_array($imageIds)) {
             $imageIds = [$imageIds];
         }
 
-        $this->merge([
-            'image_ids' => $imageIds,
-        ]);
+        $data = [];
+
+        if ($imageIds !== null) {
+            $data['image_ids'] = $imageIds;
+        }
+
+        if ($this->has('hashtags') || $this->has('tags')) {
+            $data['hashtags'] = $this->input('hashtags', $this->input('tags'));
+        }
+
+        $this->merge($data);
     }
 
     public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')],
             'category_id' => ['required', 'integer', Rule::exists('item_categories', 'id')],
             'color' => ['nullable', 'string', 'max:50'],
             'sizes' => ['nullable', 'array'],
             'sizes.*' => ['string', 'max:50'],
+            'unit' => ['nullable', 'string', Rule::in(['SET', 'PIECE'])],
             'gender' => ['nullable', Rule::enum(Gender::class)],
             'image_ids' => ['nullable', 'array'],
             'image_ids.*' => ['integer', Rule::exists('gallery_images', 'id')],
             'rental_price_per_day' => ['required', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],
-            'tags' => ['nullable', 'array'],
-            'tags.*' => ['string', 'max:100'],
+            'hashtags' => ['nullable', 'array'],
+            'hashtags.*' => ['string', 'max:100'],
             'is_active' => ['nullable', 'boolean'],
         ];
     }

@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('item_categories', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_active')->default(true);
-            $table->string('code')->unique();
             $table->string('name');
-            $table->text('remarks')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
 
             $table->unique('name');

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\EquipmentStatus;
 use App\Enums\Gender;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -14,49 +13,33 @@ class EquipmentProp extends Model
 {
     protected $fillable = [
         'is_active',
-        'code',
         'name',
+        'slug',
         'color',
         'sizes',
         'gender',
-        'item_category_id',
+        'category_id',
         'unit',
         'warehouse_id',
-        'status',
-        'quantity_total',
-        'quantity_available',
-        'minimum_quantity',
-        'purchase_date',
-        'item_value',
-        'default_rental_price',
-        'default_deposit_price',
+        'rental_price_per_day',
         'weight_kg',
         'dimensions',
         'is_fragile',
-        'tags',
+        'hashtags',
         'description',
-        'remarks',
-        'image_path',
     ];
 
     protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
-            'status' => EquipmentStatus::class,
             'sizes' => 'array',
             'gender' => Gender::class,
-            'quantity_total' => 'integer',
-            'quantity_available' => 'integer',
-            'minimum_quantity' => 'integer',
-            'purchase_date' => 'date',
-            'item_value' => 'decimal:2',
-            'default_rental_price' => 'decimal:2',
-            'default_deposit_price' => 'decimal:2',
+            'rental_price_per_day' => 'decimal:2',
             'weight_kg' => 'decimal:2',
             'dimensions' => 'array',
             'is_fragile' => 'boolean',
-            'tags' => 'array',
+            'hashtags' => 'array',
         ];
     }
 
@@ -65,33 +48,9 @@ class EquipmentProp extends Model
         return $query->where('is_active', true);
     }
 
-    public function scopeStatus(Builder $query, EquipmentStatus|string $status): Builder
-    {
-        $value = $status instanceof EquipmentStatus ? $status->value : strtoupper($status);
-
-        return $query->where('status', $value);
-    }
-
-    public function scopeInWarehouse(Builder $query, int $warehouseId): Builder
-    {
-        return $query->where('warehouse_id', $warehouseId);
-    }
-
-    public function scopeAvailable(Builder $query): Builder
-    {
-        return $query
-            ->where('quantity_available', '>', 0)
-            ->where('status', EquipmentStatus::AVAILABLE->value);
-    }
-
-    public function scopeLowStock(Builder $query): Builder
-    {
-        return $query->whereColumn('quantity_available', '<=', 'minimum_quantity');
-    }
-
     public function itemCategory(): BelongsTo
     {
-        return $this->belongsTo(ItemCategory::class, 'item_category_id', 'id');
+        return $this->belongsTo(ItemCategory::class, 'category_id', 'id');
     }
 
     public function warehouse(): BelongsTo

@@ -5,7 +5,7 @@ namespace App\Http\Requests\EquipmentProp;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreEquipmentPropRequest extends FormRequest
+class UpdateEquipmentPropRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -40,11 +40,11 @@ class StoreEquipmentPropRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')],
-            'category_id' => ['required', 'integer', Rule::exists('item_categories', 'id')],
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')->ignore($this->route('id'))],
+            'category_id' => ['sometimes', 'required', 'integer', Rule::exists('item_categories', 'id')],
             'unit' => ['nullable', 'string', 'max:50'],
-            'rental_price_per_day' => ['required', 'numeric', 'min:0'],
+            'rental_price_per_day' => ['sometimes', 'required', 'numeric', 'min:0'],
             'weight_kg' => ['nullable', 'numeric', 'min:0'],
             'dimensions' => ['nullable', 'array'],
             'dimensions.width_cm' => ['nullable', 'numeric', 'min:0'],
@@ -56,7 +56,7 @@ class StoreEquipmentPropRequest extends FormRequest
             'hashtags.*' => ['string', 'max:100'],
             'image_ids' => ['nullable', 'array'],
             'image_ids.*' => ['integer', Rule::exists('gallery_images', 'id')],
-            'is_active' => ['nullable', 'boolean'],
+            'is_active' => ['sometimes', 'boolean'],
         ];
     }
 }

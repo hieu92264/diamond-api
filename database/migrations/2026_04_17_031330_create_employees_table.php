@@ -1,6 +1,7 @@
 <?php
 
-use App\Enums\Gender;
+use App\Enums\Position;
+use App\Enums\Work;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,20 +16,20 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('user_id')->nullable()->unique();
             $table->string('employee_code')->unique();
             $table->string('full_name');
-            $table->date('dob')->nullable();
-            $table->enum('gender', Gender::values())->nullable();
+            $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
-            $table->enum('department', \App\Enums\Department::values())->nullable();
-            $table->enum('position', \App\Enums\Position::values());
+            $table->string('citizen_id_number')->unique();
+            $table->enum('position', Position::values());
             $table->date('hire_date')->nullable();
-            $table->enum('work_status', \App\Enums\Work::values());
+            $table->enum('work_status', Work::values())->default(Work::ACTIVE->value);
             $table->text('remarks')->nullable();
             $table->timestamps();
 
-            $table->index(['department', 'position']);
+            $table->index('position');
             $table->index('work_status');
         });
     }

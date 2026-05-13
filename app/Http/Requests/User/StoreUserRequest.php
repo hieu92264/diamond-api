@@ -17,7 +17,6 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'username' => ['required', 'string', 'max:50', Rule::unique('users', 'username')],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:6'],
             'role' => ['required', Rule::enum(UserRole::class)],
             'employee_id' => [
@@ -27,7 +26,6 @@ class StoreUserRequest extends FormRequest
                 Rule::unique('users', 'employee_id'),
             ],
             'is_active' => ['nullable', 'boolean'],
-            'last_login_at' => ['nullable', 'date'],
         ];
     }
 }

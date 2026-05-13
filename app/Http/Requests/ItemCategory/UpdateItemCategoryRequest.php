@@ -23,8 +23,13 @@ class UpdateItemCategoryRequest extends FormRequest
                 'max:255',
                 Rule::unique('item_categories', 'name')->ignore($this->route('id')),
             ],
+            'slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('item_categories', 'slug')->ignore($this->route('id')),
+            ],
             'type' => ['sometimes', 'required', Rule::enum(ItemCategoryType::class)],
-            'remarks' => ['nullable', 'string'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }

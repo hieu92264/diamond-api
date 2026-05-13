@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\Department;
-use App\Enums\Gender;
 use App\Enums\Position;
 use App\Enums\Work;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,13 +13,13 @@ class Employee extends Model
 {
     protected $fillable = [
         'is_active',
+        'user_id',
         'employee_code',
         'full_name',
-        'dob',
-        'gender',
+        'email',
         'phone',
         'address',
-        'department',
+        'citizen_id_number',
         'position',
         'hire_date',
         'work_status',
@@ -32,9 +30,6 @@ class Employee extends Model
     {
         return [
             'is_active' => 'boolean',
-            'dob' => 'date',
-            'gender' => Gender::class,
-            'department' => Department::class,
             'position' => Position::class,
             'hire_date' => 'date',
             'work_status' => Work::class,
@@ -44,13 +39,6 @@ class Employee extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
-    }
-
-    public function scopeDepartment(Builder $query, Department|string $department): Builder
-    {
-        $value = $department instanceof Department ? $department->value : strtoupper($department);
-
-        return $query->where('department', $value);
     }
 
     public function scopePosition(Builder $query, Position|string $position): Builder
