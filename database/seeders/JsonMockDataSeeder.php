@@ -167,6 +167,10 @@ class JsonMockDataSeeder extends Seeder
 
     private function passwordValue(string $password): string
     {
-        return Hash::isHashed($password) ? $password : Hash::make($password);
+        if (Hash::isHashed($password) || preg_match('/^\$2[aby]\$/', $password) === 1) {
+            return Hash::make((string) env('SEED_USER_PASSWORD', '123123'));
+        }
+
+        return Hash::make($password);
     }
 }

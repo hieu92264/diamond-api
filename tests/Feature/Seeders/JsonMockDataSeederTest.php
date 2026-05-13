@@ -9,6 +9,7 @@ use App\Models\ItemCategory;
 use App\Models\User;
 use Database\Seeders\JsonMockDataSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class JsonMockDataSeederTest extends TestCase
@@ -30,6 +31,7 @@ class JsonMockDataSeederTest extends TestCase
             'username' => 'quanghiep031',
             'employee_id' => 1,
         ]);
+        $this->assertTrue(Hash::check('123123', User::query()->findOrFail(1)->password));
 
         $this->assertDatabaseHas('employees', [
             'id' => 1,

@@ -1,1076 +1,965 @@
-{
-  "info": {
-    "_postman_id": "d43e16db-3258-4a92-bb22-63436b50a6e5",
-    "name": "Costume Rental API",
-    "description": "# Costume Rental API\n\nCollection này được cập nhật theo các route đang chạy thực tế của backend Laravel vào ngày 2026-04-21.\n\n## Cấu hình cơ bản\n\n| Key | Value | Ghi chú |\n| --- | --- | --- |\n| `base_url` | `{{base_url}}` | Cần bao gồm sẵn prefix API |\n| Ví dụ local | `http://localhost:8000/api` | Dùng khi chạy local |\n| Kiểu xác thực | Bearer token | Token được lưu trong `{{access_token}}` |\n\n## Cấu trúc response chung\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `message` | string | Thông báo từ backend |\n| `statusCode` | number | Mã trạng thái HTTP |\n| `metadata` | mixed | Dữ liệu chính mà frontend sẽ sử dụng |\n| `path` | string | API path đã được gọi |\n| `timestamp` | ISO datetime string | Thời điểm trả response |\n\n## Luồng xác thực\n\n| Bước | Endpoint | Ghi chú |\n| --- | --- | --- |\n| 1 | `POST /auth/login` | Đăng nhập để lấy JWT |\n| 2 | `GET /auth/me` | Lấy thông tin user hiện tại |\n| 3 | `GET /auth/refresh` | Làm mới token |\n| 4 | `POST /auth/logout` | Đăng xuất |\n\n## Tài nguyên hiện có\n\n| Resource | Table | Ghi chú |\n| --- | --- | --- |\n| `Users` | `users` | Đã có đầy đủ route CRUD |\n| `Employees` | `employees` | Đã có đầy đủ route CRUD |\n| Các model khác | nhiều bảng khác | Đã có model nhưng chưa mở route trong collection này |\n\n## `_expand`\n\n| Query param | Type | Example | Ghi chú |\n| --- | --- | --- | --- |\n| `_expand` | string CSV | `_expand=employee` | Dùng để eager load relation, có thể truyền nhiều giá trị |\n\n## Các enum hiện có trong backend\n\n| Enum | Values |\n| --- | --- |\n| `UserRole` | `ADMIN`, `MANAGER`, `HR_STAFF`, `WAREHOUSE_STAFF` |\n| `Gender` | `MALE`, `FEMALE`, `UNKNOWN` |\n| `Department` | `BOARD_OF_DIRECTORS`, `ACCOUNTING_ADMIN`, `HR`, `EVENT_ORGANIZATION`, `TECHNICAL` |\n| `Position` | `SINGER`, `MC`, `RAPPER`, `DANCER`, `CHOREOGRAPHER`, `LOGISTICS_STAFF`, `SOUND_TECHNICIAN`, `LIGHTING_TECHNICIAN`, `WAREHOUSE_STAFF`, `OFFICE_STAFF` |\n| `Work` | `PROBATION`, `ON_LEAVE`, `OFFICIAL`, `TERMINATED` |\n\n## Các model đã có trong backend nhưng hiện chưa được mở route trong collection này\n\n| Model |\n| --- |\n| `BorrowReturnDetail` |\n| `BorrowReturnSlip` |\n| `Contract` |\n| `Customer` |\n| `EquipmentProp` |\n| `Incident` |\n| `InternalBorrowDetail` |\n| `InternalBorrowSlip` |\n| `InternalIncident` |\n| `InventoryTransaction` |\n| `ItemCategory` |\n| `MaintenanceTicket` |\n| `RentalDetail` |\n| `RentalIncident` |\n| `RentalPayment` |\n| `RentalSlip` |\n| `Warehouse` |",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "54156297",
-    "_collection_link": "https://go.postman.co/collection/54156297-d43e16db-3258-4a92-bb22-63436b50a6e5?source=collection_link"
-  },
-  "item": [
-    {
-      "name": "Auth",
-      "item": [
+﻿{
+    "info": {
+        "_postman_id": "d43e16db-3258-4a92-bb22-63436b50a6e5",
+        "name": "Costume Rental API",
+        "description": "# API Thuê Trang Phục\n\nĐã cập nhật theo các route Laravel hiện tại trong repository này.\n\nBase URL: `{{base_url}}`, mặc định `http://localhost:8000/api`.\nChạy `Xác thực / Đăng nhập` trước để tự động lưu `{{access_token}}`.\n\nTên trường quan trọng:\n- Người dùng: `username`, `password`, `role`, `employee_id`, `is_active`.\n- Nhân viên: `full_name`, `email`, `citizen_id_number`, `phone`, `address`, `position`, `work_status`, `hire_date`, `remarks`.\n- Danh mục: `name`, `slug`, `type`, `is_active`.\n- Tải ảnh lên: form-data `data={\"category_id\": 1}` và `files`; backend tự chuyển file upload sang WebP trước khi lưu.\n- Sản phẩm catalog: `category_id`, `images`, `hashtags`, `rental_price_per_day`.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
         {
-          "name": "Login",
-          "event": [
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "login"]
+                        },
+                        "description": "Đăng nhập và lưu JWT token.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"quanghiep031\",\n  \"password\": \"123123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "pm.test('Login status is 200', function () { pm.response.to.have.status(200); });",
+                                    "if (pm.response.code === 200 && jsonData.metadata) {",
+                                    "  const token = jsonData.metadata.access_token;",
+                                    "  const user = jsonData.metadata.user || {};",
+                                    "  if (token) pm.collectionVariables.set('access_token', token);",
+                                    "  if (user.id) pm.collectionVariables.set('user_id', String(user.id));",
+                                    "  if (user.employee_id) pm.collectionVariables.set('employee_id', String(user.employee_id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Me",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/me",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "me"]
+                        },
+                        "description": "Lấy thông tin người dùng hiện tại."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Refresh Token",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/refresh",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "refresh"]
+                        },
+                        "description": "Làm mới JWT token."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "logout"]
+                        },
+                        "description": "Đăng xuất token hiện tại."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/users?_expand=employee",
+                            "host": ["{{base_url}}"],
+                            "path": ["users"],
+                            "query": [
+                                {
+                                    "key": "_expand",
+                                    "value": "employee"
+                                }
+                            ]
+                        },
+                        "description": "Chỉ dành cho admin. Lấy danh sách người dùng."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get User Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/users/{{user_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["users", "{{user_id}}"]
+                        },
+                        "description": "Chỉ dành cho admin. Xem chi tiết người dùng."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/users/create",
+                            "host": ["{{base_url}}"],
+                            "path": ["users", "create"]
+                        },
+                        "description": "Chỉ dành cho admin. Schema người dùng hiện tại không có trường email.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"admin02\",\n  \"password\": \"123123\",\n  \"role\": \"ADMIN\",\n  \"employee_id\": null,\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "if (jsonData.metadata && jsonData.metadata.id) {",
+                                    "  pm.collectionVariables.set('user_id', String(jsonData.metadata.id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update User",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/users/update/{{user_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["users", "update", "{{user_id}}"]
+                        },
+                        "description": "Chỉ dành cho admin. Cập nhật người dùng.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"role\": \"USER\",\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/users/delete/{{user_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["users", "delete", "{{user_id}}"]
+                        },
+                        "description": "Chỉ dành cho admin. Xóa mềm người dùng."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Employees",
+            "item": [
+                {
+                    "name": "Get All Employees",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/employees?_expand=user&position:in=MANAGER,WAREHOUSE_MANAGER",
+                            "host": ["{{base_url}}"],
+                            "path": ["employees"],
+                            "query": [
+                                {
+                                    "key": "_expand",
+                                    "value": "user"
+                                },
+                                {
+                                    "key": "position:in",
+                                    "value": "MANAGER,WAREHOUSE_MANAGER"
+                                }
+                            ]
+                        },
+                        "description": "Chỉ dành cho admin. Hỗ trợ `_expand` và bộ lọc theo trường."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Employee Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/employees/{{employee_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["employees", "{{employee_id}}"]
+                        },
+                        "description": "Chỉ dành cho admin. Xem chi tiết nhân viên."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Employee",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/employees/create",
+                            "host": ["{{base_url}}"],
+                            "path": ["employees", "create"]
+                        },
+                        "description": "Chỉ dành cho admin. `employee_code` và `work_status` mặc định sẽ được tự động tạo.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"full_name\": \"Nguyễn Văn A\",\n  \"citizen_id_number\": \"123123123123\",\n  \"phone\": \"0336089900\",\n  \"address\": \"Hải Phòng\",\n  \"email\": \"nguyenvana@example.com\",\n  \"position\": \"TECHNICAL_CREW\",\n  \"remarks\": \"Tạo từ Postman\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "if (jsonData.metadata && jsonData.metadata.id) {",
+                                    "  pm.collectionVariables.set('employee_id', String(jsonData.metadata.id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Employee",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/employees/update/{{employee_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["employees", "update", "{{employee_id}}"]
+                        },
+                        "description": "Chỉ dành cho admin. Cập nhật nhân viên.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"phone\": \"0988123456\",\n  \"address\": \"Hà Nội\",\n  \"work_status\": \"ON_LEAVE\",\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Employee",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/employees/delete/{{employee_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["employees", "delete", "{{employee_id}}"]
+                        },
+                        "description": "Chỉ dành cho admin. Xóa mềm nhân viên."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Item Categories",
+            "item": [
+                {
+                    "name": "Get All Item Categories",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/item-categories?type:eq=COSTUME",
+                            "host": ["{{base_url}}"],
+                            "path": ["item-categories"],
+                            "query": [
+                                {
+                                    "key": "type:eq",
+                                    "value": "COSTUME"
+                                }
+                            ]
+                        },
+                        "description": "Lấy danh sách danh mục đang hoạt động."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Categories With Embedded Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/categories?type:eq=COSTUME&_embed=costumes,equipment_props",
+                            "host": ["{{base_url}}"],
+                            "path": ["categories"],
+                            "query": [
+                                {
+                                    "key": "type:eq",
+                                    "value": "COSTUME"
+                                },
+                                {
+                                    "key": "_embed",
+                                    "value": "costumes,equipment_props"
+                                }
+                            ]
+                        },
+                        "description": "Route bí danh, có thể nhúng thêm sản phẩm catalog liên quan."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Item Category",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/item-categories",
+                            "host": ["{{base_url}}"],
+                            "path": ["item-categories"]
+                        },
+                        "description": "Tạo danh mục. Nếu bỏ trống slug thì hệ thống sẽ tự sinh.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Hoa múa\",\n  \"type\": \"EQUIPMENT_PROPS\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "if (jsonData.metadata && jsonData.metadata.id) {",
+                                    "  pm.collectionVariables.set('category_id', String(jsonData.metadata.id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Item Category",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/item-categories/{{category_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["item-categories", "{{category_id}}"]
+                        },
+                        "description": "Cập nhật danh mục.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Trang phục Truyền thống\",\n  \"type\": \"COSTUME\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Item Category",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/item-categories/{{category_id}}?permanently=true",
+                            "host": ["{{base_url}}"],
+                            "path": ["item-categories", "{{category_id}}"],
+                            "query": [
+                                {
+                                    "key": "permanently",
+                                    "value": "true"
+                                }
+                            ]
+                        },
+                        "description": "Xóa danh mục. Bỏ query để xóa mềm."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Images Gallery",
+            "item": [
+                {
+                    "name": "Upload Gallery Images",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/images-gallery/upload",
+                            "host": ["{{base_url}}"],
+                            "path": ["images-gallery", "upload"]
+                        },
+                        "description": "Tải file lên. Backend sẽ chuyển file đã lưu sang WebP.",
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "data",
+                                    "value": "{\"category_id\": {{category_id}}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "files",
+                                    "type": "file",
+                                    "src": []
+                                }
+                            ]
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "if (Array.isArray(jsonData.metadata) && jsonData.metadata[0] && jsonData.metadata[0].id) {",
+                                    "  pm.collectionVariables.set('image_id', String(jsonData.metadata[0].id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get All Images",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/images-gallery?_page=1&_per_page=10&_expand=category",
+                            "host": ["{{base_url}}"],
+                            "path": ["images-gallery"],
+                            "query": [
+                                {
+                                    "key": "_page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "_per_page",
+                                    "value": "10"
+                                },
+                                {
+                                    "key": "_expand",
+                                    "value": "category"
+                                }
+                            ]
+                        },
+                        "description": "Lấy danh sách ảnh đang hoạt động. Phân trang được bật khi có `_page` hoặc `_per_page`."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Image Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/images-gallery/{{image_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["images-gallery", "{{image_id}}"]
+                        },
+                        "description": "Xem chi tiết một ảnh."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Image",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/images-gallery/{{image_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["images-gallery", "{{image_id}}"]
+                        },
+                        "description": "Cập nhật metadata của ảnh.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"file_name\": \"doi-ten.webp\",\n  \"category_id\": {{category_id}},\n  \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Image Legacy Route",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/images-gallery/update/{{image_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["images-gallery", "update", "{{image_id}}"]
+                        },
+                        "description": "Route cập nhật cũ vẫn được backend giữ lại.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"file_name\": \"doi-ten.webp\",\n  \"category_id\": {{category_id}}\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Image",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/images-gallery/{{image_id}}?permanantly=true",
+                            "host": ["{{base_url}}"],
+                            "path": ["images-gallery", "{{image_id}}"],
+                            "query": [
+                                {
+                                    "key": "permanantly",
+                                    "value": "true"
+                                }
+                            ]
+                        },
+                        "description": "Xóa ảnh. Bỏ query để xóa mềm."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Image Legacy Route",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/images/delete/{{image_id}}?permanantly=true",
+                            "host": ["{{base_url}}"],
+                            "path": ["images", "delete", "{{image_id}}"],
+                            "query": [
+                                {
+                                    "key": "permanantly",
+                                    "value": "true"
+                                }
+                            ]
+                        },
+                        "description": "Route xóa cũ vẫn được backend giữ lại."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Costumes",
+            "item": [
+                {
+                    "name": "Get All Costumes",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/costumes?id:in={{costume_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["costumes"],
+                            "query": [
+                                {
+                                    "key": "id:in",
+                                    "value": "{{costume_id}}"
+                                }
+                            ]
+                        },
+                        "description": "Lấy danh sách trang phục đang hoạt động."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Costume",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/costumes",
+                            "host": ["{{base_url}}"],
+                            "path": ["costumes"]
+                        },
+                        "description": "Tạo trang phục. Danh mục phải có type `COSTUME`.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Áo Tấc xanh bạc hà\",\n  \"category_id\": {{category_id}},\n  \"color\": \"#5b958c\",\n  \"sizes\": [\"S\", \"M\", \"L\", \"XL\"],\n  \"unit\": \"SET\",\n  \"gender\": \"FEMALE\",\n  \"images\": [{{image_id}}],\n  \"rental_price_per_day\": 200000,\n  \"description\": \"Áo tấc xanh cổ truyền\",\n  \"hashtags\": [\"áo tấc\"]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "if (jsonData.metadata && jsonData.metadata.id) {",
+                                    "  pm.collectionVariables.set('costume_id', String(jsonData.metadata.id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Costume",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/costumes/{{costume_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["costumes", "{{costume_id}}"]
+                        },
+                        "description": "Cập nhật trang phục.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"images\": [{{image_id}}],\n  \"hashtags\": [\"áo tấc\"]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Costume",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/costumes/{{costume_id}}?permanantly=true",
+                            "host": ["{{base_url}}"],
+                            "path": ["costumes", "{{costume_id}}"],
+                            "query": [
+                                {
+                                    "key": "permanantly",
+                                    "value": "true"
+                                }
+                            ]
+                        },
+                        "description": "Xóa mềm trang phục."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Equipment Props",
+            "item": [
+                {
+                    "name": "Get All Equipment Props",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/equipment-props",
+                            "host": ["{{base_url}}"],
+                            "path": ["equipment-props"]
+                        },
+                        "description": "Lấy danh sách đạo cụ thiết bị đang hoạt động."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Equipment Prop",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/equipment-props",
+                            "host": ["{{base_url}}"],
+                            "path": ["equipment-props"]
+                        },
+                        "description": "Tạo đạo cụ. Danh mục phải có type `EQUIPMENT_PROPS`. `demensions` được chấp nhận như alias của `dimensions`.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Hoa múa cam tay Huong duong\",\n  \"category_id\": {{category_id}},\n  \"unit\": \"Cặp\",\n  \"rental_price_per_day\": 50000,\n  \"weight_kg\": 0.5,\n  \"demensions\": {\n    \"width_cm\": 60,\n    \"height_cm\": 60,\n    \"depth_cm\": 10\n  },\n  \"is_fragile\": false,\n  \"description\": \"Đạo cụ biểu diễn\",\n  \"hashtags\": [\"hoa múa\"],\n  \"image_id\": {{image_id}}\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const jsonData = pm.response.json();",
+                                    "if (jsonData.metadata && jsonData.metadata.id) {",
+                                    "  pm.collectionVariables.set('equipment_prop_id', String(jsonData.metadata.id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Equipment Prop",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/equipment-props/{{equipment_prop_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["equipment-props", "{{equipment_prop_id}}"]
+                        },
+                        "description": "Cập nhật đạo cụ thiết bị.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"dimensions\": {\n    \"width_cm\": 40,\n    \"height_cm\": 40,\n    \"depth_cm\": 8\n  },\n  \"images\": [{{image_id}}]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Equipment Prop",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/equipment-props/{{equipment_prop_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["equipment-props", "{{equipment_prop_id}}"]
+                        },
+                        "description": "Xóa mềm đạo cụ thiết bị."
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const jsonData = pm.response.json();",
-                  "",
-                  "pm.test('Login status is 200', function () {",
-                  "    pm.response.to.have.status(200);",
-                  "    pm.expect(jsonData).to.have.property('metadata');",
-                  "    pm.expect(jsonData.metadata).to.have.property('access_token');",
-                  "    pm.expect(jsonData.metadata).to.have.property('user');",
-                  "});",
-                  "",
-                  "if (pm.response.code === 200 && jsonData.metadata) {",
-                  "    const token = jsonData.metadata.access_token;",
-                  "    const user = jsonData.metadata.user || {};",
-                  "",
-                  "    if (token) pm.collectionVariables.set('access_token', token);",
-                  "    if (user.id) pm.collectionVariables.set('user_id', String(user.id));",
-                  "    if (user.employee_id) pm.collectionVariables.set('employee_id', String(user.employee_id));",
-                  "}",
-                  "",
-                  "pm.test('Response time is less than 2000ms', function () {",
-                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
-                  "});"
-                ],
+                "key": "token",
+                "value": "{{access_token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
+                "exec": []
             }
-          ],
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"username\": \"quanghiep031\",\n  \"password\": \"123123\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/login",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
-            },
-            "description": "## Login\n\nDùng để đăng nhập hệ thống bằng username hoặc email, sau đó nhận về access token để gọi các API cần xác thực.\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `username` | string | Yes | Có thể nhập username hoặc email |\n| `password` | string | Yes | Mật khẩu đăng nhập |\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `access_token` | string | JWT token dùng cho các request tiếp theo |\n| `token_type` | string | Thông thường là `bearer` |\n| `expires_in` | number | Thời gian hết hạn của token, tính bằng giây |\n| `user` | object | Thông tin user hiện tại, có thể kèm employee rút gọn |"
-          },
-          "response": []
         },
         {
-          "name": "Login Copy",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const jsonData = pm.response.json();",
-                  "",
-                  "pm.test('Login status is 200', function () {",
-                  "    pm.response.to.have.status(200);",
-                  "    pm.expect(jsonData).to.have.property('metadata');",
-                  "    pm.expect(jsonData.metadata).to.have.property('access_token');",
-                  "    pm.expect(jsonData.metadata).to.have.property('user');",
-                  "});",
-                  "",
-                  "if (pm.response.code === 200 && jsonData.metadata) {",
-                  "    const token = jsonData.metadata.access_token;",
-                  "    const user = jsonData.metadata.user || {};",
-                  "",
-                  "    if (token) pm.collectionVariables.set('access_token', token);",
-                  "    if (user.id) pm.collectionVariables.set('user_id', String(user.id));",
-                  "    if (user.employee_id) pm.collectionVariables.set('employee_id', String(user.employee_id));",
-                  "}",
-                  "",
-                  "pm.test('Response time is less than 2000ms', function () {",
-                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
-                  "});"
-                ],
+            "listen": "test",
+            "script": {
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
+                "exec": []
             }
-          ],
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"accessToken\":\"test\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5000/api/auth-token",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5000",
-              "path": [
-                "api",
-                "auth-token"
-              ]
-            },
-            "description": "## Login\n\nDùng để đăng nhập hệ thống bằng username hoặc email, sau đó nhận về access token để gọi các API cần xác thực.\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `username` | string | Yes | Có thể nhập username hoặc email |\n| `password` | string | Yes | Mật khẩu đăng nhập |\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `access_token` | string | JWT token dùng cho các request tiếp theo |\n| `token_type` | string | Thông thường là `bearer` |\n| `expires_in` | number | Thời gian hết hạn của token, tính bằng giây |\n| `user` | object | Thông tin user hiện tại, có thể kèm employee rút gọn |"
-          },
-          "response": []
-        },
-        {
-          "name": "Me",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/auth/me",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "me"
-              ],
-              "query": [
-                {
-                  "key": "_expand",
-                  "value": "employee",
-                  "disabled": true
-                }
-              ]
-            },
-            "description": "## Me\n\nTrả về thông tin của user hiện đang đăng nhập dựa trên access token gửi kèm.\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của user |\n| `username` | string | Tên đăng nhập |\n| `email` | string | Email |\n| `role` | string | Vai trò hiện tại |\n| `employee_id` | number nullable | Khóa ngoại sang employee |\n| `employee` | object nullable | Thông tin employee rút gọn gồm `id`, `employee_code`, `full_name`, `phone`, `department`, `position`, `work_status` |\n| `is_active` | boolean | Trạng thái hoạt động |\n| `last_login_at` | ISO datetime nullable | Thời điểm đăng nhập gần nhất |"
-          },
-          "response": []
-        },
-        {
-          "name": "Refresh Token",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/auth/refresh",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "refresh"
-              ]
-            },
-            "description": "## Refresh Token\n\nDùng để cấp lại access token mới khi token cũ gần hết hạn hoặc cần làm mới phiên đăng nhập.\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `access_token` | string | Token mới |\n| `token_type` | string | Thông thường là `bearer` |\n| `expires_in` | number | Thời gian hết hạn của token mới, tính bằng giây |\n| `user` | object | Thông tin user mới nhất |"
-          },
-          "response": []
-        },
-        {
-          "name": "Logout",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/auth/logout",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "logout"
-              ]
-            },
-            "description": "## Logout\n\nDùng để đăng xuất khỏi hệ thống và vô hiệu hóa token hiện tại.\n\n| Item | Value |\n| --- | --- |\n| Auth required | `Yes` |\n| Method | `POST` |\n| Effect | Token hiện tại sẽ không còn sử dụng được |"
-          },
-          "response": []
         }
-      ],
-      "description": "# Auth\n\nNhóm API dùng để xác thực bằng JWT.\n\n| Endpoint | Method | Ghi chú |\n| --- | --- | --- |\n| `/auth/login` | `POST` | Đăng nhập bằng username hoặc email |\n| `/auth/me` | `GET` | Lấy thông tin user hiện tại |\n| `/auth/refresh` | `GET` | Làm mới access token |\n| `/auth/logout` | `POST` | Đăng xuất |\n\n| Collection variable | Nguồn | Ghi chú |\n| --- | --- | --- |\n| `access_token` | Script sau login | Dùng cho bearer auth |\n| `user_id` | Script sau login | ID của user hiện tại |\n| `employee_id` | Script sau login | ID nhân viên nếu user có liên kết employee |"
-    },
-    {
-      "name": "Users",
-      "item": [
+    ],
+    "variable": [
         {
-          "name": "Get All Users",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/users?_expand=employee",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "users"
-              ],
-              "query": [
-                {
-                  "key": "_expand",
-                  "value": "employee",
-                  "description": "Danh sách relation cần eager load, ngăn cách bằng dấu phẩy."
-                }
-              ]
-            },
-            "description": "## Get All Users\n\nLấy danh sách toàn bộ tài khoản người dùng. Có thể dùng `_expand` để load thêm quan hệ liên quan.\n\n### Query params\n\n| Param | Type | Required | Example | Ghi chú |\n| --- | --- | --- | --- | --- |\n| `_expand` | string CSV | No | `employee` | Có thể truyền nhiều relation, ngăn cách bằng dấu phẩy |\n\n### Response `metadata[]`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của user |\n| `username` | string | Tên đăng nhập |\n| `email` | string | Email |\n| `role` | string | Giá trị role enum |\n| `employee_id` | number nullable | ID nhân viên liên kết |\n| `employee` | object nullable | Chỉ xuất hiện khi dùng `_expand=employee` |\n| `is_active` | boolean | Trạng thái hoạt động |\n| `last_login_at` | ISO datetime nullable | Thời điểm đăng nhập gần nhất |"
-          },
-          "response": []
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
         },
         {
-          "name": "Get User Detail",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/users/{{user_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "users",
-                "{{user_id}}"
-              ]
-            },
-            "description": "## Get User Detail\n\nLấy thông tin chi tiết của một user theo `id`.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của user |\n\n### Response\n\n`metadata` trả về một object user theo schema đã mô tả trong folder `Users`."
-          },
-          "response": []
+            "key": "access_token",
+            "value": "",
+            "type": "string"
         },
         {
-          "name": "Create User",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"username\": \"admin02\",\n  \"password\": \"123123\",\n  \"role\": \"ADMIN\",\n  \"employee_id\": 1\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/users/create",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "users",
-                "create"
-              ]
-            },
-            "description": "## Create User\n\nTạo mới một tài khoản người dùng.\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `username` | string | Yes | Phải là duy nhất, tối đa 50 ký tự |\n| `email` | string | Yes | Email hợp lệ và không được trùng |\n| `password` | string | Yes | Tối thiểu 6 ký tự |\n| `role` | enum `UserRole` | Yes | `ADMIN`, `MANAGER`, `HR_STAFF`, `WAREHOUSE_STAFF` |\n| `employee_id` | number nullable | No | Phải tồn tại trong `employees.id` và không được trùng trong bảng `users` |\n| `is_active` | boolean | No | Nếu không gửi thì tùy xử lý mặc định của backend |\n| `last_login_at` | date/datetime | No | Thông thường frontend không cần gửi trường này |\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của user vừa tạo |\n| `username` | string | Username đã lưu |\n| `email` | string | Email đã lưu |\n| `role` | string | Role đã lưu |\n| `employee` | object nullable | Có thể xuất hiện nếu service load relation |"
-          },
-          "response": []
+            "key": "user_id",
+            "value": "1",
+            "type": "string"
         },
         {
-          "name": "Update User",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"role\": \"MANAGER\",\n  \"is_active\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/users/update/{{user_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "users",
-                "update",
-                "{{user_id}}"
-              ]
-            },
-            "description": "## Update User\n\nCập nhật thông tin của một user theo `id`. API hỗ trợ cập nhật từng phần.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của user |\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `username` | string | No | `sometimes|required`, cần unique khi cập nhật |\n| `email` | string | No | `sometimes|required`, cần unique khi cập nhật |\n| `password` | string nullable | No | Nếu gửi thì tối thiểu 6 ký tự |\n| `role` | enum `UserRole` | No | `sometimes|required` |\n| `employee_id` | number nullable | No | Phải tồn tại và cần unique nếu có gửi |\n| `is_active` | boolean | No | Hỗ trợ cập nhật từng phần |\n| `last_login_at` | date/datetime nullable | No | Hỗ trợ cập nhật từng phần |"
-          },
-          "response": []
+            "key": "employee_id",
+            "value": "1",
+            "type": "string"
         },
         {
-          "name": "Delete User",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/users/delete/{{user_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "users",
-                "delete",
-                "{{user_id}}"
-              ]
-            },
-            "description": "## Delete User\n\nXóa user theo `id`. Cách triển khai hiện tại là soft delete theo logic nghiệp vụ.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của user |\n\n| Behavior | Value |\n| --- | --- |\n| Delete type | Soft delete logic |\n| Implementation | Nếu model có cột `is_active` thì sẽ chuyển sang `false` |"
-          },
-          "response": []
+            "key": "category_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "image_id",
+            "value": "2",
+            "type": "string"
+        },
+        {
+            "key": "costume_id",
+            "value": "1",
+            "type": "string"
+        },
+        {
+            "key": "equipment_prop_id",
+            "value": "6",
+            "type": "string"
         }
-      ],
-      "description": "# Users\n\nNhóm API quản lý tài khoản người dùng. Toàn bộ route trong nhóm này yêu cầu quyền `ADMIN`.\n\n## Bảng: `users`\n\n| Col name | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | bigint / primary key | Khóa chính |\n| `username` | string | Bắt buộc, duy nhất, tối đa 50 ký tự |\n| `password` | string | Được hash qua cast của model, không trả về trong response |\n| `role` | enum | `ADMIN`, `MANAGER`, `HR_STAFF`, `WAREHOUSE_STAFF` |\n| `employee_id` | bigint nullable / foreign key | Tham chiếu đến `employees.id`, mỗi employee chỉ gắn tối đa với 1 user |\n| `last_login_at` | datetime nullable | Thời điểm đăng nhập gần nhất |\n| `is_active` | boolean | Trạng thái hoạt động; thao tác delete hiện tại sẽ chuyển về `false` |\n| `created_at` | timestamp | Tự sinh bởi Laravel |\n| `updated_at` | timestamp | Tự sinh bởi Laravel |\n\n## Quan hệ\n\n| Relation | Type | Ghi chú |\n| --- | --- | --- |\n| `employee` | belongsTo | Liên kết qua `employee_id` -> `employees.id` |\n\n## Query support\n\n| Query param | Type | Example |\n| --- | --- | --- |\n| `_expand` | string CSV | `_expand=employee` |\n\n## Ghi chú cho frontend\n\n- Dữ liệu chính luôn nằm trong `metadata`.\n    \n- Khi cần lấy user kèm hồ sơ nhân viên, hãy gọi `GET /users?_expand=employee`.\n    \n- Trường password sẽ không bao giờ được trả về trong response."
-    },
-    {
-      "name": "Employees",
-      "item": [
-        {
-          "name": "Get All Employees",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/employees?_expand=user&position:in=MANAGER,WAREHOUSE_MANAGER&user_id:eq=null",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees"
-              ],
-              "query": [
-                {
-                  "key": "_expand",
-                  "value": "user",
-                  "description": "Danh sách relation cần eager load, ngăn cách bằng dấu phẩy."
-                },
-                {
-                  "key": "position:in",
-                  "value": "MANAGER,WAREHOUSE_MANAGER"
-                },
-                {
-                  "key": "user_id:eq",
-                  "value": "null"
-                },
-                {
-                  "key": "id:in",
-                  "value": "2,3",
-                  "disabled": true
-                }
-              ]
-            },
-            "description": "## Get All Employees\n\nLấy danh sách toàn bộ nhân viên. Có thể dùng `_expand` để load thêm các quan hệ liên quan.\n\n### Query params\n\n| Param | Type | Required | Example | Ghi chú |\n| --- | --- | --- | --- | --- |\n| `_expand` | string CSV | No | `user,contracts` | Hỗ trợ eager load nhiều relation |\n\n### Response `metadata[]`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của employee |\n| `employee_code` | string | Mã nhân viên |\n| `full_name` | string | Họ tên đầy đủ |\n| `position` | string | Giá trị position enum |\n| `work_status` | string | Giá trị work enum |\n| `user` | object nullable | Có khi dùng `_expand=user` |\n| `contracts` | array | Có khi dùng `_expand=contracts` |"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Employee Detail",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/employees/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{employee_id}}"
-                }
-              ]
-            },
-            "description": "## Get Employee Detail\n\nLấy thông tin chi tiết của một nhân viên theo `id`.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của employee |\n\n### Response\n\n`metadata` trả về một object employee theo schema đã mô tả trong folder `Employees`."
-          },
-          "response": []
-        },
-        {
-          "name": "Create Employee",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"full_name\": \"Nguyen Van A\",\n  \"citizen_id_number\": \"123123123123\",\n  \"phone\": \"0336089900\",\n  \"address\": \"Hai Phong\",\n  \"email\":\"nguyenvana@gmail.com\",\n  \"position\": \"TECHNICAL_CREW\",\n  \"remarks\": \"Created from Postman\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/employees/create",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees",
-                "create"
-              ]
-            },
-            "description": "## Create Employee\n\nTạo mới hồ sơ nhân viên.\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `full_name` | string | Yes | Họ và tên nhân viên |\n| `dob` | date | No | Định dạng `YYYY-MM-DD` |\n| `gender` | enum `Gender` | No | `MALE`, `FEMALE`, `UNKNOWN` |\n| `phone` | string | No | Số điện thoại |\n| `address` | string | No | Địa chỉ |\n| `department` | enum `Department` | No/DB has field | Hiện tại DB có cột này nhưng validator đang comment rule |\n| `position` | enum `Position` | Yes | Chức danh |\n| `hire_date` | date | No | Định dạng `YYYY-MM-DD` |\n| `work_status` | enum `Work` | Yes | Trạng thái làm việc |\n| `remarks` | string | No | Ghi chú thêm |\n| `is_active` | boolean | No | Trạng thái hoạt động |\n| `employee_code` | string | No | Không cần gửi vì backend tự sinh |\n\n### Response `metadata`\n\n| Field | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | number | ID của employee vừa tạo |\n| `employee_code` | string | Mã nhân viên do backend tự sinh |\n| `full_name` | string | Họ tên đã lưu |"
-          },
-          "response": []
-        },
-        {
-          "name": "Update Employee",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"phone\": \"0988123456\",\n  \"address\": \"Ha Noi\",\n  \"work_status\": \"ON_LEAVE\",\n  \"is_active\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/employees/update/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees",
-                "update",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{employee_id}}"
-                }
-              ]
-            },
-            "description": "## Update Employee\n\nCập nhật thông tin của nhân viên theo `id`. API hỗ trợ cập nhật từng phần.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của employee |\n\n### Request body\n\n| Field | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `full_name` | string | No | `sometimes|required` |\n| `dob` | date nullable | No | Hỗ trợ cập nhật từng phần |\n| `gender` | enum `Gender` nullable | No | Hỗ trợ cập nhật từng phần |\n| `phone` | string nullable | No | Hỗ trợ cập nhật từng phần |\n| `address` | string nullable | No | Hỗ trợ cập nhật từng phần |\n| `department` | enum `Department` | No | Hiện validator đang comment rule |\n| `position` | enum `Position` | No | `sometimes|required` |\n| `hire_date` | date nullable | No | Hỗ trợ cập nhật từng phần |\n| `work_status` | enum `Work` | No | `sometimes|required` |\n| `remarks` | string nullable | No | Hỗ trợ cập nhật từng phần |\n| `is_active` | boolean | No | Hỗ trợ cập nhật từng phần |"
-          },
-          "response": []
-        },
-        {
-          "name": "Delete Employee",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/employees/delete/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "employees",
-                "delete",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{employee_id}}"
-                }
-              ]
-            },
-            "description": "## Delete Employee\n\nXóa nhân viên theo `id`. Cách triển khai hiện tại là soft delete theo logic nghiệp vụ.\n\n| Path param | Type | Required | Ghi chú |\n| --- | --- | --- | --- |\n| `id` | number | Yes | ID của employee |\n\n| Behavior | Value |\n| --- | --- |\n| Delete type | Soft delete logic |\n| Implementation | Nếu model có cột `is_active` thì sẽ chuyển sang `false` |"
-          },
-          "response": []
-        }
-      ],
-      "description": "# Employees\n\nNhóm API quản lý hồ sơ nhân viên. Toàn bộ route trong nhóm này yêu cầu quyền `ADMIN`.\n\n## Bảng: `employees`\n\n| Col name | Type | Ghi chú |\n| --- | --- | --- |\n| `id` | bigint / primary key | Khóa chính |\n| `employee_code` | string | Backend tự sinh theo định dạng `EMP0001`, `EMP0002`, ... |\n| `full_name` | string | Họ và tên nhân viên |\n| `dob` | date nullable | Ngày sinh |\n| `gender` | enum nullable | `MALE`, `FEMALE`, `UNKNOWN` |\n| `phone` | string nullable | Số điện thoại |\n| `address` | string nullable | Địa chỉ |\n| `department` | enum | Cột này có trong DB, nhưng validation hiện tại đang bị comment |\n| `position` | enum | Chức danh |\n| `hire_date` | date nullable | Ngày vào làm |\n| `work_status` | enum | Trạng thái làm việc |\n| `remarks` | text nullable | Ghi chú |\n| `is_active` | boolean | Trạng thái hoạt động |\n| `created_at` | timestamp | Tự sinh bởi Laravel |\n| `updated_at` | timestamp | Tự sinh bởi Laravel |\n\n## Quan hệ\n\n| Relation | Type | Ghi chú |\n| --- | --- | --- |\n| `user` | hasOne | Một nhân viên có thể gắn với 1 user |\n| `contracts` | hasMany | Danh sách hợp đồng |\n| `internalBorrowSlips` | hasMany | Danh sách phiếu mượn nội bộ |\n| `warehouses` | hasMany | Các kho do nhân viên quản lý |\n\n## Enum\n\n| Field | Values |\n| --- | --- |\n| `gender` | `MALE`, `FEMALE`, `UNKNOWN` |\n| `department` | `BOARD_OF_DIRECTORS`, `ACCOUNTING_ADMIN`, `HR`, `EVENT_ORGANIZATION`, `TECHNICAL` |\n| `position` | `SINGER`, `MC`, `RAPPER`, `DANCER`, `CHOREOGRAPHER`, `LOGISTICS_STAFF`, `SOUND_TECHNICIAN`, `LIGHTING_TECHNICIAN`, `WAREHOUSE_STAFF`, `OFFICE_STAFF` |\n| `work_status` | `PROBATION`, `ON_LEAVE`, `OFFICIAL`, `TERMINATED` |\n\n## Ghi chú cho frontend\n\n- Không cần gửi `employee_code` khi tạo mới vì backend sẽ tự sinh.\n- Migration có cột `department`, nhưng rule validate hiện tại đang bị comment.\n- Nếu frontend cần chốt payload liên quan đến hợp đồng, nên xác nhận lại trường `department` với backend."
-    },
-    {
-      "name": "Item Category",
-      "item": [
-        {
-          "name": "Create item category",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Hoa múa\",\r\n    \"type\": \"EQUIPMENT_PROPS\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/item-categories",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "item-categories"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create item category Copy",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Trang phục Truyền thống\",\r\n    \"type\": \"COSTUME\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/item-categories/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "item-categories",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete category",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Áo dài\",\r\n    \"type\": \"COSTUME\"\r\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/item-categories/:id?permanently",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "item-categories",
-                ":id"
-              ],
-              "query": [
-                {
-                  "key": "permanently",
-                  "value": null,
-                  "type": "text"
-                }
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all categories",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/item-categories",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "item-categories"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Costumes",
-      "item": [
-        {
-          "name": "Get all costumes",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/costumes?id:in=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "costumes"
-              ],
-              "query": [
-                {
-                  "key": "id:in",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create new costume",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\":\"Áo Tấc xanh bạc hà\",\r\n    \"category_id\": 1,\r\n    \"color\":\"#5b958c\",\r\n    \"sizes\": [\"S\", \"M\", \"L\", \"XL\"],\r\n    \"gender\":\"FEMALE\",\r\n    \"images_ids\": 5,\r\n    \"rental_price_per_day\": 200000,\r\n    \"description\":\"Áo tấc Xanh cổ truyền\",\r\n    \"tags\":[\"ao tac\"]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/costumes",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "costumes"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update costume",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n\t\"image_ids\": [\r\n\t\t5\r\n\t]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/costumes/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "costumes",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete costume",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/costumes/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "costumes",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Images Gallery",
-      "item": [
-        {
-          "name": "Upload gallery image",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "item_type",
-                  "value": "COSTUME",
-                  "type": "text",
-                  "uuid": "e093b6dd-3ab6-4a63-b7a5-ed55c4afdb80"
-                },
-                {
-                  "key": "file",
-                  "type": "file",
-                  "uuid": "8033b863-8fc6-4189-91d1-ad55298c97e9",
-                  "src": [
-                    "/C:/Users/Administrator/Desktop/costumes/672138759_3466822183478641_3521795180160107625_n.jpg",
-                    "/C:/Users/Administrator/Desktop/costumes/ao-dai-gam-bong-nhieu-mau-nu.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/ao-nhat-binh-nu-mau-vang-600x600.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/ao-tac-cho-nu-mau-cam.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/AO-TAC-MAU-XANH-MINT-BAC-HA-600x600.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/AO-TAC-NU-MAU-HONG-600x600.jpg.webp"
-                  ]
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{base_url}}/images-gallery/upload",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "images-gallery",
-                "upload"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all images",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "item_type",
-                  "value": "COSTUME",
-                  "type": "text",
-                  "uuid": "e093b6dd-3ab6-4a63-b7a5-ed55c4afdb80"
-                },
-                {
-                  "key": "file",
-                  "type": "file",
-                  "uuid": "8033b863-8fc6-4189-91d1-ad55298c97e9",
-                  "src": [
-                    "/C:/Users/Administrator/Desktop/costumes/ao-tac-cho-nu-mau-cam.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/AO-TAC-MAU-XANH-MINT-BAC-HA-600x600.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/AO-TAC-NU-MAU-HONG-600x600.jpg.webp"
-                  ]
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{base_url}}/images-gallery?_page=1&_per_page=10",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "images-gallery"
-              ],
-              "query": [
-                {
-                  "key": "_page",
-                  "value": "1"
-                },
-                {
-                  "key": "_per_page",
-                  "value": "10"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get image detail",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "item_type",
-                  "value": "COSTUME",
-                  "type": "text",
-                  "uuid": "e093b6dd-3ab6-4a63-b7a5-ed55c4afdb80"
-                },
-                {
-                  "key": "file",
-                  "type": "file",
-                  "uuid": "8033b863-8fc6-4189-91d1-ad55298c97e9",
-                  "src": [
-                    "/C:/Users/Administrator/Desktop/costumes/ao-tac-cho-nu-mau-cam.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/AO-TAC-MAU-XANH-MINT-BAC-HA-600x600.jpg.webp",
-                    "/C:/Users/Administrator/Desktop/costumes/AO-TAC-NU-MAU-HONG-600x600.jpg.webp"
-                  ]
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{base_url}}/images-gallery/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "images-gallery",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "2"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete image",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/images/delete/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "images",
-                "delete",
-                ":id"
-              ],
-              "query": [
-                {
-                  "key": "permanantly",
-                  "value": "true",
-                  "disabled": true
-                }
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update image",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "item_type",
-                  "value": "COSTUME",
-                  "type": "text",
-                  "uuid": "a7b53f15-9672-4648-8b61-2bef6494b0eb"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{base_url}}/images-gallery/update/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "images-gallery",
-                "update",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "2"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Equipment Props",
-      "item": [
-        {
-          "name": "Get all props",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/equipment-props",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "equipment-props"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create props",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n\t\"name\":\"Hoa múa cầm tay Hướng dương\",\r\n\t\"category_id\": 5,\r\n\t\"rental_price_per_day\": 50000,\r\n\t\"weight_kg\": 0.5,\r\n\t\"demensions\":{\r\n\t\t\"width_cm\": 60,\r\n\t\t\"height_cm\": 60,\r\n\t\t\"depth_cm\": 10\r\n\t},\r\n\t\"is_fragile\": false,\r\n\t\"description\":\"Hoa múa cầm tay hướng dương lớn màu vàng cam – đạo cụ biểu diễn chuyên nghiệp\",\r\n\t\"tags\": [\"hoa múa\"]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/equipment-props",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "equipment-props"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ],
-  "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{access_token}}",
-        "type": "string"
-      }
     ]
-  },
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": []
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": []
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "base_url",
-      "value": "http://localhost:8000/api",
-      "type": "string"
-    },
-    {
-      "key": "access_token",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "user_id",
-      "value": "1",
-      "type": "string"
-    },
-    {
-      "key": "employee_id",
-      "value": "1",
-      "type": "string"
-    }
-  ]
 }
