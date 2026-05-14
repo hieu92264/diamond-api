@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class JsonMockDataSeeder extends Seeder
 {
@@ -115,13 +116,15 @@ class JsonMockDataSeeder extends Seeder
     private function seedImages(array $images): void
     {
         foreach ($images as $image) {
+            $storedImage = $this->storeSeedImage($image);
+
             GalleryImage::query()->updateOrCreate(
                 ['id' => $image['id']],
                 [
-                    'file_name' => $image['file_name'],
-                    'mime_type' => $image['mime_type'] ?? null,
-                    'size' => $image['size'] ?? null,
-                    'dest' => $image['dest'],
+                    'file_name' => $storedImage['file_name'] ?? $image['file_name'],
+                    'mime_type' => $storedImage['mime_type'] ?? $image['mime_type'] ?? null,
+                    'size' => $storedImage['size'] ?? $image['size'] ?? null,
+                    'dest' => $storedImage['dest'] ?? $image['dest'],
                     'category_id' => $image['category_id'],
                     'created_by' => $image['created_by'] ?? null,
                     'is_active' => $image['is_active'] ?? true,
@@ -187,5 +190,107 @@ class JsonMockDataSeeder extends Seeder
         return [
             'hex' => (string) $color,
         ];
+    }
+
+    private function storeSeedImage(array $image): ?array
+    {
+        $sourcePath = $this->findSeedImagePath($image);
+
+        if ($sourcePath === null) {
+            return null;
+        }
+
+        $fileName = pathinfo((string) ($image['file_name'] ?? basename($sourcePath)), PATHINFO_FILENAME).'.webp';
+        $path = "images-gallery/{$image['category_id']}/{$fileName}";
+        $contents = $this->webpContents($sourcePath);
+
+        if ($contents === null) {
+            $this->command?->warn("Cannot convert seed image to WebP: {$sourcePath}");
+
+            return null;
+        }
+
+        Storage::disk('public')->put($path, $contents);
+
+        return [
+            'file_name' => basename($path),
+            'mime_type' => 'image/webp',
+            'size' => strlen($contents),
+            'dest' => Storage::disk('public')->url($path),
+        ];
+    }
+
+    private function findSeedImagePath(array $image): ?string
+    {
+        $sourceDir = $this->seedImageSourceDir();
+
+        if ($sourceDir === null) {
+            return null;
+        }
+
+        $fileName = basename((string) ($image['file_name'] ?? $image['dest'] ?? ''));
+
+        if ($fileName === '') {
+            return null;
+        }
+
+        $candidate = $sourceDir.DIRECTORY_SEPARATOR.$fileName;
+
+        if (is_file($candidate)) {
+            return $candidate;
+        }
+
+        foreach (scandir($sourceDir) ?: [] as $entry) {
+            if (strcasecmp($entry, $fileName) === 0) {
+                return $sourceDir.DIRECTORY_SEPARATOR.$entry;
+            }
+        }
+
+        $this->command?->warn("Seed image not found: {$fileName}");
+
+        return null;
+    }
+
+    private function seedImageSourceDir(): ?string
+    {
+        $sourceDir = (string) env('SEED_IMAGE_SOURCE_DIR', base_path('../FE-COSTUME-RENTAL/mock/images'));
+
+        if (! is_dir($sourceDir)) {
+            return null;
+        }
+
+        return rtrim($sourceDir, DIRECTORY_SEPARATOR.'/\\');
+    }
+
+    private function webpContents(string $sourcePath): ?string
+    {
+        if (strtolower(pathinfo($sourcePath, PATHINFO_EXTENSION)) === 'webp') {
+            $contents = file_get_contents($sourcePath);
+
+            return is_string($contents) && $contents !== '' ? $contents : null;
+        }
+
+        if (! function_exists('imagecreatefromstring') || ! function_exists('imagewebp')) {
+            return null;
+        }
+
+        $sourceContents = file_get_contents($sourcePath);
+        $image = is_string($sourceContents) ? @imagecreatefromstring($sourceContents) : false;
+
+        if ($image === false) {
+            return null;
+        }
+
+        imagepalettetotruecolor($image);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+
+        ob_start();
+        $success = imagewebp($image, null, 85);
+        $contents = ob_get_clean();
+
+        imagedestroy($image);
+
+        return $success && is_string($contents) && $contents !== '' ? $contents : null;
     }
 }
