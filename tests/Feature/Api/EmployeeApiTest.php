@@ -44,11 +44,11 @@ class EmployeeApiTest extends TestCase
 
         $createResponse
             ->assertCreated()
-            ->assertJsonPath('metadata.employee_code', 'D00001')
-            ->assertJsonPath('metadata.work_status', Work::ACTIVE->value)
-            ->assertJsonPath('metadata.email', 'nguyenvana@example.com');
+            ->assertJsonPath('employee_code', 'D00001')
+            ->assertJsonPath('work_status', Work::ACTIVE->value)
+            ->assertJsonPath('email', 'nguyenvana@example.com');
 
-        $employeeId = $createResponse->json('metadata.id');
+        $employeeId = $createResponse->json('id');
 
         $this->withHeaders($headers)
             ->patchJson("/api/employees/update/{$employeeId}", [
@@ -58,13 +58,13 @@ class EmployeeApiTest extends TestCase
                 'is_active' => true,
             ])
             ->assertOk()
-            ->assertJsonPath('metadata.phone', '0988123456')
-            ->assertJsonPath('metadata.work_status', Work::ON_LEAVE->value);
+            ->assertJsonPath('phone', '0988123456')
+            ->assertJsonPath('work_status', Work::ON_LEAVE->value);
 
         $this->withHeaders($headers)
             ->getJson('/api/employees?position:in=MANAGER,TECHNICAL_CREW')
             ->assertOk()
-            ->assertJsonCount(1, 'metadata')
-            ->assertJsonPath('metadata.0.id', $employeeId);
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $employeeId);
     }
 }

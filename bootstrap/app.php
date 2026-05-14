@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureUserHasRole;
+use App\Support\ApiPayload;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -23,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             $routePath = base_path('routes');
             $apiFile = array_filter(
                 glob($routePath.'/*.php'),
-                fn($file) => !in_array(basename($file), ['web.php', 'console.php'])
+                fn ($file) => ! in_array(basename($file), ['web.php', 'console.php'])
             );
 
             foreach ($apiFile as $file) {
@@ -80,13 +81,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ];
             }
 
-            $payload = [
-                'message' => $message,
-                'statusCode' => $statusCode,
-                'metadata' => $metadata,
-                'path' => $request->getPathInfo(),
-                'timestamp' => now()->toISOString(),
-            ];
+            $payload = ApiPayload::make($metadata, $message, $statusCode, $request->getPathInfo());
 
             if (app()->hasDebugModeEnabled() || config('app.debug')) {
                 $payload['stack'] = $exception->getTraceAsString();

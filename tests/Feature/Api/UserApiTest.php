@@ -40,7 +40,7 @@ class UserApiTest extends TestCase
             ->getJson('/api/users')
             ->assertOk()
             ->assertJsonPath('statusCode', 200)
-            ->assertJsonCount(3, 'metadata');
+            ->assertJsonCount(3, 'data');
     }
 
     public function test_admin_can_show_a_user(): void
@@ -52,8 +52,8 @@ class UserApiTest extends TestCase
         $this->withHeaders($this->authenticateAs())
             ->getJson("/api/users/{$targetUser->id}")
             ->assertOk()
-            ->assertJsonPath('metadata.id', $targetUser->id)
-            ->assertJsonPath('metadata.username', 'target-user');
+            ->assertJsonPath('id', $targetUser->id)
+            ->assertJsonPath('username', 'target-user');
     }
 
     public function test_admin_can_create_a_user(): void
@@ -69,8 +69,8 @@ class UserApiTest extends TestCase
             ->postJson('/api/users/create', $payload)
             ->assertCreated()
             ->assertJsonPath('statusCode', 201)
-            ->assertJsonPath('metadata.username', 'new-admin')
-            ->assertJsonPath('metadata.role', UserRole::MANAGER->value);
+            ->assertJsonPath('username', 'new-admin')
+            ->assertJsonPath('role', UserRole::MANAGER->value);
 
         $this->assertDatabaseHas('users', [
             'username' => 'new-admin',
@@ -96,9 +96,9 @@ class UserApiTest extends TestCase
             ->patchJson("/api/users/update/{$targetUser->id}", $payload)
             ->assertOk()
             ->assertJsonPath('statusCode', 200)
-            ->assertJsonPath('metadata.username', 'updated-name')
-            ->assertJsonPath('metadata.role', UserRole::MANAGER->value)
-            ->assertJsonPath('metadata.is_active', false);
+            ->assertJsonPath('username', 'updated-name')
+            ->assertJsonPath('role', UserRole::MANAGER->value)
+            ->assertJsonPath('is_active', false);
 
         $this->assertDatabaseHas('users', [
             'id' => $targetUser->id,
@@ -118,7 +118,7 @@ class UserApiTest extends TestCase
             ->deleteJson("/api/users/delete/{$targetUser->id}")
             ->assertOk()
             ->assertJsonPath('statusCode', 200)
-            ->assertJsonPath('metadata', null);
+            ->assertJsonMissingPath('metadata');
 
         $this->assertDatabaseHas('users', [
             'id' => $targetUser->id,
@@ -142,8 +142,6 @@ class UserApiTest extends TestCase
             ->postJson('/api/users/create', $payload)
             ->assertUnprocessable()
             ->assertJsonPath('statusCode', 422)
-            ->assertJsonStructure([
-                'metadata' => ['username'],
-            ]);
+            ->assertJsonStructure(['username']);
     }
 }

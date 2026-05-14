@@ -29,16 +29,16 @@ class AuthTest extends TestCase
 
         $loginResponse
             ->assertOk()
-            ->assertJsonPath('metadata.user.username', 'admin')
-            ->assertJsonPath('metadata.user.role', UserRole::ADMIN->value);
+            ->assertJsonPath('user.username', 'admin')
+            ->assertJsonPath('user.role', UserRole::ADMIN->value);
 
-        $token = $loginResponse->json('metadata.access_token');
+        $token = $loginResponse->json('access_token');
 
         $this->withHeader('Authorization', 'Bearer '.$token)
             ->getJson('/api/auth/me')
             ->assertOk()
-            ->assertJsonPath('metadata.username', 'admin')
-            ->assertJsonPath('metadata.role', UserRole::ADMIN->value);
+            ->assertJsonPath('username', 'admin')
+            ->assertJsonPath('role', UserRole::ADMIN->value);
     }
 
     public function test_role_middleware_blocks_non_matching_roles(): void

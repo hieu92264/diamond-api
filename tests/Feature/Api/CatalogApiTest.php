@@ -42,11 +42,11 @@ class CatalogApiTest extends TestCase
 
         $createResponse
             ->assertCreated()
-            ->assertJsonPath('metadata.name', 'Trang phuc truyen thong')
-            ->assertJsonPath('metadata.slug', 'trang-phuc-truyen-thong')
-            ->assertJsonPath('metadata.type', ItemCategoryType::COSTUME->value);
+            ->assertJsonPath('name', 'Trang phuc truyen thong')
+            ->assertJsonPath('slug', 'trang-phuc-truyen-thong')
+            ->assertJsonPath('type', ItemCategoryType::COSTUME->value);
 
-        $categoryId = $createResponse->json('metadata.id');
+        $categoryId = $createResponse->json('id');
 
         $this->withHeaders($headers)
             ->patchJson("/api/item-categories/{$categoryId}", [
@@ -54,20 +54,20 @@ class CatalogApiTest extends TestCase
                 'type' => ItemCategoryType::COSTUME->value,
             ])
             ->assertOk()
-            ->assertJsonPath('metadata.name', 'Ao dai')
-            ->assertJsonPath('metadata.slug', 'ao-dai');
+            ->assertJsonPath('name', 'Ao dai')
+            ->assertJsonPath('slug', 'ao-dai');
 
         $this->withHeaders($headers)
             ->getJson('/api/categories?type:eq=COSTUME&_embed=costumes,equipment_props')
             ->assertOk()
-            ->assertJsonCount(1, 'metadata')
-            ->assertJsonPath('metadata.0.costumes', [])
-            ->assertJsonPath('metadata.0.equipment_props', []);
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.costumes', [])
+            ->assertJsonPath('data.0.equipment_props', []);
 
         $this->withHeaders($headers)
             ->deleteJson("/api/item-categories/{$categoryId}")
             ->assertOk()
-            ->assertJsonPath('metadata', null);
+            ->assertJsonMissingPath('metadata');
 
         $this->assertDatabaseHas('item_categories', [
             'id' => $categoryId,
@@ -98,12 +98,12 @@ class CatalogApiTest extends TestCase
 
         $uploadResponse
             ->assertCreated()
-            ->assertJsonCount(2, 'metadata')
-            ->assertJsonPath('metadata.0.category_id', $category->id)
-            ->assertJsonPath('metadata.0.mime_type', 'image/webp');
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.0.category_id', $category->id)
+            ->assertJsonPath('data.0.mime_type', 'image/webp');
 
-        $imageId = $uploadResponse->json('metadata.0.id');
-        $fileName = $uploadResponse->json('metadata.0.file_name');
+        $imageId = $uploadResponse->json('data.0.id');
+        $fileName = $uploadResponse->json('data.0.file_name');
 
         $this->assertStringEndsWith('.webp', $fileName);
         Storage::disk('public')->assertExists("images-gallery/{$category->id}/{$fileName}");
@@ -111,8 +111,8 @@ class CatalogApiTest extends TestCase
         $this->withHeaders($headers)
             ->getJson('/api/images-gallery?_expand=category')
             ->assertOk()
-            ->assertJsonCount(2, 'metadata')
-            ->assertJsonPath('metadata.0.category.id', $category->id);
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.0.category.id', $category->id);
 
         $this->withHeaders($headers)
             ->patchJson('/api/images-gallery/'.$imageId, [
@@ -120,13 +120,13 @@ class CatalogApiTest extends TestCase
                 'category_id' => $category->id,
             ])
             ->assertOk()
-            ->assertJsonPath('metadata.id', $imageId)
-            ->assertJsonPath('metadata.file_name', 'renamed.jpg');
+            ->assertJsonPath('id', $imageId)
+            ->assertJsonPath('file_name', 'renamed.jpg');
 
         $this->withHeaders($headers)
             ->delete('/api/images-gallery/'.$imageId)
             ->assertOk()
-            ->assertJsonPath('metadata', null);
+            ->assertJsonMissingPath('metadata');
 
         $this->assertDatabaseHas('gallery_images', [
             'id' => $imageId,
@@ -190,28 +190,28 @@ class CatalogApiTest extends TestCase
 
         $costumeResponse
             ->assertCreated()
-            ->assertJsonPath('metadata.name', 'Ao tac xanh bac ha')
-            ->assertJsonPath('metadata.category.type', ItemCategoryType::COSTUME->value)
-            ->assertJsonPath('metadata.color.hex', '#5b958c')
-            ->assertJsonPath('metadata.color.code', 'GRN')
-            ->assertJsonPath('metadata.color.intensity', 500)
-            ->assertJsonPath('metadata.images.0', $costumeImage->id)
-            ->assertJsonPath('metadata.hashtags.0', 'ao tac');
+            ->assertJsonPath('name', 'Ao tac xanh bac ha')
+            ->assertJsonPath('category.type', ItemCategoryType::COSTUME->value)
+            ->assertJsonPath('color.hex', '#5b958c')
+            ->assertJsonPath('color.code', 'GRN')
+            ->assertJsonPath('color.intensity', 500)
+            ->assertJsonPath('images.0', $costumeImage->id)
+            ->assertJsonPath('hashtags.0', 'ao tac');
 
-        $costumeId = $costumeResponse->json('metadata.id');
+        $costumeId = $costumeResponse->json('id');
 
         $this->withHeaders($headers)
             ->getJson('/api/costumes?id:in='.$costumeId)
             ->assertOk()
-            ->assertJsonCount(1, 'metadata')
-            ->assertJsonPath('metadata.0.id', $costumeId);
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $costumeId);
 
         $this->withHeaders($headers)
             ->patchJson("/api/costumes/{$costumeId}", [
                 'images' => [],
             ])
             ->assertOk()
-            ->assertJsonPath('metadata.images', []);
+            ->assertJsonPath('images', []);
 
         $propResponse = $this->withHeaders($headers)
             ->postJson('/api/equipment-props', [
@@ -233,12 +233,12 @@ class CatalogApiTest extends TestCase
 
         $propResponse
             ->assertCreated()
-            ->assertJsonPath('metadata.category.type', ItemCategoryType::EQUIPMENT_PROPS->value)
-            ->assertJsonPath('metadata.dimensions.width_cm', 60)
-            ->assertJsonPath('metadata.weight_kg', 0.5)
-            ->assertJsonPath('metadata.images.0', $propImage->id);
+            ->assertJsonPath('category.type', ItemCategoryType::EQUIPMENT_PROPS->value)
+            ->assertJsonPath('dimensions.width_cm', 60)
+            ->assertJsonPath('weight_kg', 0.5)
+            ->assertJsonPath('images.0', $propImage->id);
 
-        $propId = $propResponse->json('metadata.id');
+        $propId = $propResponse->json('id');
 
         $this->withHeaders($headers)
             ->patchJson("/api/equipment-props/{$propId}", [
@@ -249,11 +249,11 @@ class CatalogApiTest extends TestCase
                 ],
             ])
             ->assertOk()
-            ->assertJsonPath('metadata.dimensions.width_cm', 40);
+            ->assertJsonPath('dimensions.width_cm', 40);
 
         $this->withHeaders($headers)
             ->getJson('/api/equipment-props')
             ->assertOk()
-            ->assertJsonCount(1, 'metadata');
+            ->assertJsonCount(1, 'data');
     }
 }

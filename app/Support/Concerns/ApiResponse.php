@@ -2,6 +2,7 @@
 
 namespace App\Support\Concerns;
 
+use App\Support\ApiPayload;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -14,13 +15,7 @@ trait ApiResponse
         int $statusCode = Response::HTTP_OK,
         ?Throwable $exception = null
     ): JsonResponse {
-        $payload = [
-            'message' => $message,
-            'statusCode' => $statusCode,
-            'metadata' => $metadata,
-            'path' => request()->getPathInfo(),
-            'timestamp' => now()->toISOString(),
-        ];
+        $payload = ApiPayload::make($metadata, $message, $statusCode);
 
         if ($exception && (app()->hasDebugModeEnabled() || config('app.debug'))) {
             $payload['debug'] = [
