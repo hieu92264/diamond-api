@@ -7,8 +7,8 @@ use App\Models\EquipmentProp;
 use App\Models\GalleryImage;
 use App\Models\ItemCategory;
 use App\Models\User;
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -141,7 +141,7 @@ class JsonMockDataSeeder extends Seeder
                     'name' => $item['name'],
                     'category_id' => $item['category_id'],
                     'unit' => $item['unit'] ?? ($isCostume ? 'SET' : null),
-                    'color' => $isCostume ? ($item['color'] ?? null) : null,
+                    'color' => $isCostume ? $this->normalizeColor($item['color'] ?? null) : null,
                     'sizes' => $isCostume ? ($item['sizes'] ?? []) : null,
                     'gender' => $isCostume ? ($item['gender'] ?? null) : null,
                     'rental_price_per_day' => $item['rental_price_per_day'] ?? null,
@@ -172,5 +172,20 @@ class JsonMockDataSeeder extends Seeder
         }
 
         return Hash::make($password);
+    }
+
+    private function normalizeColor(mixed $color): ?array
+    {
+        if ($color === null || $color === '') {
+            return null;
+        }
+
+        if (is_array($color)) {
+            return $color;
+        }
+
+        return [
+            'hex' => (string) $color,
+        ];
     }
 }
