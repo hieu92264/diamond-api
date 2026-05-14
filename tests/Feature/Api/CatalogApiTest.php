@@ -174,7 +174,11 @@ class CatalogApiTest extends TestCase
             ->postJson('/api/costumes', [
                 'name' => 'Ao tac xanh bac ha',
                 'category_id' => $costumeCategory->id,
-                'color' => '#5b958c',
+                'color' => [
+                    'hex' => '#5b958c',
+                    'code' => 'GRN',
+                    'intensity' => 500,
+                ],
                 'sizes' => ['S', 'M', 'L'],
                 'unit' => 'SET',
                 'gender' => 'FEMALE',
@@ -188,6 +192,9 @@ class CatalogApiTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('metadata.name', 'Ao tac xanh bac ha')
             ->assertJsonPath('metadata.category.type', ItemCategoryType::COSTUME->value)
+            ->assertJsonPath('metadata.color.hex', '#5b958c')
+            ->assertJsonPath('metadata.color.code', 'GRN')
+            ->assertJsonPath('metadata.color.intensity', 500)
             ->assertJsonPath('metadata.images.0', $costumeImage->id)
             ->assertJsonPath('metadata.hashtags.0', 'ao tac');
 

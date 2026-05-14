@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('equipment_props', function (Blueprint $table) {
-            $table->string('color')->nullable()->after('name');
+            $table->json('color')->nullable()->after('name');
             $table->json('sizes')->nullable()->after('color');
             $table->string('gender')->nullable()->after('sizes');
             $table->decimal('weight_kg', 8, 2)->nullable()->after('rental_price_per_day');

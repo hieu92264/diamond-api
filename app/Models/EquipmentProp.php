@@ -33,6 +33,7 @@ class EquipmentProp extends Model
     {
         return [
             'is_active' => 'boolean',
+            'color' => 'array',
             'sizes' => 'array',
             'gender' => Gender::class,
             'rental_price_per_day' => 'decimal:2',

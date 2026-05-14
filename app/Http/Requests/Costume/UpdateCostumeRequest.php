@@ -31,6 +31,12 @@ class UpdateCostumeRequest extends FormRequest
             $data['hashtags'] = $this->input('hashtags', $this->input('tags'));
         }
 
+        if ($this->filled('color') && is_string($this->input('color'))) {
+            $data['color'] = [
+                'hex' => $this->input('color'),
+            ];
+        }
+
         $this->merge($data);
     }
 
@@ -40,7 +46,10 @@ class UpdateCostumeRequest extends FormRequest
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')->ignore($this->route('id'))],
             'category_id' => ['sometimes', 'required', 'integer', Rule::exists('item_categories', 'id')],
-            'color' => ['nullable', 'string', 'max:50'],
+            'color' => ['nullable', 'array'],
+            'color.hex' => ['required_with:color', 'string', 'max:50'],
+            'color.code' => ['nullable', 'string', 'max:50'],
+            'color.intensity' => ['nullable', 'integer', 'min:0'],
             'sizes' => ['nullable', 'array'],
             'sizes.*' => ['string', 'max:50'],
             'unit' => ['nullable', 'string', Rule::in(['SET', 'PIECE'])],
