@@ -6,6 +6,7 @@ use App\Enums\ItemCategoryType;
 use App\Models\EquipmentProp;
 use App\Models\GalleryImage;
 use App\Models\ItemCategory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,7 +17,7 @@ trait HandlesCatalogItems
     protected function catalogItemsQuery(ItemCategoryType $type, bool $onlyActive = true): Builder
     {
         $query = EquipmentProp::query()
-            ->with(['itemCategory', 'galleryImages.category'])
+            ->with(['itemCategory', 'galleryImages.category', 'galleryImages.creator.employee'])
             ->whereHas('itemCategory', function (Builder $builder) use ($type): void {
                 $builder->where('type', $type->value);
             });
@@ -174,7 +175,7 @@ trait HandlesCatalogItems
 
     protected function transformCatalogItem(EquipmentProp $item): array
     {
-        $item->loadMissing(['itemCategory', 'galleryImages.category']);
+        $item->loadMissing(['itemCategory', 'galleryImages.category', 'galleryImages.creator.employee']);
         $images = $item->galleryImages
             ->where('is_active', true)
             ->values();
@@ -194,7 +195,10 @@ trait HandlesCatalogItems
             'color' => $item->color,
             'sizes' => $item->sizes ?? [],
             'gender' => $item->gender?->value,
-            'images' => $images->pluck('id')->values()->all(),
+            'image_ids' => $images->pluck('id')->values()->all(),
+            'images' => $images
+                ->map(fn (GalleryImage $image) => $this->transformGalleryImage($image))
+                ->all(),
             'rental_price_per_day' => $item->rental_price_per_day !== null
                 ? (float) $item->rental_price_per_day
                 : null,
@@ -211,14 +215,15 @@ trait HandlesCatalogItems
 
     protected function transformGalleryImage(GalleryImage $image): array
     {
-        $image->loadMissing('category');
+        $image->loadMissing(['category', 'creator.employee']);
+        $publicPath = $this->galleryImagePublicPath($image);
 
         return [
             'id' => $image->id,
             'file_name' => $image->file_name,
             'size' => $image->size,
-            'dest' => $image->dest,
-            'url' => $image->url,
+            'dest' => $publicPath,
+            'url' => $publicPath,
             'mime_type' => $image->mime_type,
             'category_id' => $image->category_id,
             'category' => $image->category ? [
@@ -228,9 +233,50 @@ trait HandlesCatalogItems
                 'type' => $image->category->type?->value,
             ] : null,
             'is_active' => $image->is_active,
-            'created_by' => $image->created_by,
+            'created_by_id' => $image->created_by,
+            'created_by' => $this->transformImageCreator($image->creator),
             'created_at' => $image->created_at?->toISOString(),
             'updated_at' => $image->updated_at?->toISOString(),
+        ];
+    }
+
+    protected function galleryImagePublicPath(GalleryImage $image): string
+    {
+        $fileName = trim((string) $image->file_name, '/');
+
+        if ($fileName === '') {
+            return (string) $image->dest;
+        }
+
+        return '/storage/images-gallery/'.$image->category_id.'/'.$fileName;
+    }
+
+    protected function transformImageCreator(?User $user): ?array
+    {
+        if (! $user) {
+            return null;
+        }
+
+        $user->loadMissing('employee');
+
+        return [
+            'id' => $user->id,
+            'username' => $user->username,
+            'role' => $user->role?->value,
+            'employee_id' => $user->employee_id,
+            'employee' => $user->employee ? [
+                'id' => $user->employee->id,
+                'employee_code' => $user->employee->employee_code,
+                'full_name' => $user->employee->full_name,
+                'phone' => $user->employee->phone,
+                'email' => $user->employee->email,
+                'citizen_id_number' => $user->employee->citizen_id_number,
+                'position' => $user->employee->position?->value,
+                'work_status' => $user->employee->work_status?->value,
+            ] : null,
+            'is_active' => $user->is_active,
+            'created_at' => $user->created_at?->toISOString(),
+            'updated_at' => $user->updated_at?->toISOString(),
         ];
     }
 

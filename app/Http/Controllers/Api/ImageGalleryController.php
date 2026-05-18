@@ -24,7 +24,7 @@ class ImageGalleryController extends Controller
     {
         $query = GalleryImage::query()
             ->active()
-            ->with(['category', 'equipmentProps:id']);
+            ->with(['category', 'equipmentProps:id', 'creator.employee']);
 
         $categoryId = $request->query('category_id:eq', $request->query('category_id'));
 
@@ -37,7 +37,7 @@ class ImageGalleryController extends Controller
             $perPage = max(1, min((int) $request->query('_per_page', 10), 100));
             $images = $query->orderByDesc('id')->paginate($perPage, ['*'], 'page', $page);
 
-            return $this->success([
+            return $this->rawSuccess([
                 'items' => collect($images->items())
                     ->map(fn (GalleryImage $image) => $this->transformImage($image))
                     ->values()
@@ -48,7 +48,7 @@ class ImageGalleryController extends Controller
                     'total' => $images->total(),
                     'last_page' => $images->lastPage(),
                 ],
-            ], 'Lay danh sach anh thanh cong!');
+            ]);
         }
 
         $images = $query->orderByDesc('id')
@@ -56,7 +56,7 @@ class ImageGalleryController extends Controller
             ->map(fn (GalleryImage $image) => $this->transformImage($image))
             ->all();
 
-        return $this->success($images, 'Lay danh sach anh thanh cong!');
+        return $this->rawSuccess($images);
     }
 
     public function upload(UploadImageRequest $request): JsonResponse
@@ -76,7 +76,7 @@ class ImageGalleryController extends Controller
                     'file_name' => basename($path),
                     'mime_type' => 'image/webp',
                     'size' => strlen($webpContents),
-                    'dest' => Storage::disk('public')->url($path),
+                    'dest' => '/storage/'.$path,
                     'created_by' => auth('api')->id(),
                     'is_active' => true,
                 ]);
@@ -129,10 +129,10 @@ class ImageGalleryController extends Controller
     {
         $image = GalleryImage::query()
             ->active()
-            ->with(['category', 'equipmentProps:id'])
+            ->with(['category', 'equipmentProps:id', 'creator.employee'])
             ->findOrFail($id);
 
-        return $this->success($this->transformImage($image), 'Lay chi tiet anh thanh cong!');
+        return $this->rawSuccess($this->transformImage($image));
     }
 
     public function update(UpdateImageRequest $request, int $id): JsonResponse
@@ -159,7 +159,7 @@ class ImageGalleryController extends Controller
 
     private function transformImage(GalleryImage $image): array
     {
-        $image->loadMissing('equipmentProps:id');
+        $image->loadMissing(['equipmentProps:id', 'creator.employee']);
 
         return [
             ...$this->transformGalleryImage($image),

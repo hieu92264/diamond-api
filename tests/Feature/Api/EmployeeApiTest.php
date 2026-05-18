@@ -64,7 +64,7 @@ class EmployeeApiTest extends TestCase
         $this->withHeaders($headers)
             ->getJson('/api/employees?position:in=MANAGER,TECHNICAL_CREW')
             ->assertOk()
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.id', $employeeId);
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.id', $employeeId);
     }
 }

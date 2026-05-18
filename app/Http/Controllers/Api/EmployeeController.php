@@ -39,12 +39,12 @@ class EmployeeController extends Controller
         }
 
         $result = $query->orderByDesc('id')->get()->toArray();
-        return $this->success($result, 'Lấy danh sách profile thành công!');
+        return $this->rawSuccess($result);
     }
 
     public function show(int $id): JsonResponse {
         $result = $this->employeeService->find($id);
-        return $this->success($result, 'Lấy thông tin profile thành công!');
+        return $this->rawSuccess($result);
     }
 
     public function store(StoreEmployeeRequest $request): JsonResponse

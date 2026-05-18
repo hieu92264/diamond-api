@@ -46,6 +46,11 @@ class GalleryImage extends Model
         return $this->belongsTo(ItemCategory::class, 'category_id', 'id');
     }
 
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
     public function equipmentProps(): BelongsToMany
     {
         return $this->belongsToMany(

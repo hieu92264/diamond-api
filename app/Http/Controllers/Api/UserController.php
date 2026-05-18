@@ -22,12 +22,12 @@ class UserController extends Controller
             array_map('trim', explode(',', (string) $request->query('_expand', '')))
         );
         $result = $this->userService->all($expand);
-        return $this->success($result, 'Lấy danh sách tài khoản thành công!');
+        return $this->rawSuccess($result);
     }
 
     public function show(int $id): JsonResponse {
         $result = $this->userService->find($id);
-        return $this->success($result, 'Lấy thông tin tài khoản thành công!');
+        return $this->rawSuccess($result);
     }
 
     public function store(StoreUserRequest $request): JsonResponse

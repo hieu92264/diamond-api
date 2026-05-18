@@ -60,9 +60,9 @@ class CatalogApiTest extends TestCase
         $this->withHeaders($headers)
             ->getJson('/api/categories?type:eq=COSTUME&_embed=costumes,equipment_props')
             ->assertOk()
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.costumes', [])
-            ->assertJsonPath('data.0.equipment_props', []);
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.costumes', [])
+            ->assertJsonPath('0.equipment_props', []);
 
         $this->withHeaders($headers)
             ->deleteJson("/api/item-categories/{$categoryId}")
@@ -100,7 +100,9 @@ class CatalogApiTest extends TestCase
             ->assertCreated()
             ->assertJsonCount(2, 'data')
             ->assertJsonPath('data.0.category_id', $category->id)
-            ->assertJsonPath('data.0.mime_type', 'image/webp');
+            ->assertJsonPath('data.0.mime_type', 'image/webp')
+            ->assertJsonPath('data.0.dest', fn (string $dest) => str_starts_with($dest, "/storage/images-gallery/{$category->id}/"))
+            ->assertJsonPath('data.0.created_by.id', User::query()->where('role', UserRole::ADMIN)->value('id'));
 
         $imageId = $uploadResponse->json('data.0.id');
         $fileName = $uploadResponse->json('data.0.file_name');
@@ -111,8 +113,9 @@ class CatalogApiTest extends TestCase
         $this->withHeaders($headers)
             ->getJson('/api/images-gallery?_expand=category')
             ->assertOk()
-            ->assertJsonCount(2, 'data')
-            ->assertJsonPath('data.0.category.id', $category->id);
+            ->assertJsonCount(2)
+            ->assertJsonPath('0.category.id', $category->id)
+            ->assertJsonPath('0.created_by.id', User::query()->where('role', UserRole::ADMIN)->value('id'));
 
         $this->withHeaders($headers)
             ->patchJson('/api/images-gallery/'.$imageId, [
@@ -195,7 +198,9 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('color.hex', '#5b958c')
             ->assertJsonPath('color.code', 'GRN')
             ->assertJsonPath('color.intensity', 500)
-            ->assertJsonPath('images.0', $costumeImage->id)
+            ->assertJsonPath('image_ids.0', $costumeImage->id)
+            ->assertJsonPath('images.0.id', $costumeImage->id)
+            ->assertJsonPath('images.0.dest', "/storage/images-gallery/{$costumeCategory->id}/costume.jpg")
             ->assertJsonPath('hashtags.0', 'ao tac');
 
         $costumeId = $costumeResponse->json('id');
@@ -203,8 +208,8 @@ class CatalogApiTest extends TestCase
         $this->withHeaders($headers)
             ->getJson('/api/costumes?id:in='.$costumeId)
             ->assertOk()
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.id', $costumeId);
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.id', $costumeId);
 
         $this->withHeaders($headers)
             ->patchJson("/api/costumes/{$costumeId}", [
@@ -236,7 +241,9 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('category.type', ItemCategoryType::EQUIPMENT_PROPS->value)
             ->assertJsonPath('dimensions.width_cm', 60)
             ->assertJsonPath('weight_kg', 0.5)
-            ->assertJsonPath('images.0', $propImage->id);
+            ->assertJsonPath('image_ids.0', $propImage->id)
+            ->assertJsonPath('images.0.id', $propImage->id)
+            ->assertJsonPath('images.0.dest', "/storage/images-gallery/{$propCategory->id}/prop.jpg");
 
         $propId = $propResponse->json('id');
 
@@ -254,6 +261,6 @@ class CatalogApiTest extends TestCase
         $this->withHeaders($headers)
             ->getJson('/api/equipment-props')
             ->assertOk()
-            ->assertJsonCount(1, 'data');
+            ->assertJsonCount(1);
     }
 }

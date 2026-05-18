@@ -39,8 +39,8 @@ class UserApiTest extends TestCase
         $this->withHeaders($this->authenticateAs())
             ->getJson('/api/users')
             ->assertOk()
-            ->assertJsonPath('statusCode', 200)
-            ->assertJsonCount(3, 'data');
+            ->assertJsonMissingPath('statusCode')
+            ->assertJsonCount(3);
     }
 
     public function test_admin_can_show_a_user(): void

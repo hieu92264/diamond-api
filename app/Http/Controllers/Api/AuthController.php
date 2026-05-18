@@ -32,7 +32,7 @@ class AuthController extends Controller
         /** @var User $user */
         $user = auth('api')->user()->loadMissing('employee');
 
-        return $this->success($this->transformUser($user));
+        return $this->rawSuccess($this->transformUser($user));
     }
 
     public function logout(): JsonResponse
@@ -49,7 +49,12 @@ class AuthController extends Controller
         /** @var User $user */
         $user = auth('api')->setToken($token)->user();
 
-        return $this->responseWithToken($token, $user, 'Làm mới token thành công.');
+        return $this->rawSuccess([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user' => $this->transformUser($user),
+        ]);
     }
 
     private function responseWithToken(string $token, User $user, string $message): JsonResponse

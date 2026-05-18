@@ -33,14 +33,14 @@ class ItemCategoryController extends Controller
         }
 
         if (array_intersect($embed, ['costumes', 'equipment_props']) !== []) {
-            $query->with('equipmentProps.galleryImages.category');
+            $query->with('equipmentProps.galleryImages.category', 'equipmentProps.galleryImages.creator.employee');
         }
 
         $categories = $query->get()
             ->map(fn (ItemCategory $category) => $this->transformCategory($category, $embed))
             ->all();
 
-        return $this->success($categories, 'Lay danh sach danh muc thanh cong!');
+        return $this->rawSuccess($categories);
     }
 
     public function store(StoreItemCategoryRequest $request): JsonResponse
@@ -118,7 +118,7 @@ class ItemCategoryController extends Controller
             return [];
         }
 
-        $category->loadMissing('equipmentProps.galleryImages.category');
+        $category->loadMissing('equipmentProps.galleryImages.category', 'equipmentProps.galleryImages.creator.employee');
 
         return $category->equipmentProps
             ->where('is_active', true)

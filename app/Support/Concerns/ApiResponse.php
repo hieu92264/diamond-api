@@ -38,6 +38,13 @@ trait ApiResponse
         return $this->apiResponse($metadata, $message, $statusCode);
     }
 
+    protected function rawSuccess(
+        mixed $data = null,
+        int $statusCode = Response::HTTP_OK
+    ): JsonResponse {
+        return response()->json($data, $statusCode);
+    }
+
     protected function error(
         mixed $metadata = null,
         string $message = 'Có lỗi xảy ra.',

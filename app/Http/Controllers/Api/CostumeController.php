@@ -31,7 +31,7 @@ class CostumeController extends Controller
             ->map(fn (EquipmentProp $item) => $this->transformCatalogItem($item))
             ->all();
 
-        return $this->success($costumes, 'Lấy danh sách trang phục thành công!');
+        return $this->rawSuccess($costumes);
     }
 
     public function store(StoreCostumeRequest $request): JsonResponse

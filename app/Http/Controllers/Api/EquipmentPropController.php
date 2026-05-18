@@ -30,7 +30,7 @@ class EquipmentPropController extends Controller
             ->map(fn (EquipmentProp $item) => $this->transformCatalogItem($item))
             ->all();
 
-        return $this->success($props, 'Lấy danh sách đạo cụ thành công!');
+        return $this->rawSuccess($props);
     }
 
     public function store(StoreEquipmentPropRequest $request): JsonResponse
