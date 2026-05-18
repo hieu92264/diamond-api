@@ -41,6 +41,7 @@ class UpdateEquipmentPropRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'sku' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'sku')->ignore($this->route('id'))],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')->ignore($this->route('id'))],
             'category_id' => ['sometimes', 'required', 'integer', Rule::exists('item_categories', 'id')],
             'unit' => ['nullable', 'string', 'max:50'],

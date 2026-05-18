@@ -44,6 +44,7 @@ class StoreCostumeRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'sku' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'sku')],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')],
             'category_id' => ['required', 'integer', Rule::exists('item_categories', 'id')],
             'color' => ['nullable', 'array'],

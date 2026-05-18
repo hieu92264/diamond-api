@@ -5,13 +5,17 @@ namespace Database\Seeders;
 use App\Models\Employee;
 use App\Models\EquipmentProp;
 use App\Models\GalleryImage;
+use App\Models\InventoryCondition;
+use App\Models\InventoryItem;
 use App\Models\ItemCategory;
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class JsonMockDataSeeder extends Seeder
 {
@@ -32,10 +36,13 @@ class JsonMockDataSeeder extends Seeder
                 $this->seedEmployees($data['employees'] ?? []);
                 $this->seedUsers($data['users'] ?? []);
                 $this->syncEmployeeUsers($data['employees'] ?? []);
+                $this->seedWarehouses($data['warehouses'] ?? []);
                 $this->seedCategories($data['categories'] ?? []);
+                $this->seedInventoryConditions($data['inventory_conditions'] ?? []);
                 $this->seedImages($data['images'] ?? []);
                 $this->seedCatalogItems($data['costumes'] ?? [], true);
                 $this->seedCatalogItems($data['equipment_props'] ?? [], false);
+                $this->seedInventory($data['inventory'] ?? []);
             });
         });
     }
@@ -113,6 +120,46 @@ class JsonMockDataSeeder extends Seeder
         }
     }
 
+    private function seedWarehouses(array $warehouses): void
+    {
+        foreach ($warehouses as $warehouse) {
+            Warehouse::query()->updateOrCreate(
+                ['id' => $warehouse['id']],
+                [
+                    'is_active' => $warehouse['is_active'] ?? true,
+                    'code' => $warehouse['code'] ?? $this->warehouseCode($warehouse),
+                    'name' => $warehouse['name'],
+                    'type' => $warehouse['type'],
+                    'location' => $warehouse['location'] ?? null,
+                    'manager_employee_id' => $warehouse['manager_employee_id'] ?? $warehouse['managed_by'] ?? null,
+                    'remarks' => $warehouse['remark'] ?? $warehouse['remarks'] ?? null,
+                    'created_at' => $warehouse['created_at'] ?? now(),
+                    'updated_at' => $warehouse['updated_at'] ?? now(),
+                ]
+            );
+        }
+    }
+
+    private function seedInventoryConditions(array $conditions): void
+    {
+        foreach ($conditions as $condition) {
+            InventoryCondition::query()->updateOrCreate(
+                ['id' => $condition['id']],
+                [
+                    'is_active' => $condition['is_active'] ?? true,
+                    'code' => $condition['code'],
+                    'label' => $condition['label'],
+                    'discount_rate' => $condition['discount_rate'] ?? 0,
+                    'rentable' => $condition['rentable'] ?? true,
+                    'disposable' => $condition['disposable'] ?? false,
+                    'badge_color' => $condition['badge_color'] ?? null,
+                    'created_at' => $condition['created_at'] ?? now(),
+                    'updated_at' => $condition['updated_at'] ?? now(),
+                ]
+            );
+        }
+    }
+
     private function seedImages(array $images): void
     {
         foreach ($images as $image) {
@@ -141,6 +188,7 @@ class JsonMockDataSeeder extends Seeder
             $catalogItem = EquipmentProp::query()->updateOrCreate(
                 ['slug' => $item['slug']],
                 [
+                    'sku' => $item['sku'] ?? null,
                     'name' => $item['name'],
                     'category_id' => $item['category_id'],
                     'unit' => $item['unit'] ?? ($isCostume ? 'SET' : null),
@@ -166,6 +214,42 @@ class JsonMockDataSeeder extends Seeder
 
             $catalogItem->galleryImages()->sync($imageIds);
         }
+    }
+
+    private function seedInventory(array $items): void
+    {
+        foreach ($items as $item) {
+            if (
+                ! EquipmentProp::query()->whereKey($item['item_id'])->exists()
+                || ! InventoryCondition::query()->whereKey($item['inventory_condition_id'])->exists()
+                || ! Warehouse::query()->whereKey($item['warehouse_id'])->exists()
+            ) {
+                continue;
+            }
+
+            InventoryItem::query()->updateOrCreate(
+                ['id' => $item['id']],
+                [
+                    'is_active' => $item['is_active'] ?? true,
+                    'sku' => $item['sku'],
+                    'item_id' => $item['item_id'],
+                    'item_type' => $item['item_type'],
+                    'inventory_condition_id' => $item['inventory_condition_id'],
+                    'warehouse_id' => $item['warehouse_id'],
+                    'status' => $item['status'] ?? 'AVAILABLE',
+                    'size' => $item['size'] ?? null,
+                    'created_at' => $item['created_at'] ?? now(),
+                    'updated_at' => $item['updated_at'] ?? now(),
+                ]
+            );
+        }
+    }
+
+    private function warehouseCode(array $warehouse): string
+    {
+        $base = strtoupper(Str::slug((string) ($warehouse['name'] ?? 'warehouse'), '-')) ?: 'WAREHOUSE';
+
+        return $base.'-'.$warehouse['id'];
     }
 
     private function passwordValue(string $password): string

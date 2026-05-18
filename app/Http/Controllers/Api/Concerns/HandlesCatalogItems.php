@@ -79,6 +79,7 @@ trait HandlesCatalogItems
     protected function buildCatalogPayload(array $data, bool $isCostume): array
     {
         return [
+            'sku' => $data['sku'] ?? $this->uniqueCatalogSku($data, $isCostume),
             'name' => $data['name'],
             'slug' => $this->uniqueSlug(EquipmentProp::query(), $data['slug'] ?? $data['name']),
             'color' => $isCostume ? ($data['color'] ?? null) : null,
@@ -102,6 +103,10 @@ trait HandlesCatalogItems
 
         if (array_key_exists('name', $data)) {
             $payload['name'] = $data['name'];
+        }
+
+        if (array_key_exists('sku', $data)) {
+            $payload['sku'] = $this->uniqueCatalogSku($data, $isCostume, $item?->id);
         }
 
         if (array_key_exists('slug', $data)) {
@@ -182,6 +187,7 @@ trait HandlesCatalogItems
 
         return [
             'id' => $item->id,
+            'sku' => $item->sku,
             'slug' => $item->slug,
             'name' => $item->name,
             'category_id' => $item->category_id,
@@ -297,5 +303,30 @@ trait HandlesCatalogItems
         }
 
         return $slug;
+    }
+
+    private function uniqueCatalogSku(array $data, bool $isCostume, ?int $ignoreId = null): string
+    {
+        if (! empty($data['sku'])) {
+            $base = strtoupper(trim((string) $data['sku']));
+        } else {
+            $source = (string) ($data['slug'] ?? $data['name'] ?? 'item');
+            $prefix = $isCostume ? 'TP' : 'DC';
+            $base = $prefix.'-'.strtoupper(Str::slug($source, '-'));
+        }
+        $sku = $base;
+        $sequence = 2;
+
+        while (
+            EquipmentProp::query()
+                ->where('sku', $sku)
+                ->when($ignoreId !== null, fn (Builder $builder) => $builder->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $sku = $base.'-'.$sequence;
+            $sequence++;
+        }
+
+        return $sku;
     }
 }

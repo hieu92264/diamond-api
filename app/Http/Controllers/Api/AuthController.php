@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -33,6 +35,32 @@ class AuthController extends Controller
         $user = auth('api')->user()->loadMissing('employee');
 
         return $this->rawSuccess($this->transformUser($user));
+    }
+
+    public function register(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'username' => ['required', 'string', 'max:50', 'unique:users,username'],
+            'password' => ['required', 'string', 'min:6'],
+            'employee_id' => ['nullable', 'integer', Rule::exists('employees', 'id'), Rule::unique('users', 'employee_id')],
+            'role' => ['nullable', Rule::in(['USER', 'ADMIN'])],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
+
+        $user = User::query()->create([
+            'username' => $data['username'],
+            'password' => $data['password'],
+            'employee_id' => $data['employee_id'] ?? null,
+            'role' => $data['role'] ?? 'USER',
+            'is_active' => $data['is_active'] ?? true,
+        ]);
+
+        return $this->success($this->transformUser($user), 'Đăng ký thành công.', Response::HTTP_CREATED);
+    }
+
+    public function logoutGet(): JsonResponse
+    {
+        return $this->logout();
     }
 
     public function logout(): JsonResponse

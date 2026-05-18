@@ -8,7 +8,10 @@ Route::prefix('users')->middleware(['auth:api', 'role:ADMIN'])
     ->controller(UserController::class)
     ->group(function () {
         Route::get('/', 'index');
+        Route::post('/', 'store');
         Route::get('/{id}', 'show');
+        Route::patch('/{id}', 'update');
+        Route::delete('/{id}', 'delete');
         Route::post('/create', 'store');
         Route::patch('/update/{id}', 'update');
         Route::delete('/delete/{id}', 'delete');
@@ -18,7 +21,10 @@ Route::prefix('employees')->middleware(['auth:api', 'role:ADMIN'])
     ->controller(EmployeeController::class)
     ->group(function () {
         Route::get('/', 'index');
+        Route::post('/', 'store');
         Route::get('/{id}', 'show');
+        Route::patch('/{id}', 'update');
+        Route::delete('/{id}', 'delete');
         Route::post('/create', 'store');
         Route::patch('/update/{id}', 'update');
         Route::delete('/delete/{id}', 'delete');

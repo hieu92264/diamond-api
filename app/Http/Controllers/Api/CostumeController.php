@@ -56,6 +56,13 @@ class CostumeController extends Controller
         );
     }
 
+    public function show(int $id): JsonResponse
+    {
+        $costume = $this->catalogItemsQuery(ItemCategoryType::COSTUME)->findOrFail($id);
+
+        return $this->rawSuccess($this->transformCatalogItem($costume));
+    }
+
     public function update(UpdateCostumeRequest $request, int $id): JsonResponse
     {
         $data = $request->validated();

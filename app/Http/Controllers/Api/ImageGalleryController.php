@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ImageGalleryController extends Controller
 {
@@ -133,6 +134,24 @@ class ImageGalleryController extends Controller
             ->findOrFail($id);
 
         return $this->rawSuccess($this->transformImage($image));
+    }
+
+    public function file(string $folder, string $fileName): StreamedResponse
+    {
+        $path = trim($folder, '/').'/'.basename($fileName);
+
+        abort_unless(Storage::disk('public')->exists($path), Response::HTTP_NOT_FOUND);
+
+        return Storage::disk('public')->response($path);
+    }
+
+    public function nestedFile(string $folder, string $subfolder, string $fileName): StreamedResponse
+    {
+        $path = trim($folder, '/').'/'.trim($subfolder, '/').'/'.basename($fileName);
+
+        abort_unless(Storage::disk('public')->exists($path), Response::HTTP_NOT_FOUND);
+
+        return Storage::disk('public')->response($path);
     }
 
     public function update(UpdateImageRequest $request, int $id): JsonResponse

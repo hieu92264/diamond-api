@@ -13,6 +13,7 @@ class EquipmentProp extends Model
 {
     protected $fillable = [
         'is_active',
+        'sku',
         'name',
         'slug',
         'color',

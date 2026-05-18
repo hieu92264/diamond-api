@@ -55,6 +55,13 @@ class EquipmentPropController extends Controller
         );
     }
 
+    public function show(int $id): JsonResponse
+    {
+        $prop = $this->catalogItemsQuery(ItemCategoryType::EQUIPMENT_PROPS)->findOrFail($id);
+
+        return $this->rawSuccess($this->transformCatalogItem($prop));
+    }
+
     public function update(UpdateEquipmentPropRequest $request, int $id): JsonResponse
     {
         $data = $request->validated();

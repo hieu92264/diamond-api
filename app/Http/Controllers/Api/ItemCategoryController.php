@@ -60,6 +60,19 @@ class ItemCategoryController extends Controller
         );
     }
 
+    public function show(Request $request, int $id): JsonResponse
+    {
+        $embed = $this->embedList($request);
+        $category = ItemCategory::query()
+            ->when(
+                array_intersect($embed, ['costumes', 'equipment_props']) !== [],
+                fn ($query) => $query->with('equipmentProps.galleryImages.category', 'equipmentProps.galleryImages.creator.employee')
+            )
+            ->findOrFail($id);
+
+        return $this->rawSuccess($this->transformCategory($category, $embed));
+    }
+
     public function update(UpdateItemCategoryRequest $request, int $id): JsonResponse
     {
         $category = ItemCategory::query()->findOrFail($id);
