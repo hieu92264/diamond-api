@@ -1,783 +1,1667 @@
 {
-  "$schema": "db.schema.json",
-  "users": [
-    {
-      "username": "quanghiep031",
-      "password": "$2b$10$K3OV2a6070bTMQngIEewseBH0cbE/uWHqR0fxl5ibvO9WTPM1g1yG",
-      "role": "ADMIN",
-      "employee_id": 1,
-      "is_active": true,
-      "created_at": "2026-04-20T04:35:49.640Z",
-      "updated_at": "2026-04-23T09:19:17.938Z",
-      "id": 1
-    },
-    {
-      "username": "D00004",
-      "password": "$2b$10$fb5Kdj4TDzJde6OCf9LgceP3eKMgTiUt65YyFOBiC5KsgVjJ5ZC4W",
-      "role": "USER",
-      "employee_id": 4,
-      "is_active": true,
-      "created_at": "2026-04-23T14:49:05.966Z",
-      "updated_at": "2026-04-23T17:26:25.087Z",
-      "id": 2
-    },
-    {
-      "username": "D00005",
-      "password": "$2b$10$xi4AvD1cqVzVoBbypscdKeciuND.lYVLEK5b.FCEmK7oXv6vbao6C",
-      "role": "USER",
-      "employee_id": 5,
-      "is_active": true,
-      "created_at": "2026-04-23T15:01:08.330Z",
-      "updated_at": null,
-      "id": 3
-    },
-    {
-      "username": "D00007",
-      "password": "$2b$10$sRgrsryEcNWbVyXnSj4nOeF3R7tfQui9w8LuWOE0Q25rmlvJ2f4xa",
-      "role": "USER",
-      "employee_id": 7,
-      "is_active": true,
-      "created_at": "2026-04-23T15:42:48.663Z",
-      "updated_at": null,
-      "id": 4
-    },
-    {
-      "username": "D00002",
-      "password": "$2b$10$YvPp.Xspj/Bq/7jd1pZ9h.ckqY/WnlOkE7vkm0z/qO2zUfgNrAWqO",
-      "role": "ADMIN",
-      "employee_id": 2,
-      "is_active": false,
-      "created_at": "2026-04-23T15:48:01.650Z",
-      "updated_at": "2026-04-23T17:25:45.947Z",
-      "id": 5,
-      "employee": {
-        "id": 2,
-        "user_id": null,
-        "work_status": "ACTIVE",
-        "address": "Hải Phòng",
-        "employee_code": "D00002",
-        "full_name": "Trương Thanh Hảo",
-        "email": "thanhhao88@gmail.com",
-        "phone": "0963088690",
-        "position": "WAREHOUSE_MANAGER",
-        "hire_date": "2020-01-01",
-        "citizen_id_number": "031123123321",
-        "is_active": true,
-        "created_at": "2026-04-21T15:43:42.651Z"
-      },
-      "avatar": "https://api.dicebear.com/9.x/initials/svg?background=%23525252&color=%23fafafa&length=1&bold=true&format=svg&seed=Tr%C6%B0%C6%A1ng%20Thanh%20H%E1%BA%A3o"
-    },
-    {
-      "username": "D00008",
-      "password": "$2b$10$0Uvx5f5QHlyWDo.q0ZyaeuHlp6r0PHYtXGE.u3QdH7.XKMXXzvjGq",
-      "role": "USER",
-      "employee_id": 8,
-      "is_active": true,
-      "created_at": "2026-04-23T17:26:34.499Z",
-      "updated_at": null,
-      "id": 6
-    },
-    {
-      "username": "D00009",
-      "password": "$2b$10$WDPNQQYIJ7kwPIN/TwQU1.2o8t9CxLyWFsmwexpbjYMI.0eYynCVu",
-      "role": "USER",
-      "employee_id": 9,
-      "is_active": true,
-      "created_at": "2026-04-24T04:14:01.153Z",
-      "updated_at": null,
-      "id": 7
-    }
-  ],
-  "employees": [
-    {
-      "id": 1,
-      "user_id": 1,
-      "work_status": "ACTIVE",
-      "employee_code": "D00001",
-      "position": "MANAGER",
-      "hire_date": "2020-01-01",
-      "full_name": "Quang Hiệp",
-      "phone": "0336089988",
-      "email": "quanghiep03198@gmail.com",
-      "address": "Hải Phòng",
-      "citizen_id_number": "031098005468",
-      "is_active": true,
-      "created_at": "2026-04-21T15:43:42.651Z"
-    },
-    {
-      "id": 2,
-      "user_id": null,
-      "work_status": "ACTIVE",
-      "address": "Hải Phòng",
-      "employee_code": "D00002",
-      "full_name": "Trương Thanh Hảo",
-      "email": "thanhhao88@gmail.com",
-      "phone": "0963088690",
-      "position": "WAREHOUSE_MANAGER",
-      "hire_date": "2020-01-01",
-      "citizen_id_number": "031123123321",
-      "is_active": true,
-      "created_at": "2026-04-21T15:43:42.651Z",
-      "updated_at": "2026-04-23T17:21:48.852Z"
-    },
-    {
-      "employee_code": "D00003",
-      "full_name": "Nguyễn Thế Hiểu",
-      "phone": "0326089980",
-      "email": "hieu92264@gmail.com",
-      "address": "Ninh Bình",
-      "work_status": "SUSPENDED",
-      "citizen_id_number": "033666777888",
-      "user_id": null,
-      "is_active": true,
-      "position": "TECHICAL_CREW",
-      "created_at": "2026-04-21T14:31:58.575Z",
-      "updated_at": "2026-04-24T04:14:12.612Z",
-      "id": 3
-    },
-    {
-      "employee_code": "D00004",
-      "full_name": "Nguyễn Đức Anh",
-      "phone": "0123123123",
-      "email": "ducanh1998@gmail.com",
-      "address": "Hai Phong",
-      "work_status": "ACTIVE",
-      "citizen_id_number": "031234456345",
-      "user_id": null,
-      "is_active": true,
-      "position": "ORDER_PROCESSOR",
-      "created_at": "2026-04-21T15:36:51.198Z",
-      "updated_at": "2026-04-23T17:21:38.350Z",
-      "id": 4
-    },
-    {
-      "employee_code": "D00005",
-      "full_name": "Nguyễn Trung Dũng",
-      "phone": "0331231235",
-      "email": "trungdung98@gmail.com",
-      "address": "Hải Phòng",
-      "work_status": "ACTIVE",
-      "citizen_id_number": "045123345234",
-      "user_id": null,
-      "is_active": true,
-      "position": "WAREHOUSE_MANAGER",
-      "created_at": "2026-04-21T15:43:42.651Z",
-      "updated_at": "2026-04-23T17:23:39.882Z",
-      "id": 5
-    },
-    {
-      "employee_code": "D00006",
-      "full_name": "Dương Bích Ngọc",
-      "phone": "0924991004",
-      "email": "duongngoc2004@gmail.com",
-      "address": "Dương Kinh, Hải Phòng",
-      "work_status": "ACTIVE",
-      "citizen_id_number": "031364777123",
-      "user_id": null,
-      "is_active": true,
-      "position": "TALENT",
-      "created_at": "2026-04-21T17:10:04.529Z",
-      "updated_at": "2026-04-22T17:16:43.518Z",
-      "id": 6
-    },
-    {
-      "employee_code": "D00007",
-      "full_name": "Trần Ngọc Hải",
-      "phone": "0942667890",
-      "email": "haitn2806@gmail.com",
-      "address": "Hải Phòng",
-      "work_status": "ACTIVE",
-      "citizen_id_number": "031565798222",
-      "user_id": null,
-      "is_active": true,
-      "position": "ORDER_PROCESSOR",
-      "created_at": "2026-04-22T01:11:19.687Z",
-      "updated_at": "2026-04-23T17:10:05.356Z",
-      "id": 7
-    },
-    {
-      "employee_code": "D00008",
-      "full_name": "Đoàn Thị Hoa",
-      "phone": "0987567123",
-      "email": "hoadoan1998@gmail.com",
-      "address": "Hải Phòng",
-      "work_status": "ACTIVE",
-      "citizen_id_number": "031576890221",
-      "user_id": null,
-      "is_active": true,
-      "position": "ORDER_PROCESSOR",
-      "created_at": "2026-04-23T17:07:23.275Z",
-      "updated_at": "2026-04-28T15:54:39.681Z",
-      "id": 8
-    },
-    {
-      "employee_code": "D00009",
-      "full_name": "Nguyễn Đức Thành",
-      "phone": "0942899559",
-      "email": "ducthanhnguyen245@gmail.com",
-      "address": "Số 1/22 Trần Nguyên Hãn, Hải Phòng",
-      "work_status": "SUSPENDED",
-      "citizen_id_number": "031999345909",
-      "user_id": null,
-      "is_active": true,
-      "position": "ORDER_PROCESSOR",
-      "created_at": "2026-04-24T03:55:29.056Z",
-      "updated_at": "2026-04-28T16:13:03.793Z",
-      "id": 9
-    }
-  ],
-  "revoke_tokens": [
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NjM3MCwiZXhwIjoxNzc3OTcxMTcwfQ.P9eQQnBH6dFGk2Bmq3A3R5O0Sfd3M8T1HGS_gUZ07n0"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2Njc0NiwiZXhwIjoxNzc3MzY2NzU2fQ.-5UugJp_GIoJ-GLu-J0fMzLIkmQRxOhfBdaokRdG24Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzEzMiwiZXhwIjoxNzc3MzY3MTQyfQ.jI7HkMbgF0BP5ImzKRlQ7Esjp0UbBfvvOM93Q9u2UqM"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzEzMiwiZXhwIjoxNzc3MzY3MTQyfQ.jI7HkMbgF0BP5ImzKRlQ7Esjp0UbBfvvOM93Q9u2UqM"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzE0MiwiZXhwIjoxNzc3MzY3MTUyfQ.4w5cCfm9smwd_gke6ykggg5X_Wc5wcDE4btBa2zWP8U"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzE3NCwiZXhwIjoxNzc3MzY3MTg0fQ.ZbuUsZXMdldG4Q1tFM9fEcGZYwCy3fXMbLyzw1GXkm4"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzE5MSwiZXhwIjoxNzc3MzY3MjAxfQ.J9ObXhoNKgIywkcEIeaWuZAvhVv7rlQ7w14U_o5klLY"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzIxNiwiZXhwIjoxNzc3MzY3MjI2fQ.ypi3E-tlV6miePcTlTxs-BrRWsCp-GsSxgcy2z4QEAY"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzIyOCwiZXhwIjoxNzc3MzY3MjM4fQ.oJj6jgYd47O79I53wN2V4HKVmFWLfv8p7XTkYNOb5Jk"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzIzOSwiZXhwIjoxNzc3MzY3MjQ5fQ.CZIe-Fviy0gsvi4UNyDJf14i1LKQBSm9Yzn3WhmmY_Y"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzI5NiwiZXhwIjoxNzc3MzY3MzA2fQ.yhgU7kk0Gmthvt06FdIPfgspTmHFQ0wig5KR3Z3yPF4"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2NzMwNiwiZXhwIjoxNzc3MzY3MzE2fQ.xR7v_CgrefLWpG4zfsiRVgxUSmHhQDSE-rYziYrjtTc"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2ODAwMCwiZXhwIjoxNzc3MzY4MDEwfQ.p4WEPYg0V_YDeN_-itV9gGUOVx1qMn_nBw_F8wjUSqg"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2ODM4NCwiZXhwIjoxNzc3MzY4Mzk0fQ.hz02u5IONVpHt7ia8TeNkk1K3L_397bSTuMP6xVGM6k"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3MzkzNiwiZXhwIjoxNzc3MzczOTQ2fQ.X1MeMhqhz5dadG5O1bwcvcTiZDYPXyOD2qKbb9mznXo"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3MzkzNiwiZXhwIjoxNzc3MzczOTQ2fQ.X1MeMhqhz5dadG5O1bwcvcTiZDYPXyOD2qKbb9mznXo"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDE2OSwiZXhwIjoxNzc3Mzc0MTc5fQ.kDTH98998pg__iVFys8L4RxZQIznUibSwecV_4cWBQM"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDM0MywiZXhwIjoxNzc3Mzc0MzUzfQ.3_fLWOhpfzOmvHA2ydavvn1BCdsRCTpfyRQYDBO-vP0"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDM1OSwiZXhwIjoxNzc3Mzc0MzY5fQ.xlO-bSimzNhoO0gVkyo3GpBUMbpUEniRF8-XXZgyq3k"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDM4MCwiZXhwIjoxNzc3Mzc0MzkwfQ.4Tr8kjdvdPT5QrJgpisanoXEsq1AuKTYwPd7YSQJmlc"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDQxMiwiZXhwIjoxNzc3Mzc0NDIyfQ.kT3jS1q-1u4FX1jKGLiFxXem1-WTVjhMY_Yyc92Ohfs"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDQ3MywiZXhwIjoxNzc3Mzc0NDgzfQ.Vwe6xItgNGrDj8snjT7RydF9zHn0JqtXvajiFhNfymE"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDU3MiwiZXhwIjoxNzc3Mzc0NTgyfQ.qUqVRY5cS4HX2KWipz0VEOfDOL4D0ZAzrC8sgRKwN14"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDU5OCwiZXhwIjoxNzc3Mzc0NjA4fQ.6oNFI67bUdFtjh0k1O_wAkZ6kQD2z71iTEsKYPSmxnc"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDYxMCwiZXhwIjoxNzc3Mzc0NjIwfQ.opGM4Nh3iHQ6TXfDTl8YmaXpGZt1CeVjiriWeMgXrpA"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDYzOSwiZXhwIjoxNzc3Mzc0NjQ5fQ.0783yLaXmOxhWPZrvTq-_ZRcOjx72PExqzvwcFR0aVQ"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDY2NiwiZXhwIjoxNzc3Mzc0Njc2fQ.A6rGEyesoEbrOSDZ_2dIZOdYOHvnsvfRpLGt9XKTnbk"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NDY4MCwiZXhwIjoxNzc3Mzc0NjkwfQ.T7tU1inajmBe3GNE8zsd8TPc9y6HTDM0NEwQwJ7LIJ4"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM3NTE2NSwiZXhwIjoxNzc3NDYxNTY1fQ.L99tp86DioA6_O2DJTYC9TJ-04E5N5fHG8zPs93d3Zo"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM4ODQ3NiwiZXhwIjoxNzc3NDc0ODc2fQ.1mfQUcro70zWrhDWnXeT5bJso7YeTEtkKpG-zoFy3zM"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM4OTU4NywiZXhwIjoxNzc3NDc1OTg3fQ.n779Qbsn9kzmAthwbcOzrGNud81vXFxYcXNf2L8i7U0"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM5MzgwMiwiZXhwIjoxNzc3NDgwMjAyfQ.AoJxp4qOmXG03GQYb2lC5eFApjepyywfxHRfS1c3sbo"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM5Njk1OSwiZXhwIjoxNzc3NDgzMzU5fQ.aKNBMz_5qotJCnIzCIQSqKHA8NbtR-qwR3iFy50GOZA"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2ODM5NCwiZXhwIjoxNzc3MzY4NDA0fQ.UH6op77oX74zf-wVoxwsKXXQKju8pG2TqBu2_xVwrp4"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3NzM2ODM5NCwiZXhwIjoxNzc3MzY4NDA0fQ.UH6op77oX74zf-wVoxwsKXXQKju8pG2TqBu2_xVwrp4"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3ODQ2NDMyNiwiZXhwIjoxNzc4NTUwNzI2fQ.T0MXn2vT1P4dFNz2Y5gcuCFJ11UDJwDt6zDAxKphEOE"
-    },
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Nzg1MDM2NzUsImV4cCI6MTc3ODU5MDA3NX0.EDNWH-yitHa2H6TM1S3EkPb_rmVg2OdXeHklcHO4gZs"
-    }
-  ],
-  "warehouses": [],
-  "images": [
-    {
-      "file_name": "1777023502551-ao-dai-gam-bong-nhieu-mau-nu.webp",
-      "size": 36840,
-      "dest": "/images/1777023502551-ao-dai-gam-bong-nhieu-mau-nu.webp",
-      "mime_type": "image/webp",
-      "category_id": 1,
-      "is_active": true,
-      "created_by": 1,
-      "created_at": "2026-04-24T09:38:22.551Z",
-      "updated_at": "2026-04-24T16:26:33.871Z",
-      "id": 2
-    },
-    {
-      "file_name": "1777023502553-ao-tac-cho-nu-mau-cam.webp",
-      "size": 49296,
-      "dest": "/images/1777023502553-ao-tac-cho-nu-mau-cam.webp",
-      "mime_type": "image/webp",
-      "category_id": 1,
-      "is_active": true,
-      "created_by": 1,
-      "created_at": "2026-04-24T09:38:22.554Z",
-      "updated_at": null,
-      "id": 4
-    },
-    {
-      "file_name": "AO-TAC-MAU-XANH-MINT-BAC-HA-600x600.webp",
-      "size": 19734,
-      "dest": "/images/AO-TAC-MAU-XANH-MINT-BAC-HA-600x600.webp",
-      "mime_type": "image/webp",
-      "category_id": 1,
-      "is_active": true,
-      "created_by": 1,
-      "created_at": "2026-04-24T09:38:22.567Z",
-      "updated_at": "2026-05-12T03:21:17.673Z",
-      "id": 5
-    },
-    {
-      "file_name": "AO-TAC-NU-MAU-HONG.webp",
-      "size": 18522,
-      "dest": "/images/AO-TAC-NU-MAU-HONG.webp",
-      "mime_type": "image/webp",
-      "category_id": 1,
-      "is_active": true,
-      "created_by": 1,
-      "created_at": "2026-04-24T09:38:22.579Z",
-      "updated_at": "2026-05-12T03:21:46.850Z",
-      "id": 6
-    },
-    {
-      "file_name": "1777046950675-vn-11134207-7ras8-m0zo4auo8j6jec-1728118676279.webp",
-      "size": 306928,
-      "dest": "/images/1777046950675-vn-11134207-7ras8-m0zo4auo8j6jec-1728118676279.webp",
-      "mime_type": "image/webp",
-      "item_type": "EQUIPMENT_PROPS",
-      "is_active": true,
-      "created_by": 1,
-      "created_at": "2026-04-24T16:09:10.676Z",
-      "updated_at": null,
-      "category_id": 5,
-      "id": 7
-    },
-    {
-      "file_name": "ao-dai-cach-tan-tim-1.webp",
-      "size": 65950,
-      "dest": "/images/ao-dai-cach-tan-tim-1.webp",
-      "mime_type": "image/webp",
-      "category_id": 7,
-      "created_by": 1,
-      "is_active": true,
-      "created_at": "2026-05-11T14:35:40.957Z",
-      "updated_at": "2026-05-12T03:22:32.020Z",
-      "id": 8
-    },
-    {
-      "file_name": "1778510140958-2-8.webp",
-      "size": 77488,
-      "dest": "/images/1778510140958-2-8.webp",
-      "mime_type": "image/webp",
-      "category_id": 7,
-      "created_by": 1,
-      "is_active": true,
-      "created_at": "2026-05-11T14:35:40.959Z",
-      "updated_at": null,
-      "id": 9
-    },
-    {
-      "file_name": "1778510140971-3-8.webp",
-      "size": 73736,
-      "dest": "/images/1778510140971-3-8.webp",
-      "mime_type": "image/webp",
-      "category_id": 7,
-      "created_by": 1,
-      "is_active": true,
-      "created_at": "2026-05-11T14:35:40.971Z",
-      "updated_at": null,
-      "id": 10
-    },
-    {
-      "file_name": "1778510140981-5-8-600x901.webp",
-      "size": 52522,
-      "dest": "/images/1778510140981-5-8-600x901.webp",
-      "mime_type": "image/webp",
-      "category_id": 7,
-      "created_by": 1,
-      "is_active": true,
-      "created_at": "2026-05-11T14:35:40.982Z",
-      "updated_at": null,
-      "id": 11
-    },
-    {
-      "file_name": "1778513299684-il_794xN.webp",
-      "size": 54916,
-      "dest": "/images/1778513299684-il_794xN.webp",
-      "mime_type": "image/webp",
-      "category_id": 7,
-      "created_by": 1,
-      "is_active": true,
-      "created_at": "2026-05-11T15:28:19.685Z",
-      "updated_at": null,
-      "id": 12
-    },
-    {
-      "file_name": "1778513299686-il_794xN.webp",
-      "size": 53468,
-      "dest": "/images/1778513299686-il_794xN.webp",
-      "mime_type": "image/webp",
-      "category_id": 7,
-      "created_by": 1,
-      "is_active": true,
-      "created_at": "2026-05-11T15:28:19.687Z",
-      "updated_at": null,
-      "id": 13
-    },
-    {
-      "file_name": "1778513299700-il_794xN.webp",
-      "size": 53056,
-      "dest": "/images/1778513299700-il_794xN.webp",
-      "mime_type": "image/webp",
-      "category_id": 7,
-      "created_by": 1,
-      "is_active": true,
-      "created_at": "2026-05-11T15:28:19.701Z",
-      "updated_at": null,
-      "id": 14
-    }
-  ],
-  "categories": [
-    {
-      "name": "Trang phục Truyền thống",
-      "slug": "trang-phuc-truyen-thong",
-      "type": "COSTUME",
-      "is_active": true,
-      "created_at": "2026-04-24T09:07:28.173Z",
-      "updated_at": "2026-04-24T09:13:08.602Z",
-      "id": 1
-    },
-    {
-      "name": "Trang Phục Múa - Nhảy - Khiêu Vũ",
-      "slug": "trang-phuc-mua-nhay-khieu-vu",
-      "type": "COSTUME",
-      "is_active": true,
-      "created_at": "2026-04-24T09:07:59.263Z",
-      "updated_at": null,
-      "id": 2
-    },
-    {
-      "name": "Trang Phục Hóa Trang",
-      "slug": "trang-phuc-hoa-trang",
-      "type": "COSTUME",
-      "is_active": true,
-      "created_at": "2026-04-24T09:10:04.233Z",
-      "updated_at": null,
-      "id": 3
-    },
-    {
-      "name": "Trang Phục Các Dân Tộc Việt Nam",
-      "slug": "trang-phuc-cac-dan-toc-viet-nam",
-      "type": "COSTUME",
-      "is_active": true,
-      "created_at": "2026-04-24T09:10:17.439Z",
-      "updated_at": null,
-      "id": 4
-    },
-    {
-      "name": "Hoa múa",
-      "slug": "hoa-mua",
-      "type": "EQUIPMENT_PROPS",
-      "is_active": true,
-      "created_at": "2026-04-24T15:56:15.161Z",
-      "updated_at": null,
-      "id": 5
-    },
-    {
-      "name": "Trang Phục Cổ Trang",
-      "slug": "trang-phuc-co-trang",
-      "type": "COSTUME",
-      "is_active": false,
-      "created_at": "2026-04-29T07:32:18.171Z",
-      "updated_at": "2026-04-29T08:09:12.986Z",
-      "id": 6
-    },
-    {
-      "name": "Áo Dài",
-      "slug": "ao-dai",
-      "type": "COSTUME",
-      "is_active": true,
-      "created_at": "2026-05-11T14:31:13.369Z",
-      "updated_at": null,
-      "id": 7
-    }
-  ],
-  "costumes": [
-    {
-      "slug": "ao-tac-xanh-bac-ha",
-      "name": "Áo Tấc xanh bạc hà",
-      "category_id": 1,
-      "unit": "SET",
-      "color": "#5b958c",
-      "sizes": ["S", "M", "L", "XL"],
-      "gender": "FEMALE",
-      "images": [5],
-      "rental_price_per_day": 200000,
-      "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 328px;\"><colgroup><col style=\"width: 248px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"248\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo Tấc Lụa trơn</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"248\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"248\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Vải Lụa</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">150 - 156 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">42 - 48 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 82, Vòng 2: 66 , Vòng 3: 86</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">156 - 160 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">49 - 54 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 86, Vòng 2: 70 , Vòng 3: 90</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">55 - 59 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 90, Vòng 2: 74 , Vòng 3: 94</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">60 - 65 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 94, Vòng 2: 78 , Vòng 3: 98</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\"><span style=\"color: inherit;\"><strong class=\"font-bold\">THÔNG TIN SẢN PHẨM</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\">Trong sắc nắng dịu mùa xuân, thiết kế áo dài đỏ son của Diamond Studio hiện lên vừa nổi bật vừa nền nã. Gam đỏ trầm sang, không chói gắt, tôn da và gợi cảm giác may mắn, viên mãn – rất hợp cho những dịp lễ, cưới hỏi hay du xuân đầu năm.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Phom dáng áo dài truyền thống được xử lý gọn gàng, tay lửng trẻ trung và che được khuyết điểm, chiều dài chuẩn giúp vóc dáng thêm thanh thoát. Chất liệu gấm hoa nổi có độ đứng phom hoàn hảo và vẫn thoải mái khi chuyển động tạo nên vẻ uyển chuyển rất nữ tính. Họa tiết hoa nhỏ được tạo nên từ kỹ nghệ dệt truyền thống tạo điểm nhấn mà vẫn giữ trọn sự sang trọng.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Một thiết kế dành cho nàng yêu vẻ đẹp cổ điển, chín chắn nhưng không hề nhàm chán, để mỗi lần khoác lên là cảm thấy tự tin và rạng rỡ hơn.</p></li></ul><p class=\"my-1\"></p>",
-      "hashtags": ["áo tấc"],
-      "is_active": true,
-      "created_at": "2026-04-24T16:12:39.694Z",
-      "updated_at": "2026-04-27T13:22:22.232Z",
-      "id": 1,
-      "category": {
-        "name": "Trang phục Truyền thống",
-        "slug": "trang-phuc-truyen-thong",
-        "type": "COSTUME",
-        "is_active": true,
-        "created_at": "2026-04-24T09:07:28.173Z",
-        "updated_at": "2026-04-24T09:13:08.602Z",
-        "id": 1
-      }
-    },
-    {
-      "slug": "ao-tac-lua-do",
-      "name": "Áo Tấc Lụa Đỏ",
-      "category_id": 1,
-      "color": "#991b1b",
-      "sizes": ["S", "M", "L", "XL"],
-      "gender": "FEMALE",
-      "rental_price_per_day": 200000,
-      "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 306px;\"><colgroup><col style=\"width: 226px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"226\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo Tấc Lụa Trơn</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"226\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"226\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Vải Lụa</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">150 - 156 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">42 - 48 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 82, Vòng 2: 66 , Vòng 3: 86</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">156 - 160 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">49 - 54 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 86, Vòng 2: 70 , Vòng 3: 90</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">55 - 59 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 90, Vòng 2: 74 , Vòng 3: 94</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">60 - 65 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 94, Vòng 2: 78 , Vòng 3: 98</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\"><span style=\"color: inherit;\"><strong class=\"font-bold\">THÔNG TIN SẢN PHẨM</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\">Trong sắc nắng dịu mùa xuân, thiết kế áo dài đỏ son của Lamia hiện lên vừa nổi bật vừa nền nã. Gam đỏ trầm sang, không chói gắt, tôn da và gợi cảm giác may mắn, viên mãn – rất hợp cho những dịp lễ, cưới hỏi hay du xuân đầu năm.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Phom dáng áo dài truyền thống được xử lý gọn gàng, tay lửng trẻ trung và che được khuyết điểm, chiều dài chuẩn giúp vóc dáng thêm thanh thoát. Chất liệu gấm hoa nổi có độ đứng phom hoàn hảo và vẫn thoải mái khi chuyển động tạo nên vẻ uyển chuyển rất nữ tính. Họa tiết hoa nhỏ được tạo nên từ kỹ nghệ dệt truyền thống tạo điểm nhấn mà vẫn giữ trọn sự sang trọng.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Một thiết kế dành cho nàng yêu vẻ đẹp cổ điển, chín chắn nhưng không hề nhàm chán, để mỗi lần khoác lên là cảm thấy tự tin và rạng rỡ hơn.</p></li></ul><p class=\"my-1\"></p>",
-      "hashtags": ["aoTacLua", "aoTruyenThong"],
-      "is_active": false,
-      "unit": "SET",
-      "images": [4],
-      "created_at": "2026-04-27T08:55:20.167Z",
-      "updated_at": "2026-04-27T13:19:50.859Z",
-      "id": 2,
-      "category": {
-        "name": "Trang phục Truyền thống",
-        "slug": "trang-phuc-truyen-thong",
-        "type": "COSTUME",
-        "is_active": true,
-        "created_at": "2026-04-24T09:07:28.173Z",
-        "updated_at": "2026-04-24T09:13:08.602Z",
-        "id": 1
-      }
-    },
-    {
-      "slug": "ao-dai-xanh-bac-ha",
-      "name": "Áo Dài Xanh Bạc Hà",
-      "category_id": 1,
-      "color": "#bbf7d0",
-      "sizes": ["S", "M", "L", "XL", "XXL"],
-      "gender": "FEMALE",
-      "images": [2],
-      "unit": "SET",
-      "rental_price_per_day": 300000,
-      "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 321px;\"><colgroup><col style=\"width: 241px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"241\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo Dài Cách Tân</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"241\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"241\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Lụa, Cotton</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">150 - 156 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">42 - 48 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 82, Vòng 2: 66 , Vòng 3: 86</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">156 - 160 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">49 - 54 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 86, Vòng 2: 70 , Vòng 3: 90</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">55 - 59 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 90, Vòng 2: 74 , Vòng 3: 94</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">60 - 64 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 94, Vòng 2: 78 , Vòng 3: 98</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size XXL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">165cm - 175cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">65 - 70kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 95, Vòng 2: 80, Vòng 3: 98</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Thông tin sản phẩm</h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\">Trong sắc nắng dịu mùa xuân, thiết kế áo dài đỏ son của Lamia hiện lên vừa nổi bật vừa nền nã. Gam đỏ trầm sang, không chói gắt, tôn da và gợi cảm giác may mắn, viên mãn – rất hợp cho những dịp lễ, cưới hỏi hay du xuân đầu năm.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Phom dáng áo dài truyền thống được xử lý gọn gàng, tay lửng trẻ trung và che được khuyết điểm, chiều dài chuẩn giúp vóc dáng thêm thanh thoát. Chất liệu gấm hoa nổi có độ đứng phom hoàn hảo và vẫn thoải mái khi chuyển động tạo nên vẻ uyển chuyển rất nữ tính. Họa tiết hoa nhỏ được tạo nên từ kỹ nghệ dệt truyền thống tạo điểm nhấn mà vẫn giữ trọn sự sang trọng.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Một thiết kế dành cho nàng yêu vẻ đẹp cổ điển, chín chắn nhưng không hề nhàm chán, để mỗi lần khoác lên là cảm thấy tự tin và rạng rỡ hơn.</p></li></ul><p class=\"my-1\"></p>",
-      "hashtags": ["AoDaiVietNam", "AoDaiCachTan"],
-      "is_active": true,
-      "created_at": "2026-04-27T11:35:10.896Z",
-      "updated_at": "2026-04-28T15:27:58.289Z",
-      "id": 4
-    },
-    {
-      "slug": "ao-dai-cach-tan",
-      "name": "Áo Dài Cách Tân",
-      "category_id": 7,
-      "color": "#991b1b",
-      "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
-      "gender": "FEMALE",
-      "images": [12, 13, 14],
-      "unit": "SET",
-      "rental_price_per_day": 300000,
-      "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo dài cách tân tay lỡ</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Màu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Đỏ mận</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Lụa, Cotton</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XS</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">60-62</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">82-84</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">64-66</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">86-88</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">84-86</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">68-70</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">90-92</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">88-90</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">72-74</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">94-96</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">92-94</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">98-100</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XXL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">96-100</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">102-104</p></td></tr></tbody></table><p class=\"my-1\"></p>",
-      "hashtags": ["aodaicachtan"],
-      "is_active": true,
-      "created_at": "2026-05-11T16:14:50.961Z",
-      "updated_at": "2026-05-12T03:44:36.111Z",
-      "id": 5
-    },
-    {
-      "slug": "ao-dai-lua-tim",
-      "name": "Áo Dài Lụa Tím",
-      "category_id": 7,
-      "color": "#ddd6fe",
-      "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
-      "gender": "FEMALE",
-      "images": [8, 9, 10, 11],
-      "unit": "SET",
-      "rental_price_per_day": 299999,
-      "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo dài cách tân tay lỡ</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Màu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Đỏ mận</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Lụa, Cotton</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XS</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">60-62</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">82-84</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">64-66</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">86-88</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">84-86</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">68-70</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">90-92</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">88-90</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">72-74</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">94-96</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">92-94</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">98-100</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XXL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">96-100</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">102-104</p></td></tr></tbody></table><p class=\"my-1\"></p>",
-      "hashtags": ["AoDaiVietNam"],
-      "is_active": true,
-      "created_at": "2026-05-12T03:51:27.941Z",
-      "updated_at": null,
-      "id": 6
-    }
-  ],
-  "equipment_props": [
-    {
-      "name": "Hoa Múa Cầm Tay Hướng Dương 2",
-      "slug": "hoa-mua-cam-tay-huong-duong-2",
-      "category_id": 5,
-      "rental_price_per_day": 70000,
-      "description": "<p class=\"my-1\"><span style=\"color: rgb(220, 38, 38);\">Hoa múa cầm tay hướng dương lớn màu vàng cam – đạo cụ biểu diễn chuyên nghiệp</span></p>",
-      "images": [7],
-      "hashtags": ["hoa múa"],
-      "unit": "Cặp",
-      "is_active": true,
-      "created_at": "2026-04-24T16:10:07.433Z",
-      "updated_at": "2026-04-28T15:14:01.781Z",
-      "id": 1,
-      "category": {
-        "id": 5,
-        "name": "Hoa múa"
-      }
-    }
-  ],
-  "inventory": []
+    "$schema": "db.schema.json",
+    "users": [
+        {
+            "username": "quanghiep031",
+            "password": "$2b$10$K3OV2a6070bTMQngIEewseBH0cbE/uWHqR0fxl5ibvO9WTPM1g1yG",
+            "role": "ADMIN",
+            "employee_id": 1,
+            "is_active": true,
+            "created_at": "2026-04-20T04:35:49.640Z",
+            "updated_at": "2026-04-23T09:19:17.938Z",
+            "id": 1
+        },
+        {
+            "username": "D00004",
+            "password": "$2b$10$fb5Kdj4TDzJde6OCf9LgceP3eKMgTiUt65YyFOBiC5KsgVjJ5ZC4W",
+            "role": "USER",
+            "employee_id": 4,
+            "is_active": true,
+            "created_at": "2026-04-23T14:49:05.966Z",
+            "updated_at": "2026-04-23T17:26:25.087Z",
+            "id": 2
+        },
+        {
+            "username": "D00005",
+            "password": "$2b$10$xi4AvD1cqVzVoBbypscdKeciuND.lYVLEK5b.FCEmK7oXv6vbao6C",
+            "role": "USER",
+            "employee_id": 5,
+            "is_active": true,
+            "created_at": "2026-04-23T15:01:08.330Z",
+            "updated_at": null,
+            "id": 3
+        },
+        {
+            "username": "D00007",
+            "password": "$2b$10$sRgrsryEcNWbVyXnSj4nOeF3R7tfQui9w8LuWOE0Q25rmlvJ2f4xa",
+            "role": "USER",
+            "employee_id": 7,
+            "is_active": true,
+            "created_at": "2026-04-23T15:42:48.663Z",
+            "updated_at": null,
+            "id": 4
+        },
+        {
+            "username": "D00002",
+            "password": "$2b$10$YvPp.Xspj/Bq/7jd1pZ9h.ckqY/WnlOkE7vkm0z/qO2zUfgNrAWqO",
+            "role": "ADMIN",
+            "employee_id": 2,
+            "is_active": false,
+            "created_at": "2026-04-23T15:48:01.650Z",
+            "updated_at": "2026-04-23T17:25:45.947Z",
+            "id": 5,
+            "employee": {
+                "id": 2,
+                "user_id": null,
+                "work_status": "ACTIVE",
+                "address": "Hải Phòng",
+                "employee_code": "D00002",
+                "full_name": "Trương Thanh Hảo",
+                "email": "thanhhao88@gmail.com",
+                "phone": "0963088690",
+                "position": "WAREHOUSE_MANAGER",
+                "hire_date": "2020-01-01",
+                "citizen_id_number": "031123123321",
+                "is_active": true,
+                "created_at": "2026-04-21T15:43:42.651Z"
+            },
+            "avatar": "https://api.dicebear.com/9.x/initials/svg?background=%23525252&color=%23fafafa&length=1&bold=true&format=svg&seed=Tr%C6%B0%C6%A1ng%20Thanh%20H%E1%BA%A3o"
+        },
+        {
+            "username": "D00008",
+            "password": "$2b$10$0Uvx5f5QHlyWDo.q0ZyaeuHlp6r0PHYtXGE.u3QdH7.XKMXXzvjGq",
+            "role": "USER",
+            "employee_id": 8,
+            "is_active": true,
+            "created_at": "2026-04-23T17:26:34.499Z",
+            "updated_at": null,
+            "id": 6
+        },
+        {
+            "username": "D00009",
+            "password": "$2b$10$WDPNQQYIJ7kwPIN/TwQU1.2o8t9CxLyWFsmwexpbjYMI.0eYynCVu",
+            "role": "USER",
+            "employee_id": 9,
+            "is_active": true,
+            "created_at": "2026-04-24T04:14:01.153Z",
+            "updated_at": null,
+            "id": 7
+        }
+    ],
+    "employees": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "work_status": "ACTIVE",
+            "employee_code": "D00001",
+            "position": "MANAGER",
+            "hire_date": "2020-01-01",
+            "full_name": "Quang Hiệp",
+            "phone": "0336089988",
+            "email": "quanghiep03198@gmail.com",
+            "address": "Hải Phòng",
+            "citizen_id_number": "031098005468",
+            "is_active": true,
+            "created_at": "2026-04-21T15:43:42.651Z"
+        },
+        {
+            "id": 2,
+            "user_id": null,
+            "work_status": "ACTIVE",
+            "address": "Hải Phòng",
+            "employee_code": "D00002",
+            "full_name": "Trương Thanh Hảo",
+            "email": "thanhhao88@gmail.com",
+            "phone": "0963088690",
+            "position": "WAREHOUSE_MANAGER",
+            "hire_date": "2020-01-01",
+            "citizen_id_number": "031123123321",
+            "is_active": true,
+            "created_at": "2026-04-21T15:43:42.651Z",
+            "updated_at": "2026-04-23T17:21:48.852Z"
+        },
+        {
+            "employee_code": "D00003",
+            "full_name": "Nguyễn Thế Hiểu",
+            "phone": "0326089980",
+            "email": "hieu92264@gmail.com",
+            "address": "Ninh Bình",
+            "work_status": "SUSPENDED",
+            "citizen_id_number": "033666777888",
+            "user_id": null,
+            "is_active": true,
+            "position": "TECHICAL_CREW",
+            "created_at": "2026-04-21T14:31:58.575Z",
+            "updated_at": "2026-04-24T04:14:12.612Z",
+            "id": 3
+        },
+        {
+            "employee_code": "D00004",
+            "full_name": "Nguyễn Đức Anh",
+            "phone": "0123123123",
+            "email": "ducanh1998@gmail.com",
+            "address": "Hai Phong",
+            "work_status": "ACTIVE",
+            "citizen_id_number": "031234456345",
+            "user_id": null,
+            "is_active": true,
+            "position": "ORDER_PROCESSOR",
+            "created_at": "2026-04-21T15:36:51.198Z",
+            "updated_at": "2026-04-23T17:21:38.350Z",
+            "id": 4
+        },
+        {
+            "employee_code": "D00005",
+            "full_name": "Nguyễn Trung Dũng",
+            "phone": "0331231235",
+            "email": "trungdung98@gmail.com",
+            "address": "Hải Phòng",
+            "work_status": "ACTIVE",
+            "citizen_id_number": "045123345234",
+            "user_id": null,
+            "is_active": true,
+            "position": "WAREHOUSE_MANAGER",
+            "created_at": "2026-04-21T15:43:42.651Z",
+            "updated_at": "2026-04-23T17:23:39.882Z",
+            "id": 5
+        },
+        {
+            "employee_code": "D00006",
+            "full_name": "Dương Bích Ngọc",
+            "phone": "0924991004",
+            "email": "duongngoc2004@gmail.com",
+            "address": "Dương Kinh, Hải Phòng",
+            "work_status": "ACTIVE",
+            "citizen_id_number": "031364777123",
+            "user_id": null,
+            "is_active": true,
+            "position": "TALENT",
+            "created_at": "2026-04-21T17:10:04.529Z",
+            "updated_at": "2026-04-22T17:16:43.518Z",
+            "id": 6
+        },
+        {
+            "employee_code": "D00007",
+            "full_name": "Trần Ngọc Hải",
+            "phone": "0942667890",
+            "email": "haitn2806@gmail.com",
+            "address": "Hải Phòng",
+            "work_status": "ACTIVE",
+            "citizen_id_number": "031565798222",
+            "user_id": null,
+            "is_active": true,
+            "position": "ORDER_PROCESSOR",
+            "created_at": "2026-04-22T01:11:19.687Z",
+            "updated_at": "2026-04-23T17:10:05.356Z",
+            "id": 7
+        },
+        {
+            "employee_code": "D00008",
+            "full_name": "Đoàn Thị Hoa",
+            "phone": "0987567123",
+            "email": "hoadoan1998@gmail.com",
+            "address": "Hải Phòng",
+            "work_status": "ACTIVE",
+            "citizen_id_number": "031576890221",
+            "user_id": null,
+            "is_active": true,
+            "position": "ORDER_PROCESSOR",
+            "created_at": "2026-04-23T17:07:23.275Z",
+            "updated_at": "2026-04-28T15:54:39.681Z",
+            "id": 8
+        },
+        {
+            "employee_code": "D00009",
+            "full_name": "Nguyễn Đức Thành",
+            "phone": "0942899559",
+            "email": "ducthanhnguyen245@gmail.com",
+            "address": "Số 1/22 Trần Nguyên Hãn, Hải Phòng",
+            "work_status": "SUSPENDED",
+            "citizen_id_number": "031999345909",
+            "user_id": null,
+            "is_active": true,
+            "position": "ORDER_PROCESSOR",
+            "created_at": "2026-04-24T03:55:29.056Z",
+            "updated_at": "2026-04-28T16:13:03.793Z",
+            "id": 9
+        }
+    ],
+    "revoke_tokens": [
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Nzg1OTQ0NjcsImV4cCI6MTc3ODY4MDg2N30.D3S_xzkQFw7z38xnOxuGMdyakIfrFEcM39RwtxbXAxU"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3ODY4MzI4MSwiZXhwIjoxNzc4NzY5NjgxfQ.PWHHp3eWi0TAujNRkhyzYTauKezbSX9IgBnJKWgz8KE"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Nzg2NDYwMjAsImV4cCI6MTc3ODczMjQyMH0.NNQJaOaNmkMQnS2plZ6NFmKJhTB5qTVkbBr_SLnWgjs"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Nzg2OTA4NzIsImV4cCI6MTc3ODc3NzI3Mn0.q8CHQf3ZTzWsHjzzcVJbjlA_aNh-WBJ0Vl6f8b3KoFU"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3ODg1OTUxNCwiZXhwIjoxNzc4OTQ1OTE0fQ.2JEfKayk-52afehr_L9ViYoQ5HBifHAaONavv6vDIr0"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Nzg4MDcwMjcsImV4cCI6MTc3ODg5MzQyN30.S5yQE2oyLTzha97wZkiX5-QF5YswY0BXxXYqbVeevd0"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Nzg4MDcwMjcsImV4cCI6MTc3ODg5MzQyN30.S5yQE2oyLTzha97wZkiX5-QF5YswY0BXxXYqbVeevd0"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3ODg5NTM4MiwiZXhwIjoxNzc4OTgxNzgyfQ.f7taGMvu2hnYE6PFTKR1tM-pqCJLa6OTdtAuWrwQir4"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzkwMDgxMjAsImV4cCI6MTc3OTA5NDUyMH0.eAG2f_z8YfKvnosoOvUtyWPONbeBME1uWkoqXKnZzJ4"
+        },
+        {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJxdWFuZ2hpZXAwMzEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzkwMTQ5NTgsImV4cCI6MTc3OTEwMTM1OH0.cPrFefVR9zPlpfAJxlBdRgH3Y9JlIa6wBIrLp2jBA28"
+        }
+    ],
+    "warehouses": [
+        {
+            "name": "Kho trang phục 1",
+            "type": "COSTUME",
+            "managed_by": 2,
+            "is_active": true,
+            "created_at": "2026-05-13T04:20:33.890Z",
+            "updated_at": "2026-05-13T06:15:40.803Z",
+            "id": 1
+        },
+        {
+            "name": "Kho đạo cụ 1",
+            "type": "EQUIPMENT_PROPS",
+            "managed_by": 5,
+            "is_active": true,
+            "created_at": "2026-05-13T06:15:25.858Z",
+            "updated_at": null,
+            "id": 2
+        }
+    ],
+    "images": [
+        {
+            "file_name": "1777023502551-ao-dai-gam-bong-nhieu-mau-nu.webp",
+            "size": 36840,
+            "dest": "/images/1777023502551-ao-dai-gam-bong-nhieu-mau-nu.webp",
+            "mime_type": "image/webp",
+            "category_id": 1,
+            "is_active": true,
+            "created_by": 1,
+            "created_at": "2026-04-24T09:38:22.551Z",
+            "updated_at": "2026-04-24T16:26:33.871Z",
+            "id": 2
+        },
+        {
+            "file_name": "1777023502553-ao-tac-cho-nu-mau-cam.webp",
+            "size": 49296,
+            "dest": "/images/1777023502553-ao-tac-cho-nu-mau-cam.webp",
+            "mime_type": "image/webp",
+            "category_id": 1,
+            "is_active": true,
+            "created_by": 1,
+            "created_at": "2026-04-24T09:38:22.554Z",
+            "updated_at": null,
+            "id": 4
+        },
+        {
+            "file_name": "AO-TAC-MAU-XANH-MINT-BAC-HA-600x600.webp",
+            "size": 19734,
+            "dest": "/images/AO-TAC-MAU-XANH-MINT-BAC-HA-600x600.webp",
+            "mime_type": "image/webp",
+            "category_id": 1,
+            "is_active": true,
+            "created_by": 1,
+            "created_at": "2026-04-24T09:38:22.567Z",
+            "updated_at": "2026-05-12T03:21:17.673Z",
+            "id": 5
+        },
+        {
+            "file_name": "AO-TAC-NU-MAU-HONG.webp",
+            "size": 18522,
+            "dest": "/images/AO-TAC-NU-MAU-HONG.webp",
+            "mime_type": "image/webp",
+            "category_id": 1,
+            "is_active": true,
+            "created_by": 1,
+            "created_at": "2026-04-24T09:38:22.579Z",
+            "updated_at": "2026-05-12T03:21:46.850Z",
+            "id": 6
+        },
+        {
+            "file_name": "1777046950675-vn-11134207-7ras8-m0zo4auo8j6jec-1728118676279.webp",
+            "size": 306928,
+            "dest": "/images/1777046950675-vn-11134207-7ras8-m0zo4auo8j6jec-1728118676279.webp",
+            "mime_type": "image/webp",
+            "is_active": true,
+            "created_by": 1,
+            "created_at": "2026-04-24T16:09:10.676Z",
+            "updated_at": null,
+            "category_id": 5,
+            "id": 7
+        },
+        {
+            "file_name": "ao-dai-cach-tan-tim-1.webp",
+            "size": 65950,
+            "dest": "/images/ao-dai-cach-tan-tim-1.webp",
+            "mime_type": "image/webp",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-11T14:35:40.957Z",
+            "updated_at": "2026-05-12T03:22:32.020Z",
+            "id": 8
+        },
+        {
+            "file_name": "1778510140958-2-8.webp",
+            "size": 77488,
+            "dest": "/images/1778510140958-2-8.webp",
+            "mime_type": "image/webp",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-11T14:35:40.959Z",
+            "updated_at": null,
+            "id": 9
+        },
+        {
+            "file_name": "1778510140971-3-8.webp",
+            "size": 73736,
+            "dest": "/images/1778510140971-3-8.webp",
+            "mime_type": "image/webp",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-11T14:35:40.971Z",
+            "updated_at": null,
+            "id": 10
+        },
+        {
+            "file_name": "1778510140981-5-8-600x901.webp",
+            "size": 52522,
+            "dest": "/images/1778510140981-5-8-600x901.webp",
+            "mime_type": "image/webp",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-11T14:35:40.982Z",
+            "updated_at": null,
+            "id": 11
+        },
+        {
+            "file_name": "1778513299684-il_794xN.webp",
+            "size": 54916,
+            "dest": "/images/1778513299684-il_794xN.webp",
+            "mime_type": "image/webp",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-11T15:28:19.685Z",
+            "updated_at": null,
+            "id": 12
+        },
+        {
+            "file_name": "1778513299686-il_794xN.webp",
+            "size": 53468,
+            "dest": "/images/1778513299686-il_794xN.webp",
+            "mime_type": "image/webp",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-11T15:28:19.687Z",
+            "updated_at": null,
+            "id": 13
+        },
+        {
+            "file_name": "1778513299700-il_794xN.webp",
+            "size": 53056,
+            "dest": "/images/1778513299700-il_794xN.webp",
+            "mime_type": "image/webp",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-11T15:28:19.701Z",
+            "updated_at": null,
+            "id": 14
+        },
+        {
+            "file_name": "1778639230219-672138759_3466822183478641_3521795180160107625_n.jpg",
+            "size": 63664,
+            "dest": "/images/1778639230219-672138759_3466822183478641_3521795180160107625_n.jpg",
+            "mime_type": "image/jpeg",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-13T02:27:10.220Z",
+            "updated_at": null,
+            "id": 15
+        },
+        {
+            "file_name": "1778857716162-Screenshot_2026-05-15_220657.png",
+            "size": 118863,
+            "dest": "/images/1778857716162-Screenshot_2026-05-15_220657.png",
+            "mime_type": "image/png",
+            "category_id": 8,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-15T15:08:36.163Z",
+            "updated_at": null,
+            "id": 16
+        },
+        {
+            "file_name": "1779014978097-tumblr_40657a0bc14cf72f554f6d0878d87f73_b95371a9_640.jpg",
+            "size": 81584,
+            "dest": "/images/1779014978097-tumblr_40657a0bc14cf72f554f6d0878d87f73_b95371a9_640.jpg",
+            "mime_type": "image/jpeg",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-17T10:49:38.098Z",
+            "updated_at": null,
+            "id": 17
+        },
+        {
+            "file_name": "1779014978100-tumblr_b70c65235e7d2c88d919eec5b788638f_79b8642f_640.jpg",
+            "size": 75755,
+            "dest": "/images/1779014978100-tumblr_b70c65235e7d2c88d919eec5b788638f_79b8642f_640.jpg",
+            "mime_type": "image/jpeg",
+            "category_id": 7,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-17T10:49:38.101Z",
+            "updated_at": null,
+            "id": 18
+        },
+        {
+            "file_name": "1779037017820-1740031920028_image_709474.jpg",
+            "size": 63235,
+            "dest": "/images/1779037017820-1740031920028_image_709474.jpg",
+            "mime_type": "image/jpeg",
+            "category_id": 9,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-17T16:56:57.820Z",
+            "updated_at": null,
+            "id": 19
+        },
+        {
+            "file_name": "1779037017822-1740031920036_image_9382.jpg",
+            "size": 118363,
+            "dest": "/images/1779037017822-1740031920036_image_9382.jpg",
+            "mime_type": "image/jpeg",
+            "category_id": 9,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-17T16:56:57.823Z",
+            "updated_at": null,
+            "id": 20
+        },
+        {
+            "file_name": "1779037017832-1740031920041_image_651035.jpg",
+            "size": 47692,
+            "dest": "/images/1779037017832-1740031920041_image_651035.jpg",
+            "mime_type": "image/jpeg",
+            "category_id": 9,
+            "created_by": 1,
+            "is_active": true,
+            "created_at": "2026-05-17T16:56:57.833Z",
+            "updated_at": null,
+            "id": 21
+        }
+    ],
+    "categories": [
+        {
+            "name": "Trang phục Truyền thống",
+            "slug": "trang-phuc-truyen-thong",
+            "type": "COSTUME",
+            "is_active": true,
+            "created_at": "2026-04-24T09:07:28.173Z",
+            "updated_at": "2026-04-24T09:13:08.602Z",
+            "id": 1
+        },
+        {
+            "name": "Trang Phục Múa - Nhảy - Khiêu Vũ",
+            "slug": "trang-phuc-mua-nhay-khieu-vu",
+            "type": "COSTUME",
+            "is_active": true,
+            "created_at": "2026-04-24T09:07:59.263Z",
+            "updated_at": null,
+            "id": 2
+        },
+        {
+            "name": "Trang Phục Hóa Trang",
+            "slug": "trang-phuc-hoa-trang",
+            "type": "COSTUME",
+            "is_active": true,
+            "created_at": "2026-04-24T09:10:04.233Z",
+            "updated_at": null,
+            "id": 3
+        },
+        {
+            "name": "Trang Phục Các Dân Tộc Việt Nam",
+            "slug": "trang-phuc-cac-dan-toc-viet-nam",
+            "type": "COSTUME",
+            "is_active": true,
+            "created_at": "2026-04-24T09:10:17.439Z",
+            "updated_at": null,
+            "id": 4
+        },
+        {
+            "name": "Hoa múa",
+            "slug": "hoa-mua",
+            "type": "EQUIPMENT_PROPS",
+            "is_active": true,
+            "created_at": "2026-04-24T15:56:15.161Z",
+            "updated_at": null,
+            "id": 5
+        },
+        {
+            "name": "Trang Phục Cổ Trang",
+            "slug": "trang-phuc-co-trang",
+            "type": "COSTUME",
+            "is_active": false,
+            "created_at": "2026-04-29T07:32:18.171Z",
+            "updated_at": "2026-04-29T08:09:12.986Z",
+            "id": 6
+        },
+        {
+            "name": "Áo Dài",
+            "slug": "ao-dai",
+            "type": "COSTUME",
+            "is_active": true,
+            "created_at": "2026-05-11T14:31:13.369Z",
+            "updated_at": null,
+            "id": 7
+        },
+        {
+            "name": "Quạt múa",
+            "slug": "quat-mua",
+            "type": "EQUIPMENT_PROPS",
+            "is_active": true,
+            "created_at": "2026-05-15T15:08:21.943Z",
+            "updated_at": null,
+            "id": 8
+        },
+        {
+            "name": "Áo Dài Cách Tân",
+            "slug": "ao-dai-cach-tan",
+            "type": "COSTUME",
+            "is_active": true,
+            "created_at": "2026-05-17T15:43:39.203Z",
+            "updated_at": null,
+            "id": 9
+        }
+    ],
+    "costumes": [
+        {
+            "slug": "ao-tac-xanh-bac-ha",
+            "name": "Áo Tấc xanh bạc hà",
+            "category_id": 1,
+            "unit": "SET",
+            "color": {
+                "hex": "#15803d",
+                "code": "GRN",
+                "intensity": 700
+            },
+            "sizes": ["S", "M", "L", "XL"],
+            "gender": "FEMALE",
+            "images": [5],
+            "rental_price_per_day": 200000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 328px;\"><colgroup><col style=\"width: 248px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"248\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo Tấc Lụa trơn</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"248\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"248\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Vải Lụa</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">150 - 156 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">42 - 48 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 82, Vòng 2: 66 , Vòng 3: 86</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">156 - 160 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">49 - 54 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 86, Vòng 2: 70 , Vòng 3: 90</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">55 - 59 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 90, Vòng 2: 74 , Vòng 3: 94</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">60 - 65 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 94, Vòng 2: 78 , Vòng 3: 98</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\"><span style=\"color: inherit;\"><strong class=\"font-bold\">THÔNG TIN SẢN PHẨM</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\">Trong sắc nắng dịu mùa xuân, thiết kế áo dài đỏ son của Diamond Studio hiện lên vừa nổi bật vừa nền nã. Gam đỏ trầm sang, không chói gắt, tôn da và gợi cảm giác may mắn, viên mãn – rất hợp cho những dịp lễ, cưới hỏi hay du xuân đầu năm.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Phom dáng áo dài truyền thống được xử lý gọn gàng, tay lửng trẻ trung và che được khuyết điểm, chiều dài chuẩn giúp vóc dáng thêm thanh thoát. Chất liệu gấm hoa nổi có độ đứng phom hoàn hảo và vẫn thoải mái khi chuyển động tạo nên vẻ uyển chuyển rất nữ tính. Họa tiết hoa nhỏ được tạo nên từ kỹ nghệ dệt truyền thống tạo điểm nhấn mà vẫn giữ trọn sự sang trọng.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Một thiết kế dành cho nàng yêu vẻ đẹp cổ điển, chín chắn nhưng không hề nhàm chán, để mỗi lần khoác lên là cảm thấy tự tin và rạng rỡ hơn.</p></li></ul><p class=\"my-1\"></p>",
+            "hashtags": ["áo tấc"],
+            "is_active": true,
+            "created_at": "2026-04-24T16:12:39.694Z",
+            "updated_at": "2026-04-27T13:22:22.232Z",
+            "id": 1,
+            "category": {
+                "name": "Trang phục Truyền thống",
+                "slug": "trang-phuc-truyen-thong",
+                "type": "COSTUME",
+                "is_active": true,
+                "created_at": "2026-04-24T09:07:28.173Z",
+                "updated_at": "2026-04-24T09:13:08.602Z",
+                "id": 1
+            }
+        },
+        {
+            "slug": "ao-tac-lua-do",
+            "name": "Áo Tấc Lụa Đỏ",
+            "category_id": 1,
+            "color": {
+                "hex": "#991b1b",
+                "code": "RED",
+                "intensity": 700
+            },
+            "sizes": ["S", "M", "L", "XL"],
+            "gender": "FEMALE",
+            "rental_price_per_day": 200000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 306px;\"><colgroup><col style=\"width: 226px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"226\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo Tấc Lụa Trơn</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"226\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"226\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Vải Lụa</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">150 - 156 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">42 - 48 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 82, Vòng 2: 66 , Vòng 3: 86</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">156 - 160 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">49 - 54 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 86, Vòng 2: 70 , Vòng 3: 90</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">55 - 59 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 90, Vòng 2: 74 , Vòng 3: 94</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">60 - 65 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 94, Vòng 2: 78 , Vòng 3: 98</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\"><span style=\"color: inherit;\"><strong class=\"font-bold\">THÔNG TIN SẢN PHẨM</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\">Trong sắc nắng dịu mùa xuân, thiết kế áo dài đỏ son của Lamia hiện lên vừa nổi bật vừa nền nã. Gam đỏ trầm sang, không chói gắt, tôn da và gợi cảm giác may mắn, viên mãn – rất hợp cho những dịp lễ, cưới hỏi hay du xuân đầu năm.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Phom dáng áo dài truyền thống được xử lý gọn gàng, tay lửng trẻ trung và che được khuyết điểm, chiều dài chuẩn giúp vóc dáng thêm thanh thoát. Chất liệu gấm hoa nổi có độ đứng phom hoàn hảo và vẫn thoải mái khi chuyển động tạo nên vẻ uyển chuyển rất nữ tính. Họa tiết hoa nhỏ được tạo nên từ kỹ nghệ dệt truyền thống tạo điểm nhấn mà vẫn giữ trọn sự sang trọng.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Một thiết kế dành cho nàng yêu vẻ đẹp cổ điển, chín chắn nhưng không hề nhàm chán, để mỗi lần khoác lên là cảm thấy tự tin và rạng rỡ hơn.</p></li></ul><p class=\"my-1\"></p>",
+            "hashtags": ["aoTacLua", "aoTruyenThong"],
+            "is_active": false,
+            "unit": "SET",
+            "images": [4],
+            "created_at": "2026-04-27T08:55:20.167Z",
+            "updated_at": "2026-04-27T13:19:50.859Z",
+            "id": 2,
+            "category": {
+                "name": "Trang phục Truyền thống",
+                "slug": "trang-phuc-truyen-thong",
+                "type": "COSTUME",
+                "is_active": true,
+                "created_at": "2026-04-24T09:07:28.173Z",
+                "updated_at": "2026-04-24T09:13:08.602Z",
+                "id": 1
+            }
+        },
+        {
+            "slug": "ao-dai-xanh-bac-ha",
+            "name": "Áo Dài Xanh Bạc Hà",
+            "category_id": 7,
+            "color": {
+                "hex": "#86efac",
+                "code": "GRN",
+                "intensity": 300
+            },
+            "sizes": ["S", "M", "L", "XL", "2XL"],
+            "gender": "FEMALE",
+            "images": [2],
+            "unit": "SET",
+            "rental_price_per_day": 300000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 321px;\"><colgroup><col style=\"width: 241px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"241\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo Dài Cách Tân</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"241\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"241\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Lụa, Cotton</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">150 - 156 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">42 - 48 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 82, Vòng 2: 66 , Vòng 3: 86</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">156 - 160 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">49 - 54 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 86, Vòng 2: 70 , Vòng 3: 90</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">55 - 59 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 90, Vòng 2: 74 , Vòng 3: 94</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">160 - 164 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">60 - 64 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 94, Vòng 2: 78 , Vòng 3: 98</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Size 2XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">165cm - 175cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">65 - 70kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" style=\"text-align: left;\"><p class=\"my-1\">Vòng 1: 95, Vòng 2: 80, Vòng 3: 98</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Thông tin sản phẩm</h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\">Trong sắc nắng dịu mùa xuân, thiết kế áo dài đỏ son của Lamia hiện lên vừa nổi bật vừa nền nã. Gam đỏ trầm sang, không chói gắt, tôn da và gợi cảm giác may mắn, viên mãn – rất hợp cho những dịp lễ, cưới hỏi hay du xuân đầu năm.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Phom dáng áo dài truyền thống được xử lý gọn gàng, tay lửng trẻ trung và che được khuyết điểm, chiều dài chuẩn giúp vóc dáng thêm thanh thoát. Chất liệu gấm hoa nổi có độ đứng phom hoàn hảo và vẫn thoải mái khi chuyển động tạo nên vẻ uyển chuyển rất nữ tính. Họa tiết hoa nhỏ được tạo nên từ kỹ nghệ dệt truyền thống tạo điểm nhấn mà vẫn giữ trọn sự sang trọng.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\">Một thiết kế dành cho nàng yêu vẻ đẹp cổ điển, chín chắn nhưng không hề nhàm chán, để mỗi lần khoác lên là cảm thấy tự tin và rạng rỡ hơn.</p></li></ul><p class=\"my-1\"></p>",
+            "hashtags": ["AoDaiVietNam", "AoDaiCachTan"],
+            "is_active": true,
+            "created_at": "2026-04-27T11:35:10.896Z",
+            "updated_at": "2026-05-15T09:19:02.116Z",
+            "id": 4
+        },
+        {
+            "slug": "ao-dai-cach-tan",
+            "name": "Áo Dài Cách Tân",
+            "category_id": 7,
+            "color": {
+                "hex": "#991b1b",
+                "code": "RED",
+                "intensity": 800
+            },
+            "sizes": ["XS", "S", "M", "L", "XL", "2XL"],
+            "gender": "FEMALE",
+            "images": [12, 13, 14],
+            "unit": "SET",
+            "rental_price_per_day": 300000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo dài cách tân tay lỡ</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Màu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Đỏ mận</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Lụa, Cotton</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XS</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">60-62</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">82-84</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">64-66</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">86-88</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">84-86</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">68-70</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">90-92</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">88-90</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">72-74</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">94-96</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">92-94</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">98-100</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">2XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">96-100</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">102-104</p></td></tr></tbody></table><p class=\"my-1\"></p>",
+            "hashtags": ["aodaicachtan"],
+            "is_active": true,
+            "created_at": "2026-05-11T16:14:50.961Z",
+            "updated_at": "2026-05-12T03:44:36.111Z",
+            "id": 5
+        },
+        {
+            "slug": "ao-dai-lua-tim",
+            "name": "Áo Dài Lụa Tím",
+            "category_id": 7,
+            "color": {
+                "hex": "#ddd6fe",
+                "code": "VOL",
+                "intensity": 200
+            },
+            "sizes": ["XS", "S", "M", "L", "XL", "2XL"],
+            "gender": "FEMALE",
+            "images": [8, 9, 10, 11],
+            "unit": "SET",
+            "rental_price_per_day": 300000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo dài cách tân tay lỡ</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Màu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Đỏ mận</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Lụa, Cotton</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XS</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">60-62</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">82-84</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">64-66</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">86-88</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">84-86</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">68-70</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">90-92</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">88-90</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">72-74</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">94-96</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">92-94</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">98-100</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">2XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">96-100</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">102-104</p></td></tr></tbody></table><p class=\"my-1\"></p>",
+            "hashtags": ["AoDaiVietNam"],
+            "is_active": true,
+            "created_at": "2026-05-12T03:51:27.941Z",
+            "updated_at": "2026-05-12T07:34:12.721Z",
+            "id": 6
+        },
+        {
+            "slug": "ao-dai-theu-hoa",
+            "name": "Áo Dài Thêu Hoa",
+            "category_id": 1,
+            "color": {
+                "hex": "#172554",
+                "code": "BLU",
+                "intensity": 950
+            },
+            "sizes": ["XS", "S", "M", "L", "XL", "2XL"],
+            "gender": "FEMALE",
+            "images": [15],
+            "unit": "SET",
+            "rental_price_per_day": 300000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo dài cách tân tay lỡ</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Màu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Đỏ mận</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Lụa, Cotton</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XS</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">60-62</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">82-84</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">64-66</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">86-88</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">84-86</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">68-70</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">90-92</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">88-90</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">72-74</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">94-96</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">92-94</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">76-78</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">98-100</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">2XL</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">96-100</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80-82</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">102-104</p></td></tr></tbody></table><p class=\"my-1\"></p>",
+            "hashtags": ["aodaivietnam"],
+            "is_active": true,
+            "created_at": "2026-05-12T06:36:38.393Z",
+            "updated_at": "2026-05-12T07:33:53.507Z",
+            "id": 7
+        },
+        {
+            "slug": "ao-dai-tim-hue",
+            "name": "Áo Dài Tím Huế",
+            "category_id": 7,
+            "color": {
+                "hex": "#6d28d9",
+                "code": "VOL",
+                "intensity": 700
+            },
+            "sizes": ["S", "M", "L", "XL", "2XL"],
+            "gender": "FEMALE",
+            "images": [17, 18],
+            "unit": "SET",
+            "rental_price_per_day": 500000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\"></p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\"></p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\"></p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 320px;\"><colgroup><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\"></p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\"></p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\"></p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\"></p></td></tr></tbody></table><p class=\"my-1\"></p>",
+            "hashtags": ["aoDaiHue", "aoDaiVietNam"],
+            "is_active": true,
+            "created_at": "2026-05-17T10:51:10.948Z",
+            "updated_at": "2026-05-17T10:51:40.536Z",
+            "id": 8,
+            "category": {
+                "id": 7,
+                "name": "Áo Dài"
+            }
+        },
+        {
+            "slug": "ao-dai-ngu-than-ti-ba",
+            "name": "Áo Dài Ngũ Thân Tì Bà",
+            "category_id": 9,
+            "color": {
+                "hex": "#172554",
+                "code": "BLU",
+                "intensity": 950
+            },
+            "sizes": ["S", "M", "L", "XL", "2XL"],
+            "gender": "MALE",
+            "images": [19, 20, 21],
+            "unit": "SET",
+            "rental_price_per_day": 500000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Áo Dài Ngũ Thân - Báu vật Tì Bà</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Vải Cotton, Lụa, Linen</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Bảng tư vấn Size</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 467px;\"><colgroup><col style=\"width: 97px;\"><col style=\"width: 210px;\"><col style=\"min-width: 80px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"97\"><p class=\"my-1\">Size</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"210\"><p class=\"my-1\">Chiều cao</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Cân nặng</p></th><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Số đo 3 vòng</p></th></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" colwidth=\"97\"><p class=\"my-1\">S</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" colwidth=\"210\"><p class=\"my-1\">160-165 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">55-65 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">80 – 88 cm | 68 – 74 cm | 84 – 91 cm</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" colwidth=\"97\"><p class=\"my-1\">M</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" colwidth=\"210\"><p class=\"my-1\">166-170 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">65-70 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">88 – 95 cm | 74 – 79 cm | 92 – 97 cm</p></td></tr><tr><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" colwidth=\"97\"><p class=\"my-1\">L</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\" colwidth=\"210\"><p class=\"my-1\">171-175 cm</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">71-75 kg</p></td><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">101 – 107 cm | 85 – 90 cm | 104 – 110 cm</p></td></tr></tbody></table><p class=\"my-1\"></p>",
+            "hashtags": ["aoDaiVietNam", "aoDaiNguThan"],
+            "is_active": true,
+            "created_at": "2026-05-17T17:38:31.272Z",
+            "updated_at": "2026-05-17T17:40:04.721Z",
+            "id": 9,
+            "category": {
+                "id": 9,
+                "name": "Áo Dài Cách Tân"
+            }
+        }
+    ],
+    "equipment_props": [
+        {
+            "name": "Hoa Múa Cầm Tay Hướng Dương 2",
+            "slug": "hoa-mua-cam-tay-huong-duong-2",
+            "category_id": 5,
+            "rental_price_per_day": 70000,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 277px;\"><colgroup><col style=\"width: 197px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"197\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Hoa múa Hướng dương đeo tay</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"197\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"197\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Vải, Nhựa tổng hợp</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\">Thông tin sản phẩm</h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Chất liệu cao cấp:</strong> Hoa được làm từ vải lụa, voan hoặc giấy nhún chuyên dụng, giúp cánh hoa mềm mại nhưng vẫn giữ được form dáng khi thực hiện các động tác quay, vẩy.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Thiết kế thông minh:</strong> Phần tay cầm chắc chắn, nhẹ, được bọc băng keo hoặc vải lụa giúp vũ công cầm nắm dễ dàng, không gây mỏi khi biểu diễn thời gian dài.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Màu sắc rực rỡ:</strong> Được phối màu tinh tế với hiệu ứng chuyển sắc (ombre) hoặc đính kim sa, giúp bắt sáng cực tốt dưới ánh đèn sân khấu.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Kích thước đa dạng:</strong> Có đủ kích cỡ từ hoa cầm tay nhỏ gọn đến các loại hoa đại có đường kính lớn phục vụ cho các tổ hợp múa tạo hình.</p></li></ul><p class=\"my-1\"></p>",
+            "images": [7],
+            "hashtags": ["hoa múa"],
+            "unit": "Cặp",
+            "is_active": true,
+            "created_at": "2026-04-24T16:10:07.433Z",
+            "updated_at": "2026-05-14T15:46:46.980Z",
+            "id": 1,
+            "category": {
+                "id": 5,
+                "name": "Hoa múa"
+            }
+        },
+        {
+            "name": "Quạt Lụa Đỏ",
+            "slug": "quat-lua-do",
+            "category_id": 8,
+            "rental_price_per_day": 100002,
+            "description": "<h3 class=\"font-bold !text-foreground\">Chi tiết sản phẩm</h3><table class=\"m-0 w-full table-fixed overflow-hidden border rounded border-collapse [&amp;.resize-cursor]:cursor-col-resize\" style=\"width: 100%; min-width: 330px;\"><colgroup><col style=\"width: 250px;\"><col style=\"min-width: 80px;\"></colgroup><tbody><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Mẫu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Quạt xương cá</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Màu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Đỏ</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Xuất xứ</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Việt Nam</p></td></tr><tr><th class=\"border px-3 py-1 relative [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25\" colspan=\"1\" rowspan=\"1\" colwidth=\"250\"><p class=\"my-1\">Chất liệu</p></th><td class=\"px-3 py-1 border [&amp;.selectedCell]:bg-secondary/50 dark:[&amp;.selectedCell]:bg-secondary/25 before:hidden align-top\" colspan=\"1\" rowspan=\"1\"><p class=\"my-1\">Tre, Lụa</p></td></tr></tbody></table><h3 class=\"font-bold !text-foreground\"><strong class=\"font-bold\">Đặc điểm nổi bật của đạo cụ</strong></h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Chất liệu cao cấp:</strong> Hoa được làm từ vải lụa, voan hoặc giấy nhún chuyên dụng, giúp cánh hoa mềm mại nhưng vẫn giữ được form dáng khi thực hiện các động tác quay, vẩy.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Thiết kế thông minh:</strong> Phần tay cầm chắc chắn, nhẹ, được bọc băng keo hoặc vải lụa giúp vũ công cầm nắm dễ dàng, không gây mỏi khi biểu diễn thời gian dài.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Màu sắc rực rỡ:</strong> Được phối màu tinh tế với hiệu ứng chuyển sắc (ombre) hoặc đính kim sa, giúp bắt sáng cực tốt dưới ánh đèn sân khấu.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Kích thước đa dạng:</strong> Có đủ kích cỡ từ hoa cầm tay nhỏ gọn đến các loại hoa đại có đường kính lớn phục vụ cho các tổ hợp múa tạo hình.</p></li></ul><h3 class=\"font-bold !text-foreground\"><strong class=\"font-bold\">Tại sao nên chọn thuê hoa múa tại Diamond Studio?</strong></h3><ul class=\"list-disc text-foreground\"><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Sản phẩm luôn mới:</strong> Đạo cụ được bảo quản kỹ lưỡng, đảm bảo độ sạch sẽ và mới đến 95-100%.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Giá thuê cạnh tranh:</strong> Chính sách giá ưu đãi cho học sinh, sinh viên và các đoàn đội thuê số lượng lớn.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Tư vấn tận tình:</strong> Hỗ trợ chọn loại hoa phù hợp nhất với trang phục biểu diễn và nội dung bài múa.</p></li><li class=\"text-foreground m-0\"><p class=\"my-1\"><strong class=\"font-bold\">Thủ tục nhanh gọn:</strong> Nhận đồ ngay trong ngày, hỗ trợ ship nhanh khu vực nội thành.</p></li></ul><p class=\"my-1\"></p>",
+            "images": [16],
+            "unit": "Chiếc",
+            "hashtags": ["quatMua", "quatLua"],
+            "is_active": true,
+            "created_at": "2026-05-15T15:31:05.232Z",
+            "updated_at": null,
+            "id": 2
+        }
+    ],
+    "inventory_conditions": [
+        {
+            "id": 1,
+            "created_at": "2026-04-19T00:00:00.000Z",
+            "code": "A",
+            "label": "Tốt",
+            "badge_color": "#22c55e",
+            "discount_rate": 0,
+            "rentable": true,
+            "disposable": false,
+            "is_active": true
+        },
+        {
+            "id": 2,
+            "created_at": "2026-04-19T00:00:00.000Z",
+            "code": "B",
+            "label": "Trung bình",
+            "badge_color": "#eab308",
+            "discount_rate": 0,
+            "rentable": true,
+            "disposable": false,
+            "is_active": true
+        },
+        {
+            "id": 3,
+            "created_at": "2026-04-19T00:00:00.000Z",
+            "code": "C",
+            "label": "Kém",
+            "badge_color": "#ef4444",
+            "discount_rate": 0,
+            "rentable": false,
+            "disposable": true,
+            "is_active": true
+        }
+    ],
+    "inventory": [
+        {
+            "sku": "TP-ADLT-VOL200-0001",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-14T06:29:06.189Z",
+            "updated_at": "2026-05-15T02:50:47.342Z",
+            "id": 1
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0002",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-14T06:29:06.191Z",
+            "updated_at": null,
+            "id": 2
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0003",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-14T06:29:06.204Z",
+            "updated_at": null,
+            "id": 3
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0004",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-14T06:29:06.215Z",
+            "updated_at": null,
+            "id": 4
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0005",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-14T06:29:06.225Z",
+            "updated_at": null,
+            "id": 5
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0006",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:10:59.929Z",
+            "updated_at": null,
+            "id": 6
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0007",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:10:59.930Z",
+            "updated_at": null,
+            "id": 7
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0008",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:10:59.931Z",
+            "updated_at": null,
+            "id": 8
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0009",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:10:59.933Z",
+            "updated_at": null,
+            "id": 9
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0010",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:10:59.948Z",
+            "updated_at": null,
+            "id": 10
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0011",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:11:40.022Z",
+            "updated_at": null,
+            "id": 11
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0012",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:11:40.024Z",
+            "updated_at": null,
+            "id": 12
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0013",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:11:40.026Z",
+            "updated_at": null,
+            "id": 13
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0014",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:11:40.038Z",
+            "updated_at": null,
+            "id": 14
+        },
+        {
+            "sku": "TP-ADLT-VOL200-0015",
+            "item_id": 6,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:11:40.049Z",
+            "updated_at": null,
+            "id": 15
+        },
+        {
+            "sku": "TP-ADCT-RED800-0001",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:17.016Z",
+            "updated_at": null,
+            "id": 16
+        },
+        {
+            "sku": "TP-ADCT-RED800-0002",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:17.019Z",
+            "updated_at": null,
+            "id": 17
+        },
+        {
+            "sku": "TP-ADCT-RED800-0003",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "L",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:17.021Z",
+            "updated_at": null,
+            "id": 18
+        },
+        {
+            "sku": "TP-ADCT-RED800-0004",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:30.634Z",
+            "updated_at": null,
+            "id": 19
+        },
+        {
+            "sku": "TP-ADCT-RED800-0005",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:30.636Z",
+            "updated_at": null,
+            "id": 20
+        },
+        {
+            "sku": "TP-ADCT-RED800-0006",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:30.648Z",
+            "updated_at": null,
+            "id": 21
+        },
+        {
+            "sku": "TP-ADCT-RED800-0007",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:30.660Z",
+            "updated_at": null,
+            "id": 22
+        },
+        {
+            "sku": "TP-ADCT-RED800-0008",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "2XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:41.002Z",
+            "updated_at": null,
+            "id": 23
+        },
+        {
+            "sku": "TP-ADCT-RED800-0009",
+            "item_id": 5,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "2XL",
+            "is_active": true,
+            "created_at": "2026-05-14T07:12:41.004Z",
+            "updated_at": null,
+            "id": 24
+        },
+        {
+            "sku": "TP,ADTH,BLU950,S-0001",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T08:59:03.956Z",
+            "updated_at": null,
+            "id": 25
+        },
+        {
+            "sku": "TP,ADTH,BLU950,S-0002",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T08:59:03.961Z",
+            "updated_at": null,
+            "id": 26
+        },
+        {
+            "sku": "TP,ADTH,BLU950,S-0003",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T08:59:03.977Z",
+            "updated_at": null,
+            "id": 27
+        },
+        {
+            "sku": "TP,ADTH,BLU950,M-0001",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-15T09:05:48.796Z",
+            "updated_at": null,
+            "id": 28
+        },
+        {
+            "sku": "TP,ADTH,BLU950,M-0002",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-15T09:05:48.797Z",
+            "updated_at": null,
+            "id": 29
+        },
+        {
+            "sku": "TP,ADTH,BLU950,M-0003",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-15T09:05:48.798Z",
+            "updated_at": null,
+            "id": 30
+        },
+        {
+            "sku": "TP,ADTH,BLU950,M-0004",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-15T09:05:48.812Z",
+            "updated_at": null,
+            "id": 31
+        },
+        {
+            "sku": "TP,ADTH,BLU950,M-0005",
+            "item_id": 7,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "M",
+            "is_active": true,
+            "created_at": "2026-05-15T09:05:48.822Z",
+            "updated_at": null,
+            "id": 32
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0001",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.123Z",
+            "updated_at": null,
+            "id": 33
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0002",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.124Z",
+            "updated_at": null,
+            "id": 34
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0003",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.126Z",
+            "updated_at": null,
+            "id": 35
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0004",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.127Z",
+            "updated_at": null,
+            "id": 36
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0005",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.138Z",
+            "updated_at": null,
+            "id": 37
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0006",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.151Z",
+            "updated_at": null,
+            "id": 38
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0007",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.164Z",
+            "updated_at": null,
+            "id": 39
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0008",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.175Z",
+            "updated_at": null,
+            "id": 40
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0009",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.186Z",
+            "updated_at": null,
+            "id": 41
+        },
+        {
+            "sku": "TP,ADXBH,GRN300,S-0010",
+            "item_id": 4,
+            "item_type": "COSTUME",
+            "inventory_condition_id": 1,
+            "warehouse_id": 1,
+            "status": "AVAILABLE",
+            "size": "S",
+            "is_active": true,
+            "created_at": "2026-05-15T09:18:40.196Z",
+            "updated_at": null,
+            "id": 42
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0001",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.710Z",
+            "updated_at": null,
+            "id": 43
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0002",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.716Z",
+            "updated_at": null,
+            "id": 44
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0003",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.734Z",
+            "updated_at": null,
+            "id": 45
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0004",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.751Z",
+            "updated_at": null,
+            "id": 46
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0005",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.769Z",
+            "updated_at": null,
+            "id": 47
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0006",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.784Z",
+            "updated_at": null,
+            "id": 48
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0007",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.796Z",
+            "updated_at": null,
+            "id": 49
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0008",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.806Z",
+            "updated_at": null,
+            "id": 50
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0009",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.818Z",
+            "updated_at": null,
+            "id": 51
+        },
+        {
+            "sku": "DC,HMCTHD2,HMCTHD2-0010",
+            "item_id": 1,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T09:29:09.830Z",
+            "updated_at": null,
+            "id": 52
+        },
+        {
+            "sku": "DC,QLD,QLD-0001",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.639Z",
+            "updated_at": null,
+            "id": 53
+        },
+        {
+            "sku": "DC,QLD,QLD-0002",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.640Z",
+            "updated_at": null,
+            "id": 54
+        },
+        {
+            "sku": "DC,QLD,QLD-0003",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.641Z",
+            "updated_at": null,
+            "id": 55
+        },
+        {
+            "sku": "DC,QLD,QLD-0004",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.649Z",
+            "updated_at": null,
+            "id": 56
+        },
+        {
+            "sku": "DC,QLD,QLD-0005",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.657Z",
+            "updated_at": null,
+            "id": 57
+        },
+        {
+            "sku": "DC,QLD,QLD-0006",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.664Z",
+            "updated_at": null,
+            "id": 58
+        },
+        {
+            "sku": "DC,QLD,QLD-0007",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.671Z",
+            "updated_at": null,
+            "id": 59
+        },
+        {
+            "sku": "DC,QLD,QLD-0008",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.680Z",
+            "updated_at": null,
+            "id": 60
+        },
+        {
+            "sku": "DC,QLD,QLD-0009",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.687Z",
+            "updated_at": null,
+            "id": 61
+        },
+        {
+            "sku": "DC,QLD,QLD-0010",
+            "item_id": 2,
+            "item_type": "EQUIPMENT_PROPS",
+            "inventory_condition_id": 1,
+            "warehouse_id": 2,
+            "status": "AVAILABLE",
+            "size": null,
+            "is_active": true,
+            "created_at": "2026-05-15T15:37:16.694Z",
+            "updated_at": null,
+            "id": 62
+        }
+    ]
 }
