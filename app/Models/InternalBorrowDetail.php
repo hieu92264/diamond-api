@@ -42,7 +42,7 @@ class InternalBorrowDetail extends Model
 
     public function scopePendingReturn(Builder $query): Builder
     {
-        return $query->whereColumn('returned_quantity', '<', 'borrowed_quantity');
+        return $query->whereRaw('(returned_quantity + lost_quantity + damaged_quantity) < borrowed_quantity');
     }
 
     public function scopeHasIncident(Builder $query): Builder
@@ -66,5 +66,10 @@ class InternalBorrowDetail extends Model
     public function incidents(): HasMany
     {
         return $this->hasMany(InternalIncident::class, 'internal_borrow_detail_id', 'id');
+    }
+
+    public function detailItems(): HasMany
+    {
+        return $this->hasMany(InternalBorrowDetailItem::class, 'internal_borrow_detail_id', 'id');
     }
 }

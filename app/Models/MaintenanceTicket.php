@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MaintenanceStatus;
+use App\Enums\MaintenanceType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,7 @@ class MaintenanceTicket extends Model
         'is_active',
         'code',
         'item_id',
+        'inventory_item_id',
         'maintenance_type',
         'reported_date',
         'started_date',
@@ -29,6 +31,7 @@ class MaintenanceTicket extends Model
     {
         return [
             'is_active' => 'boolean',
+            'maintenance_type' => MaintenanceType::class,
             'reported_date' => 'date',
             'started_date' => 'date',
             'expected_return_date' => 'date',
@@ -63,6 +66,16 @@ class MaintenanceTicket extends Model
     public function item(): BelongsTo
     {
         return $this->belongsTo(EquipmentProp::class, 'item_id', 'id');
+    }
+
+    public function equipmentProp(): BelongsTo
+    {
+        return $this->belongsTo(EquipmentProp::class, 'item_id', 'id');
+    }
+
+    public function inventoryItem(): BelongsTo
+    {
+        return $this->belongsTo(InventoryItem::class, 'inventory_item_id', 'id');
     }
 
     public function createdBy(): BelongsTo

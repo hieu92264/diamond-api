@@ -50,7 +50,7 @@ class RentalDetail extends Model
 
     public function scopePendingReturn(Builder $query): Builder
     {
-        return $query->whereColumn('returned_quantity', '<', 'rented_quantity');
+        return $query->whereRaw('(returned_quantity + lost_quantity + damaged_quantity) < rented_quantity');
     }
 
     public function scopeHasIncident(Builder $query): Builder
@@ -74,5 +74,10 @@ class RentalDetail extends Model
     public function incidents(): HasMany
     {
         return $this->hasMany(RentalIncident::class, 'rental_detail_id', 'id');
+    }
+
+    public function detailItems(): HasMany
+    {
+        return $this->hasMany(RentalDetailItem::class, 'rental_detail_id', 'id');
     }
 }

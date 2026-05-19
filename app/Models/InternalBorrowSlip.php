@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class InternalBorrowSlip extends Model
 {
@@ -94,5 +95,17 @@ class InternalBorrowSlip extends Model
     public function details(): HasMany
     {
         return $this->hasMany(InternalBorrowDetail::class, 'internal_borrow_slip_id', 'id');
+    }
+
+    public function detailItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            InternalBorrowDetailItem::class,
+            InternalBorrowDetail::class,
+            'internal_borrow_slip_id',
+            'internal_borrow_detail_id',
+            'id',
+            'id'
+        );
     }
 }

@@ -22,9 +22,9 @@ class JsonMockDataSeederTest extends TestCase
 
         $this->assertSame(7, User::query()->count());
         $this->assertSame(9, Employee::query()->count());
-        $this->assertSame(7, ItemCategory::query()->count());
-        $this->assertSame(12, GalleryImage::query()->count());
-        $this->assertSame(6, EquipmentProp::query()->count());
+        $this->assertSame(9, ItemCategory::query()->count());
+        $this->assertSame(19, GalleryImage::query()->count());
+        $this->assertSame(10, EquipmentProp::query()->count());
 
         $this->assertDatabaseHas('users', [
             'id' => 1,

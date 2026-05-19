@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class RentalSlip extends Model
 {
@@ -117,5 +118,17 @@ class RentalSlip extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(RentalPayment::class, 'rental_slip_id', 'id');
+    }
+
+    public function detailItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            RentalDetailItem::class,
+            RentalDetail::class,
+            'rental_slip_id',
+            'rental_detail_id',
+            'id',
+            'id'
+        );
     }
 }

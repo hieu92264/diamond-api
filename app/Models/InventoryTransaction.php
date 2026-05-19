@@ -12,6 +12,7 @@ class InventoryTransaction extends Model
 {
     protected $fillable = [
         'equipment_prop_id',
+        'inventory_item_id',
         'warehouse_id',
         'transaction_type',
         'quantity',
@@ -66,6 +67,11 @@ class InventoryTransaction extends Model
     public function equipment(): BelongsTo
     {
         return $this->belongsTo(EquipmentProp::class, 'equipment_prop_id', 'id');
+    }
+
+    public function inventoryItem(): BelongsTo
+    {
+        return $this->belongsTo(InventoryItem::class, 'inventory_item_id', 'id');
     }
 
     public function equipmentProp(): BelongsTo

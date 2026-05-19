@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\IncidentStatus;
+use App\Enums\IncidentType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,9 @@ class RentalIncident extends Model
         'is_active',
         'code',
         'rental_detail_id',
+        'inventory_item_id',
         'incident_description',
+        'incident_type',
         'status',
         'compensation_amount',
         'resolved_by_id',
@@ -25,6 +28,7 @@ class RentalIncident extends Model
     {
         return [
             'is_active' => 'boolean',
+            'incident_type' => IncidentType::class,
             'status' => IncidentStatus::class,
             'compensation_amount' => 'decimal:2',
             'resolved_at' => 'datetime',
@@ -48,6 +52,13 @@ class RentalIncident extends Model
         return $query->where('status', IncidentStatus::OPEN->value);
     }
 
+    public function scopeType(Builder $query, IncidentType|string $type): Builder
+    {
+        $value = $type instanceof IncidentType ? $type->value : strtoupper($type);
+
+        return $query->where('incident_type', $value);
+    }
+
     public function scopeResolved(Builder $query): Builder
     {
         return $query->whereNotNull('resolved_at');
@@ -56,6 +67,11 @@ class RentalIncident extends Model
     public function rentalDetail(): BelongsTo
     {
         return $this->belongsTo(RentalDetail::class, 'rental_detail_id', 'id');
+    }
+
+    public function inventoryItem(): BelongsTo
+    {
+        return $this->belongsTo(InventoryItem::class, 'inventory_item_id', 'id');
     }
 
     public function resolvedBy(): BelongsTo

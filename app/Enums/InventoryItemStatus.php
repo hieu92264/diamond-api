@@ -11,5 +11,6 @@ enum InventoryItemStatus: string
     case AVAILABLE = 'AVAILABLE';
     case RENTED = 'RENTED';
     case MAINTENANCE = 'MAINTENANCE';
+    case LOST = 'LOST';
     case DISPOSED = 'DISPOSED';
 }

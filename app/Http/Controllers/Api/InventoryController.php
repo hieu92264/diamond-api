@@ -174,4 +174,17 @@ class InventoryController extends Controller
 
         return $prefix . '-' . str_pad((string) $count, 4, '0', STR_PAD_LEFT);
     }
+
+    public function available(Request $request): JsonResponse
+    {
+        $query = InventoryItem::query();
+
+        $data = $request->validate([
+            'warehouse_id' => 'required|integer|exists:warehouses,id',
+            'item_type' => 'required|string|exists:inventory,item_type',
+            'equipment_prop_id' => 'required|integer|exists:equipment_props,id',
+            'size' => 'nullable|string',
+            'inventory_condition_id'
+        ]);
+    }
 }
