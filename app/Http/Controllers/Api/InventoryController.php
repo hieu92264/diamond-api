@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\InventoryReferenceType;
 use App\Enums\InventoryItemStatus;
+use App\Enums\InventoryTransactionType;
 use App\Enums\ItemCategoryType;
 use App\Http\Controllers\Controller;
 use App\Models\EquipmentProp;
 use App\Models\InventoryCondition;
 use App\Models\InventoryItem;
+use App\Models\InventoryTransaction;
+use App\Models\InternalIncident;
+use App\Models\MaintenanceTicket;
+use App\Models\RentalIncident;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -84,6 +90,138 @@ class InventoryController extends Controller
         }
 
         return $this->rawSuccess($query->orderBy('code')->get()->toArray());
+    }
+
+    public function show(int $id): JsonResponse
+    {
+        $item = InventoryItem::query()
+            ->with(['item.itemCategory', 'inventoryCondition', 'warehouse'])
+            ->findOrFail($id);
+
+        return $this->rawSuccess($this->transformInventoryItem($item));
+    }
+
+    public function available(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'warehouse_id' => ['nullable', 'integer', Rule::exists('warehouses', 'id')],
+            'item_type' => ['nullable', Rule::enum(ItemCategoryType::class)],
+            'equipment_prop_id' => ['nullable', 'integer', Rule::exists('equipment_props', 'id')],
+            'size' => ['nullable', 'string', 'max:20'],
+            'inventory_condition_id' => ['nullable', 'integer', Rule::exists('inventory_conditions', 'id')],
+            'keyword' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $query = InventoryItem::query()
+            ->available()
+            ->whereHas('inventoryCondition', fn (Builder $query) => $query->where('rentable', true))
+            ->with(['item.itemCategory', 'inventoryCondition', 'warehouse']);
+
+        foreach (['warehouse_id', 'equipment_prop_id' => 'item_id', 'inventory_condition_id', 'size'] as $key => $field) {
+            $requestKey = is_int($key) ? $field : $key;
+            $column = is_int($key) ? $field : $field;
+
+            if (! empty($data[$requestKey])) {
+                $query->where($column, $data[$requestKey]);
+            }
+        }
+
+        if (! empty($data['item_type'])) {
+            $query->where('item_type', $data['item_type']);
+        }
+
+        if (! empty($data['keyword'])) {
+            $keyword = trim($data['keyword']);
+
+            $query->where(function (Builder $builder) use ($keyword): void {
+                $builder
+                    ->where('sku', 'like', "%{$keyword}%")
+                    ->orWhereHas('item', fn (Builder $itemQuery) => $itemQuery->where('name', 'like', "%{$keyword}%"));
+            });
+        }
+
+        return $this->rawSuccess(
+            $query->orderBy('item_id')
+                ->orderBy('size')
+                ->orderBy('sku')
+                ->get()
+                ->map(fn (InventoryItem $item) => $this->transformInventoryItem($item))
+                ->all()
+        );
+    }
+
+    public function timeline(int $id): JsonResponse
+    {
+        $item = InventoryItem::query()
+            ->with(['item.itemCategory', 'inventoryCondition', 'warehouse'])
+            ->findOrFail($id);
+
+        return $this->rawSuccess([
+            'inventory_item' => $this->transformInventoryItem($item),
+            'transactions' => InventoryTransaction::query()
+                ->with(['inventoryItem', 'warehouse'])
+                ->where('inventory_item_id', $item->id)
+                ->latestFirst()
+                ->get()
+                ->map(fn (InventoryTransaction $transaction) => $this->transformInventoryTransaction($transaction))
+                ->all(),
+            'internal_incidents' => InternalIncident::query()
+                ->with('inventoryItem')
+                ->where('inventory_item_id', $item->id)
+                ->latest('id')
+                ->get()
+                ->map(fn (InternalIncident $incident) => $this->transformIncident($incident))
+                ->all(),
+            'rental_incidents' => RentalIncident::query()
+                ->with('inventoryItem')
+                ->where('inventory_item_id', $item->id)
+                ->latest('id')
+                ->get()
+                ->map(fn (RentalIncident $incident) => $this->transformIncident($incident))
+                ->all(),
+            'maintenance_tickets' => MaintenanceTicket::query()
+                ->with(['inventoryItem', 'item'])
+                ->where('inventory_item_id', $item->id)
+                ->latest('id')
+                ->get()
+                ->map(fn (MaintenanceTicket $ticket) => $this->transformMaintenanceTicket($ticket))
+                ->all(),
+        ]);
+    }
+
+    public function transactions(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'inventory_item_id' => ['nullable', 'integer', Rule::exists('inventory', 'id')],
+            'warehouse_id' => ['nullable', 'integer', Rule::exists('warehouses', 'id')],
+            'transaction_type' => ['nullable', Rule::enum(InventoryTransactionType::class)],
+            'reference_type' => ['nullable', Rule::enum(InventoryReferenceType::class)],
+            'reference_id' => ['nullable', 'integer'],
+        ]);
+
+        $query = InventoryTransaction::query()
+            ->with(['equipmentProp', 'inventoryItem', 'warehouse'])
+            ->latestFirst();
+
+        foreach (['inventory_item_id', 'warehouse_id', 'reference_id'] as $field) {
+            if (! empty($data[$field])) {
+                $query->where($field, $data[$field]);
+            }
+        }
+
+        if (! empty($data['transaction_type'])) {
+            $query->where('transaction_type', $data['transaction_type']);
+        }
+
+        if (! empty($data['reference_type'])) {
+            $query->where('reference_type', $data['reference_type']);
+        }
+
+        return $this->rawSuccess(
+            $query->get()
+                ->map(fn (InventoryTransaction $transaction) => $this->transformInventoryTransaction($transaction))
+                ->all()
+        );
     }
 
     private function inventoryList(Request $request, ItemCategoryType $type): array
@@ -175,16 +313,65 @@ class InventoryController extends Controller
         return $prefix . '-' . str_pad((string) $count, 4, '0', STR_PAD_LEFT);
     }
 
-    public function available(Request $request): JsonResponse
+    private function transformInventoryTransaction(InventoryTransaction $transaction): array
     {
-        $query = InventoryItem::query();
+        $transaction->loadMissing(['equipmentProp', 'inventoryItem', 'warehouse']);
 
-        $data = $request->validate([
-            'warehouse_id' => 'required|integer|exists:warehouses,id',
-            'item_type' => 'required|string|exists:inventory,item_type',
-            'equipment_prop_id' => 'required|integer|exists:equipment_props,id',
-            'size' => 'nullable|string',
-            'inventory_condition_id'
-        ]);
+        return [
+            'id' => $transaction->id,
+            'equipment_prop_id' => $transaction->equipment_prop_id,
+            'inventory_item_id' => $transaction->inventory_item_id,
+            'sku' => $transaction->inventoryItem?->sku,
+            'warehouse_id' => $transaction->warehouse_id,
+            'warehouse_name' => $transaction->warehouse?->name,
+            'transaction_type' => $transaction->transaction_type?->value,
+            'quantity' => $transaction->quantity,
+            'quantity_before' => $transaction->quantity_before,
+            'quantity_after' => $transaction->quantity_after,
+            'reference_type' => $transaction->reference_type?->value,
+            'reference_id' => $transaction->reference_id,
+            'note' => $transaction->note,
+            'created_at' => $transaction->created_at?->toISOString(),
+        ];
+    }
+
+    private function transformIncident(InternalIncident|RentalIncident $incident): array
+    {
+        $incident->loadMissing('inventoryItem');
+
+        return [
+            'id' => $incident->id,
+            'code' => $incident->code,
+            'incident_type' => $incident->incident_type?->value,
+            'status' => $incident->status?->value,
+            'inventory_item_id' => $incident->inventory_item_id,
+            'sku' => $incident->inventoryItem?->sku,
+            'compensation_amount' => $incident->compensation_amount,
+            'incident_description' => $incident->incident_description,
+            'resolved_at' => $incident->resolved_at?->toISOString(),
+        ];
+    }
+
+    private function transformMaintenanceTicket(MaintenanceTicket $ticket): array
+    {
+        $ticket->loadMissing(['inventoryItem', 'item']);
+
+        return [
+            'id' => $ticket->id,
+            'code' => $ticket->code,
+            'item_id' => $ticket->item_id,
+            'inventory_item_id' => $ticket->inventory_item_id,
+            'sku' => $ticket->inventoryItem?->sku,
+            'item_name' => $ticket->item?->name,
+            'maintenance_type' => $ticket->maintenance_type?->value,
+            'status' => $ticket->status?->value,
+            'reported_date' => $ticket->reported_date?->toDateString(),
+            'started_date' => $ticket->started_date?->toDateString(),
+            'expected_return_date' => $ticket->expected_return_date?->toDateString(),
+            'return_date' => $ticket->return_date?->toDateString(),
+            'vendor' => $ticket->vendor,
+            'cost' => $ticket->cost,
+            'remarks' => $ticket->remarks,
+        ];
     }
 }
