@@ -8,8 +8,10 @@ use App\Models\Employee;
 use App\Models\EquipmentProp;
 use App\Models\GalleryImage;
 use App\Models\InventoryCondition;
+use App\Models\InventoryItem;
 use App\Models\ItemCategory;
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -139,5 +141,99 @@ class InventoryWarehouseApiTest extends TestCase
             ])
             ->assertOk()
             ->assertJsonPath('inventory_condition_id', $conditionB->id);
+    }
+
+    public function test_costume_inventory_is_grouped_by_costume_and_condition(): void
+    {
+        $headers = $this->authenticate();
+
+        $category = ItemCategory::query()->create([
+            'name' => 'Ao Dai',
+            'slug' => 'ao-dai',
+            'type' => ItemCategoryType::COSTUME,
+            'is_active' => true,
+        ]);
+
+        $costume = EquipmentProp::query()->create([
+            'name' => 'Ao Dai Lua Tim',
+            'slug' => 'ao-dai-lua-tim',
+            'category_id' => $category->id,
+            'color' => [
+                'hex' => '#ddd6fe',
+                'code' => 'VOL',
+                'intensity' => 200,
+            ],
+            'sizes' => ['XS', 'S', 'M', 'L', 'XL', '2XL'],
+            'unit' => 'SET',
+            'gender' => 'FEMALE',
+            'rental_price_per_day' => 300000,
+            'is_active' => true,
+        ]);
+
+        $image = GalleryImage::query()->create([
+            'category_id' => $category->id,
+            'file_name' => 'ao-dai-cach-tan-tim-1.webp',
+            'mime_type' => 'image/webp',
+            'size' => 65950,
+            'dest' => "/{$category->id}/ao-dai-cach-tan-tim-1.webp",
+            'is_active' => true,
+        ]);
+
+        $costume->galleryImages()->attach($image->id);
+
+        $condition = InventoryCondition::query()->create([
+            'code' => 'A',
+            'label' => 'Tot',
+            'discount_rate' => 0,
+            'rentable' => true,
+            'is_active' => true,
+        ]);
+
+        $warehouse = Warehouse::query()->create([
+            'code' => 'KTP001',
+            'name' => 'Kho trang phuc 1',
+            'type' => ItemCategoryType::COSTUME->value,
+            'is_active' => true,
+        ]);
+
+        InventoryItem::query()->create([
+            'sku' => 'TP-ADLT-VOL200-0001',
+            'item_id' => $costume->id,
+            'item_type' => ItemCategoryType::COSTUME,
+            'inventory_condition_id' => $condition->id,
+            'warehouse_id' => $warehouse->id,
+            'status' => 'AVAILABLE',
+            'size' => 'M',
+            'is_active' => true,
+        ]);
+
+        InventoryItem::query()->create([
+            'sku' => 'TP-ADLT-VOL200-0002',
+            'item_id' => $costume->id,
+            'item_type' => ItemCategoryType::COSTUME,
+            'inventory_condition_id' => $condition->id,
+            'warehouse_id' => $warehouse->id,
+            'status' => 'AVAILABLE',
+            'size' => 'L',
+            'is_active' => true,
+        ]);
+
+        $this->withHeaders($headers)
+            ->getJson('/api/inventory/costumes')
+            ->assertOk()
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.id', $costume->id)
+            ->assertJsonPath('0.slug', 'ao-dai-lua-tim')
+            ->assertJsonPath('0.category.id', $category->id)
+            ->assertJsonPath('0.color.code', 'VOL')
+            ->assertJsonPath('0.original_rental_price_per_day', 300000)
+            ->assertJsonPath('0.current_rental_price_per_day', 300000)
+            ->assertJsonPath('0.images.0.dest', "/{$category->id}/ao-dai-cach-tan-tim-1.webp")
+            ->assertJsonPath('0.inventory_condition.id', $condition->id)
+            ->assertJsonPath('0.details.0.sku', 'TP-ADLT-VOL200-0002')
+            ->assertJsonPath('0.details.0.size', 'L')
+            ->assertJsonPath('0.details.0.warehouse.name', 'Kho trang phuc 1')
+            ->assertJsonPath('0.details.1.sku', 'TP-ADLT-VOL200-0001')
+            ->assertJsonPath('0.details.1.size', 'M');
     }
 }

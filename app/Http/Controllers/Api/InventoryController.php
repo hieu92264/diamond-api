@@ -38,7 +38,7 @@ class InventoryController extends Controller
 
     public function costumes(Request $request): JsonResponse
     {
-        return $this->rawSuccess($this->inventoryList($request, ItemCategoryType::COSTUME));
+        return $this->rawSuccess($this->costumeInventoryList($request));
     }
 
     public function props(Request $request): JsonResponse
@@ -274,6 +274,118 @@ class InventoryController extends Controller
             ->get()
             ->map(fn(InventoryItem $item) => $this->transformInventoryItem($item))
             ->all();
+    }
+
+    private function costumeInventoryList(Request $request): array
+    {
+        $query = InventoryItem::query()
+            ->where('item_type', ItemCategoryType::COSTUME->value)
+            ->with(self::INVENTORY_ITEM_RELATIONS);
+
+        if (! $request->boolean('include_inactive')) {
+            $query->where('is_active', true);
+        }
+
+        foreach (['item_id', 'inventory_condition_id', 'warehouse_id', 'status', 'size', 'sku'] as $field) {
+            $inValue = $request->query($field . ':in');
+
+            if ($inValue !== null && $inValue !== '') {
+                $query->whereIn($field, array_filter(array_map('trim', explode(',', (string) $inValue))));
+            }
+
+            $eqValue = $request->query($field . ':eq', $request->query($field));
+
+            if ($eqValue !== null && $eqValue !== '') {
+                $query->where($field, $eqValue);
+            }
+        }
+
+        $keyword = trim((string) $request->query('keyword', ''));
+
+        if ($keyword !== '') {
+            $query->where(function (Builder $builder) use ($keyword): void {
+                $builder
+                    ->where('sku', 'like', "%{$keyword}%")
+                    ->orWhereHas('item', fn(Builder $itemQuery) => $itemQuery->where('name', 'like', "%{$keyword}%"));
+            });
+        }
+
+        return $query->orderByDesc('item_id')
+            ->orderBy('inventory_condition_id')
+            ->orderBy('size')
+            ->orderBy('sku')
+            ->get()
+            ->groupBy(fn (InventoryItem $inventoryItem) => $inventoryItem->item_id.'-'.$inventoryItem->inventory_condition_id)
+            ->map(fn ($items) => $this->transformCostumeInventoryGroup($items->values()))
+            ->values()
+            ->all();
+    }
+
+    private function transformCostumeInventoryGroup($items): array
+    {
+        /** @var InventoryItem $firstItem */
+        $firstItem = $items->first();
+        $costume = $firstItem->item;
+        $condition = $firstItem->inventoryCondition;
+        $originalPrice = $costume?->rental_price_per_day !== null ? (float) $costume->rental_price_per_day : null;
+        $discountRate = $condition?->discount_rate !== null ? (float) $condition->discount_rate : 0.0;
+
+        return [
+            'id' => $costume?->id,
+            'slug' => $costume?->slug,
+            'name' => $costume?->name,
+            'category' => $costume?->itemCategory ? [
+                'name' => $costume->itemCategory->name,
+                'slug' => $costume->itemCategory->slug,
+                'type' => $costume->itemCategory->type?->value,
+                'is_active' => $costume->itemCategory->is_active,
+                'created_at' => $costume->itemCategory->created_at?->toISOString(),
+                'updated_at' => $costume->itemCategory->updated_at?->toISOString(),
+                'id' => $costume->itemCategory->id,
+            ] : null,
+            'color' => $costume?->color,
+            'sizes' => $costume?->sizes ?? [],
+            'unit' => $costume?->unit,
+            'gender' => $costume?->gender?->value,
+            'original_rental_price_per_day' => $originalPrice,
+            'current_rental_price_per_day' => $originalPrice !== null
+                ? round($originalPrice * (1 - $discountRate), 2)
+                : null,
+            'images' => $costume?->galleryImages
+                ->where('is_active', true)
+                ->values()
+                ->map(fn ($image) => [
+                    'id' => $image->id,
+                    'file_name' => $image->file_name,
+                    'size' => $image->size,
+                    'dest' => $this->galleryImageRelativePath($image),
+                    'mime_type' => $image->mime_type,
+                ])
+                ->all() ?? [],
+            'inventory_condition' => $condition ? [
+                'id' => $condition->id,
+                'created_at' => $condition->created_at?->toISOString(),
+                'code' => $condition->code,
+                'label' => $condition->label,
+                'badge_color' => $condition->badge_color,
+                'discount_rate' => $condition->discount_rate !== null ? (float) $condition->discount_rate : null,
+                'rentable' => $condition->rentable,
+                'disposable' => $condition->disposable,
+                'is_active' => $condition->is_active,
+            ] : null,
+            'details' => $items
+                ->map(fn (InventoryItem $inventoryItem) => [
+                    'id' => $inventoryItem->id,
+                    'sku' => $inventoryItem->sku,
+                    'size' => $inventoryItem->size,
+                    'status' => $inventoryItem->status?->value,
+                    'warehouse' => $inventoryItem->warehouse ? [
+                        'id' => $inventoryItem->warehouse->id,
+                        'name' => $inventoryItem->warehouse->name,
+                    ] : null,
+                ])
+                ->all(),
+        ];
     }
 
     private function transformInventoryItem(InventoryItem $item): array
