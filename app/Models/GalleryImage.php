@@ -38,7 +38,17 @@ class GalleryImage extends Model
 
     public function getUrlAttribute(): string
     {
-        return $this->dest;
+        if ($this->file_name !== null && $this->file_name !== '') {
+            return url('/storage/images-gallery/'.$this->category_id.'/'.ltrim($this->file_name, '/'));
+        }
+
+        $path = parse_url((string) $this->dest, PHP_URL_PATH);
+
+        if (is_string($path) && $path !== '') {
+            return url('/'.ltrim($path, '/'));
+        }
+
+        return (string) $this->dest;
     }
 
     public function category(): BelongsTo

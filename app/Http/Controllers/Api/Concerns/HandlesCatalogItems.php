@@ -298,14 +298,15 @@ trait HandlesCatalogItems
     protected function transformGalleryImage(GalleryImage $image): array
     {
         $image->loadMissing(['category', 'creator.employee']);
+        $relativePath = $this->galleryImageRelativePath($image);
         $publicPath = $this->galleryImagePublicPath($image);
 
         return [
             'id' => $image->id,
             'file_name' => $image->file_name,
             'size' => $image->size,
-            'dest' => $publicPath,
-            'url' => $publicPath,
+            'dest' => $relativePath,
+            'url' => $this->absolutePublicUrl($publicPath),
             'mime_type' => $image->mime_type,
             'category_id' => $image->category_id,
             'category' => $image->category ? [
@@ -322,15 +323,48 @@ trait HandlesCatalogItems
         ];
     }
 
+    protected function galleryImageRelativePath(GalleryImage $image): string
+    {
+        $fileName = trim((string) $image->file_name, '/');
+
+        if ($fileName !== '') {
+            return '/'.$image->category_id.'/'.$fileName;
+        }
+
+        $path = parse_url((string) $image->dest, PHP_URL_PATH);
+        $dest = is_string($path) && $path !== '' ? $path : (string) $image->dest;
+
+        if (str_starts_with($dest, '/storage/images-gallery/')) {
+            return substr($dest, strlen('/storage/images-gallery'));
+        }
+
+        if (str_starts_with($dest, 'storage/images-gallery/')) {
+            return '/'.substr($dest, strlen('storage/images-gallery/'));
+        }
+
+        return str_starts_with($dest, '/') ? $dest : '/'.$dest;
+    }
+
     protected function galleryImagePublicPath(GalleryImage $image): string
     {
         $fileName = trim((string) $image->file_name, '/');
 
         if ($fileName === '') {
-            return (string) $image->dest;
+            $path = parse_url((string) $image->dest, PHP_URL_PATH);
+
+            return is_string($path) && $path !== '' ? $path : (string) $image->dest;
         }
 
         return '/storage/images-gallery/'.$image->category_id.'/'.$fileName;
+    }
+
+    protected function absolutePublicUrl(string $path): string
+    {
+        if (preg_match('/^https?:\/\//i', $path) === 1) {
+            return $path;
+        }
+
+        return url('/'.ltrim($path, '/'));
     }
 
     protected function transformImageCreator(?User $user): ?array

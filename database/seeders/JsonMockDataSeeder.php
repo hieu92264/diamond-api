@@ -200,7 +200,7 @@ class JsonMockDataSeeder extends Seeder
                     'file_name' => $storedImage['file_name'] ?? $image['file_name'],
                     'mime_type' => $storedImage['mime_type'] ?? $image['mime_type'] ?? null,
                     'size' => $storedImage['size'] ?? $image['size'] ?? null,
-                    'dest' => $storedImage['dest'] ?? $image['dest'],
+                    'dest' => $storedImage['dest'] ?? $this->seedImagePublicPath($image),
                     'category_id' => $image['category_id'],
                     'created_by' => $image['created_by'] ?? null,
                     'is_active' => $image['is_active'] ?? true,
@@ -998,8 +998,26 @@ class JsonMockDataSeeder extends Seeder
             'file_name' => basename($path),
             'mime_type' => 'image/webp',
             'size' => strlen($contents),
-            'dest' => Storage::disk('public')->url($path),
+            'dest' => '/'.$image['category_id'].'/'.basename($path),
         ];
+    }
+
+    private function seedImagePublicPath(array $image): string
+    {
+        $fileName = basename((string) ($image['file_name'] ?? $image['dest'] ?? ''));
+
+        if ($fileName !== '') {
+            return "/{$image['category_id']}/{$fileName}";
+        }
+
+        $dest = (string) ($image['dest'] ?? '');
+        $path = parse_url($dest, PHP_URL_PATH);
+
+        if (is_string($path) && $path !== '') {
+            return $path;
+        }
+
+        return $dest;
     }
 
     private function findSeedImagePath(array $image): ?string

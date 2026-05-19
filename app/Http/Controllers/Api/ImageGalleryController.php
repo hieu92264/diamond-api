@@ -77,7 +77,7 @@ class ImageGalleryController extends Controller
                     'file_name' => basename($path),
                     'mime_type' => 'image/webp',
                     'size' => strlen($webpContents),
-                    'dest' => '/storage/'.$path,
+                    'dest' => '/'.$category->id.'/'.basename($path),
                     'created_by' => auth('api')->id(),
                     'is_active' => true,
                 ]);
@@ -188,10 +188,12 @@ class ImageGalleryController extends Controller
 
     private function deleteStoredFile(GalleryImage $image): void
     {
-        $dest = (string) $image->dest;
+        $dest = parse_url((string) $image->dest, PHP_URL_PATH) ?: (string) $image->dest;
         $path = str_starts_with($dest, '/storage/')
             ? substr($dest, strlen('/storage/'))
-            : ltrim($dest, '/');
+            : (preg_match('/^\/?\d+\//', $dest) === 1
+                ? 'images-gallery/'.ltrim($dest, '/')
+                : ltrim($dest, '/'));
 
         if ($path !== '') {
             Storage::disk('public')->delete($path);

@@ -107,7 +107,7 @@ class CatalogApiTest extends TestCase
             ->assertJsonCount(2, 'data')
             ->assertJsonPath('data.0.category_id', $category->id)
             ->assertJsonPath('data.0.mime_type', 'image/webp')
-            ->assertJsonPath('data.0.dest', fn (string $dest) => str_starts_with($dest, "/storage/images-gallery/{$category->id}/"))
+            ->assertJsonPath('data.0.dest', fn (string $dest) => str_starts_with($dest, "/{$category->id}/"))
             ->assertJsonPath('data.0.created_by.id', User::query()->where('role', UserRole::ADMIN)->value('id'));
 
         $imageId = $uploadResponse->json('data.0.id');
@@ -206,7 +206,7 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('color.intensity', 500)
             ->assertJsonPath('image_ids.0', $costumeImage->id)
             ->assertJsonPath('images.0.id', $costumeImage->id)
-            ->assertJsonPath('images.0.dest', "/storage/images-gallery/{$costumeCategory->id}/costume.jpg")
+            ->assertJsonPath('images.0.dest', "/{$costumeCategory->id}/costume.jpg")
             ->assertJsonPath('hashtags.0', 'ao tac');
 
         $costumeId = $costumeResponse->json('id');
@@ -249,7 +249,7 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('weight_kg', 0.5)
             ->assertJsonPath('image_ids.0', $propImage->id)
             ->assertJsonPath('images.0.id', $propImage->id)
-            ->assertJsonPath('images.0.dest', "/storage/images-gallery/{$propCategory->id}/prop.jpg");
+            ->assertJsonPath('images.0.dest', "/{$propCategory->id}/prop.jpg");
 
         $propId = $propResponse->json('id');
 
