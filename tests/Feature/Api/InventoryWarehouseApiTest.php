@@ -6,6 +6,7 @@ use App\Enums\ItemCategoryType;
 use App\Enums\UserRole;
 use App\Models\Employee;
 use App\Models\EquipmentProp;
+use App\Models\GalleryImage;
 use App\Models\InventoryCondition;
 use App\Models\ItemCategory;
 use App\Models\User;
@@ -80,6 +81,17 @@ class InventoryWarehouseApiTest extends TestCase
             'is_active' => true,
         ]);
 
+        $image = GalleryImage::query()->create([
+            'category_id' => $category->id,
+            'file_name' => 'prop.jpg',
+            'mime_type' => 'image/jpeg',
+            'size' => 100,
+            'dest' => "/{$category->id}/prop.jpg",
+            'is_active' => true,
+        ]);
+
+        $prop->galleryImages()->attach($image->id);
+
         $condition = InventoryCondition::query()->create([
             'code' => 'A',
             'label' => 'Tot',
@@ -117,7 +129,9 @@ class InventoryWarehouseApiTest extends TestCase
             ->getJson('/api/inventory/props?warehouse_id:eq='.$warehouseId)
             ->assertOk()
             ->assertJsonCount(2)
-            ->assertJsonPath('0.item_type', ItemCategoryType::EQUIPMENT_PROPS->value);
+            ->assertJsonPath('0.item_type', ItemCategoryType::EQUIPMENT_PROPS->value)
+            ->assertJsonPath('0.item.images.0.id', $image->id)
+            ->assertJsonPath('0.item.images.0.dest', "/{$category->id}/prop.jpg");
 
         $this->withHeaders($headers)
             ->patchJson('/api/inventory/condition/'.$sku, [

@@ -6,6 +6,7 @@ use App\Enums\InventoryReferenceType;
 use App\Enums\InventoryItemStatus;
 use App\Enums\InventoryTransactionType;
 use App\Enums\ItemCategoryType;
+use App\Http\Controllers\Api\Concerns\HandlesCatalogItems;
 use App\Http\Controllers\Controller;
 use App\Models\EquipmentProp;
 use App\Models\InventoryCondition;
@@ -24,6 +25,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InventoryController extends Controller
 {
+    use HandlesCatalogItems;
+
+    private const INVENTORY_ITEM_RELATIONS = [
+        'item.itemCategory',
+        'item.galleryImages.category',
+        'item.galleryImages.creator.employee',
+        'item.inventoryItems.inventoryCondition',
+        'inventoryCondition',
+        'warehouse',
+    ];
+
     public function costumes(Request $request): JsonResponse
     {
         return $this->rawSuccess($this->inventoryList($request, ItemCategoryType::COSTUME));
@@ -60,7 +72,7 @@ class InventoryController extends Controller
                     'status' => InventoryItemStatus::AVAILABLE->value,
                     'size' => $data['size'] ?? null,
                     'is_active' => true,
-                ])->load(['item.itemCategory', 'inventoryCondition', 'warehouse']);
+                ])->load(self::INVENTORY_ITEM_RELATIONS);
             }
 
             return array_map(fn(InventoryItem $item) => $this->transformInventoryItem($item), $created);
@@ -78,7 +90,7 @@ class InventoryController extends Controller
         $item = InventoryItem::query()->where('sku', $sku)->firstOrFail();
         $item->update(['inventory_condition_id' => $data['inventory_condition_id']]);
 
-        return $this->success($this->transformInventoryItem($item->fresh(['item.itemCategory', 'inventoryCondition', 'warehouse'])), 'Cập nhật tình trạng tồn kho thành công!');
+        return $this->success($this->transformInventoryItem($item->fresh(self::INVENTORY_ITEM_RELATIONS)), 'Cập nhật tình trạng tồn kho thành công!');
     }
 
     public function conditions(Request $request): JsonResponse
@@ -95,7 +107,7 @@ class InventoryController extends Controller
     public function show(int $id): JsonResponse
     {
         $item = InventoryItem::query()
-            ->with(['item.itemCategory', 'inventoryCondition', 'warehouse'])
+            ->with(self::INVENTORY_ITEM_RELATIONS)
             ->findOrFail($id);
 
         return $this->rawSuccess($this->transformInventoryItem($item));
@@ -115,7 +127,7 @@ class InventoryController extends Controller
         $query = InventoryItem::query()
             ->available()
             ->whereHas('inventoryCondition', fn (Builder $query) => $query->where('rentable', true))
-            ->with(['item.itemCategory', 'inventoryCondition', 'warehouse']);
+            ->with(self::INVENTORY_ITEM_RELATIONS);
 
         foreach (['warehouse_id', 'equipment_prop_id' => 'item_id', 'inventory_condition_id', 'size'] as $key => $field) {
             $requestKey = is_int($key) ? $field : $key;
@@ -153,7 +165,7 @@ class InventoryController extends Controller
     public function timeline(int $id): JsonResponse
     {
         $item = InventoryItem::query()
-            ->with(['item.itemCategory', 'inventoryCondition', 'warehouse'])
+            ->with(self::INVENTORY_ITEM_RELATIONS)
             ->findOrFail($id);
 
         return $this->rawSuccess([
@@ -228,7 +240,7 @@ class InventoryController extends Controller
     {
         $query = InventoryItem::query()
             ->where('item_type', $type->value)
-            ->with(['item.itemCategory', 'inventoryCondition', 'warehouse']);
+            ->with(self::INVENTORY_ITEM_RELATIONS);
 
         if (! $request->boolean('include_inactive')) {
             $query->where('is_active', true);
@@ -266,14 +278,14 @@ class InventoryController extends Controller
 
     private function transformInventoryItem(InventoryItem $item): array
     {
-        $item->loadMissing(['item.itemCategory', 'inventoryCondition', 'warehouse']);
+        $item->loadMissing(self::INVENTORY_ITEM_RELATIONS);
 
         return [
             'id' => $item->id,
             'sku' => $item->sku,
             'item_id' => $item->item_id,
             'item_type' => $item->item_type?->value,
-            'item' => $item->item,
+            'item' => $item->item ? $this->transformCatalogItem($item->item) : null,
             'inventory_condition_id' => $item->inventory_condition_id,
             'inventory_condition' => $item->inventoryCondition,
             'warehouse_id' => $item->warehouse_id,
