@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Concerns;
 
 use App\Enums\ItemCategoryType;
+use App\Enums\InventoryItemStatus;
 use App\Models\EquipmentProp;
 use App\Models\GalleryImage;
+use App\Models\InventoryItem;
 use App\Models\ItemCategory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +19,12 @@ trait HandlesCatalogItems
     protected function catalogItemsQuery(ItemCategoryType $type, bool $onlyActive = true): Builder
     {
         $query = EquipmentProp::query()
-            ->with(['itemCategory', 'galleryImages.category', 'galleryImages.creator.employee'])
+            ->with([
+                'itemCategory',
+                'galleryImages.category',
+                'galleryImages.creator.employee',
+                'inventoryItems.inventoryCondition',
+            ])
             ->whereHas('itemCategory', function (Builder $builder) use ($type): void {
                 $builder->where('type', $type->value);
             });
@@ -180,7 +187,12 @@ trait HandlesCatalogItems
 
     protected function transformCatalogItem(EquipmentProp $item): array
     {
-        $item->loadMissing(['itemCategory', 'galleryImages.category', 'galleryImages.creator.employee']);
+        $item->loadMissing([
+            'itemCategory',
+            'galleryImages.category',
+            'galleryImages.creator.employee',
+            'inventoryItems.inventoryCondition',
+        ]);
         $images = $item->galleryImages
             ->where('is_active', true)
             ->values();
@@ -200,6 +212,7 @@ trait HandlesCatalogItems
             'unit' => $item->unit,
             'color' => $item->color,
             'sizes' => $item->sizes ?? [],
+            'inventory' => $this->transformCatalogInventory($item),
             'gender' => $item->gender?->value,
             'image_ids' => $images->pluck('id')->values()->all(),
             'images' => $images
@@ -216,6 +229,69 @@ trait HandlesCatalogItems
             'is_active' => $item->is_active,
             'created_at' => $item->created_at?->toISOString(),
             'updated_at' => $item->updated_at?->toISOString(),
+        ];
+    }
+
+    protected function transformCatalogInventory(EquipmentProp $item): array
+    {
+        $inventoryItems = $item->inventoryItems
+            ->where('is_active', true)
+            ->values();
+
+        $isAvailable = fn (InventoryItem $inventoryItem): bool => $inventoryItem->status === InventoryItemStatus::AVAILABLE
+            && (bool) $inventoryItem->inventoryCondition?->rentable;
+
+        $configuredSizes = collect($item->sizes ?? [])
+            ->map(fn ($size) => (string) $size)
+            ->filter(fn (string $size) => $size !== '')
+            ->values();
+
+        $inventorySizes = $inventoryItems
+            ->pluck('size')
+            ->filter(fn ($size) => $size !== null && $size !== '')
+            ->map(fn ($size) => (string) $size)
+            ->unique()
+            ->values();
+
+        $sizes = $configuredSizes
+            ->merge($inventorySizes->diff($configuredSizes)->sort()->values())
+            ->values();
+
+        $bySize = $sizes
+            ->map(function (string $size) use ($inventoryItems, $isAvailable): array {
+                $items = $inventoryItems->where('size', $size)->values();
+                $availableQuantity = $items->filter($isAvailable)->count();
+
+                return [
+                    'size' => $size,
+                    'total_quantity' => $items->count(),
+                    'available_quantity' => $availableQuantity,
+                    'is_available' => $availableQuantity > 0,
+                ];
+            })
+            ->all();
+
+        $noSizeItems = $inventoryItems
+            ->filter(fn (InventoryItem $inventoryItem) => $inventoryItem->size === null || $inventoryItem->size === '')
+            ->values();
+
+        if ($noSizeItems->isNotEmpty()) {
+            $availableQuantity = $noSizeItems->filter($isAvailable)->count();
+            $bySize[] = [
+                'size' => null,
+                'total_quantity' => $noSizeItems->count(),
+                'available_quantity' => $availableQuantity,
+                'is_available' => $availableQuantity > 0,
+            ];
+        }
+
+        $availableQuantity = $inventoryItems->filter($isAvailable)->count();
+
+        return [
+            'total_quantity' => $inventoryItems->count(),
+            'available_quantity' => $availableQuantity,
+            'is_available' => $availableQuantity > 0,
+            'by_size' => $bySize,
         ];
     }
 

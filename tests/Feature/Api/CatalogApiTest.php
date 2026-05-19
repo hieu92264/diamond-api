@@ -3,10 +3,16 @@
 namespace Tests\Feature\Api;
 
 use App\Enums\ItemCategoryType;
+use App\Enums\InventoryItemStatus;
 use App\Enums\UserRole;
+use App\Enums\WarehouseType;
+use App\Models\EquipmentProp;
 use App\Models\GalleryImage;
+use App\Models\InventoryCondition;
+use App\Models\InventoryItem;
 use App\Models\ItemCategory;
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -262,5 +268,80 @@ class CatalogApiTest extends TestCase
             ->getJson('/api/equipment-props')
             ->assertOk()
             ->assertJsonCount(1);
+    }
+
+    public function test_costumes_include_inventory_availability_by_size(): void
+    {
+        $headers = $this->authenticate();
+
+        $category = ItemCategory::query()->create([
+            'name' => 'Ao dai',
+            'slug' => 'ao-dai',
+            'type' => ItemCategoryType::COSTUME,
+            'is_active' => true,
+        ]);
+
+        $costume = EquipmentProp::query()->create([
+            'name' => 'Ao dai do',
+            'slug' => 'ao-dai-do',
+            'category_id' => $category->id,
+            'sizes' => ['S', 'M', 'L'],
+            'unit' => 'SET',
+            'gender' => 'FEMALE',
+            'is_active' => true,
+        ]);
+
+        $condition = InventoryCondition::query()->create([
+            'code' => 'A',
+            'label' => 'Tot',
+            'discount_rate' => 0,
+            'rentable' => true,
+            'is_active' => true,
+        ]);
+
+        $warehouse = Warehouse::query()->create([
+            'code' => 'KTP001',
+            'name' => 'Kho trang phuc',
+            'type' => WarehouseType::COSTUME,
+            'is_active' => true,
+        ]);
+
+        InventoryItem::query()->create([
+            'sku' => 'TP-1-S-0001',
+            'item_id' => $costume->id,
+            'item_type' => ItemCategoryType::COSTUME,
+            'inventory_condition_id' => $condition->id,
+            'warehouse_id' => $warehouse->id,
+            'status' => InventoryItemStatus::AVAILABLE,
+            'size' => 'S',
+            'is_active' => true,
+        ]);
+
+        InventoryItem::query()->create([
+            'sku' => 'TP-1-M-0001',
+            'item_id' => $costume->id,
+            'item_type' => ItemCategoryType::COSTUME,
+            'inventory_condition_id' => $condition->id,
+            'warehouse_id' => $warehouse->id,
+            'status' => InventoryItemStatus::RENTED,
+            'size' => 'M',
+            'is_active' => true,
+        ]);
+
+        $this->withHeaders($headers)
+            ->getJson('/api/costumes?id:in='.$costume->id)
+            ->assertOk()
+            ->assertJsonPath('0.inventory.total_quantity', 2)
+            ->assertJsonPath('0.inventory.available_quantity', 1)
+            ->assertJsonPath('0.inventory.is_available', true)
+            ->assertJsonPath('0.inventory.by_size.0.size', 'S')
+            ->assertJsonPath('0.inventory.by_size.0.available_quantity', 1)
+            ->assertJsonPath('0.inventory.by_size.0.is_available', true)
+            ->assertJsonPath('0.inventory.by_size.1.size', 'M')
+            ->assertJsonPath('0.inventory.by_size.1.available_quantity', 0)
+            ->assertJsonPath('0.inventory.by_size.1.is_available', false)
+            ->assertJsonPath('0.inventory.by_size.2.size', 'L')
+            ->assertJsonPath('0.inventory.by_size.2.available_quantity', 0)
+            ->assertJsonPath('0.inventory.by_size.2.is_available', false);
     }
 }
