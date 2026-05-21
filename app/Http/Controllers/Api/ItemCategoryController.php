@@ -32,8 +32,8 @@ class ItemCategoryController extends Controller
             $query->where('type', strtoupper((string) $type));
         }
 
-        if (array_intersect($embed, ['costumes', 'equipment_props']) !== []) {
-            $query->with('equipmentProps.galleryImages.category', 'equipmentProps.galleryImages.creator.employee');
+        if ($this->shouldEmbedProducts($embed)) {
+            $query->with($this->categoryProductsRelations());
         }
 
         $categories = $query->get()
@@ -65,8 +65,8 @@ class ItemCategoryController extends Controller
         $embed = $this->embedList($request);
         $category = ItemCategory::query()
             ->when(
-                array_intersect($embed, ['costumes', 'equipment_props']) !== [],
-                fn ($query) => $query->with('equipmentProps.galleryImages.category', 'equipmentProps.galleryImages.creator.employee')
+                $this->shouldEmbedProducts($embed),
+                fn ($query) => $query->with($this->categoryProductsRelations())
             )
             ->findOrFail($id);
 
@@ -114,6 +114,10 @@ class ItemCategoryController extends Controller
             'updated_at' => $category->updated_at?->toISOString(),
         ];
 
+        if ($this->shouldEmbedProducts($embed)) {
+            $data['products'] = $this->embeddedProducts($category);
+        }
+
         if (in_array('costumes', $embed, true)) {
             $data['costumes'] = $this->embeddedItems($category, ItemCategoryType::COSTUME);
         }
@@ -125,13 +129,26 @@ class ItemCategoryController extends Controller
         return $data;
     }
 
+    private function embeddedProducts(ItemCategory $category): array
+    {
+        $type = $category->type instanceof ItemCategoryType
+            ? $category->type
+            : ItemCategoryType::tryFrom((string) $category->type);
+
+        if (! $type) {
+            return [];
+        }
+
+        return $this->embeddedItems($category, $type);
+    }
+
     private function embeddedItems(ItemCategory $category, ItemCategoryType $type): array
     {
         if (($category->type?->value ?? $category->type) !== $type->value) {
             return [];
         }
 
-        $category->loadMissing('equipmentProps.galleryImages.category', 'equipmentProps.galleryImages.creator.employee');
+        $category->loadMissing($this->categoryProductsRelations());
 
         return $category->equipmentProps
             ->where('is_active', true)
@@ -142,11 +159,32 @@ class ItemCategoryController extends Controller
 
     private function embedList(Request $request): array
     {
-        return collect(explode(',', (string) $request->query('_embed', '')))
+        $embed = collect(explode(',', (string) $request->query('_embed', '')));
+        $expand = collect(explode(',', (string) $request->query('_expand', '')))
+            ->map(fn (string $item) => in_array(trim($item), ['costumes', 'equipment_props'], true) ? 'products' : $item);
+
+        return $embed
+            ->merge($expand)
             ->map(fn (string $item) => trim($item))
             ->filter()
+            ->unique()
             ->values()
             ->all();
+    }
+
+    private function shouldEmbedProducts(array $embed): bool
+    {
+        return array_intersect($embed, ['products', 'costumes', 'equipment_props']) !== [];
+    }
+
+    private function categoryProductsRelations(): array
+    {
+        return [
+            'equipmentProps.itemCategory',
+            'equipmentProps.galleryImages.category',
+            'equipmentProps.galleryImages.creator.employee',
+            'equipmentProps.inventoryItems.inventoryCondition',
+        ];
     }
 
     private function shouldDeletePermanently(Request $request): bool

@@ -344,4 +344,80 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('0.inventory.by_size.2.available_quantity', 0)
             ->assertJsonPath('0.inventory.by_size.2.is_available', false);
     }
+
+    public function test_category_detail_expands_products_by_category_type(): void
+    {
+        $headers = $this->authenticate();
+
+        $category = ItemCategory::query()->create([
+            'name' => 'Ao dai',
+            'slug' => 'ao-dai',
+            'type' => ItemCategoryType::COSTUME,
+            'is_active' => true,
+        ]);
+
+        $image = GalleryImage::query()->create([
+            'category_id' => $category->id,
+            'file_name' => 'ao-dai.jpg',
+            'mime_type' => 'image/jpeg',
+            'size' => 100,
+            'dest' => '/storage/images-gallery/ao-dai.jpg',
+            'is_active' => true,
+        ]);
+
+        $costume = EquipmentProp::query()->create([
+            'name' => 'Ao dai do',
+            'slug' => 'ao-dai-do',
+            'category_id' => $category->id,
+            'color' => ['hex' => '#ff0000'],
+            'sizes' => ['S', 'M'],
+            'unit' => 'SET',
+            'gender' => 'FEMALE',
+            'rental_price_per_day' => 200000,
+            'is_active' => true,
+        ]);
+        $costume->galleryImages()->sync([$image->id]);
+
+        $condition = InventoryCondition::query()->create([
+            'code' => 'A',
+            'label' => 'Tot',
+            'discount_rate' => 0,
+            'rentable' => true,
+            'is_active' => true,
+        ]);
+
+        $warehouse = Warehouse::query()->create([
+            'code' => 'KTP001',
+            'name' => 'Kho trang phuc',
+            'type' => WarehouseType::COSTUME,
+            'is_active' => true,
+        ]);
+
+        InventoryItem::query()->create([
+            'sku' => 'TP-1-S-0001',
+            'item_id' => $costume->id,
+            'item_type' => ItemCategoryType::COSTUME,
+            'inventory_condition_id' => $condition->id,
+            'warehouse_id' => $warehouse->id,
+            'status' => InventoryItemStatus::AVAILABLE,
+            'size' => 'S',
+            'is_active' => true,
+        ]);
+
+        $this->withHeaders($headers)
+            ->getJson("/api/categories/{$category->id}?_expand=costumes")
+            ->assertOk()
+            ->assertJsonMissingPath('costumes')
+            ->assertJsonPath('products.0.id', $costume->id)
+            ->assertJsonPath('products.0.category.type', ItemCategoryType::COSTUME->value)
+            ->assertJsonPath('products.0.color.hex', '#ff0000')
+            ->assertJsonPath('products.0.sizes.0', 'S')
+            ->assertJsonPath('products.0.rental_price_per_day', 200000)
+            ->assertJsonPath('products.0.image_ids.0', $image->id)
+            ->assertJsonPath('products.0.images.0.id', $image->id)
+            ->assertJsonPath('products.0.inventory.total_quantity', 1)
+            ->assertJsonPath('products.0.inventory.available_quantity', 1)
+            ->assertJsonPath('products.0.inventory.by_size.0.size', 'S')
+            ->assertJsonPath('products.0.inventory.by_size.0.is_available', true);
+    }
 }
