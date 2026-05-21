@@ -213,6 +213,7 @@ trait HandlesCatalogItems
             'color' => $item->color,
             'sizes' => $item->sizes ?? [],
             'inventory' => $this->transformCatalogInventory($item),
+            'conditions' => $this->transformCatalogConditions($item),
             'gender' => $item->gender?->value,
             'image_ids' => $images->pluck('id')->values()->all(),
             'images' => $images
@@ -230,6 +231,45 @@ trait HandlesCatalogItems
             'created_at' => $item->created_at?->toISOString(),
             'updated_at' => $item->updated_at?->toISOString(),
         ];
+    }
+
+    protected function transformCatalogConditions(EquipmentProp $item): array
+    {
+        $inventoryItems = $item->inventoryItems
+            ->where('is_active', true)
+            ->filter(fn (InventoryItem $inventoryItem): bool => $inventoryItem->inventoryCondition !== null)
+            ->values();
+
+        return $inventoryItems
+            ->groupBy('inventory_condition_id')
+            ->map(function ($items): array {
+                /** @var InventoryItem $firstItem */
+                $firstItem = $items->first();
+                $condition = $firstItem->inventoryCondition;
+                $availableQuantity = $items->filter(fn (InventoryItem $inventoryItem): bool => $inventoryItem->status === InventoryItemStatus::AVAILABLE
+                    && (bool) $inventoryItem->inventoryCondition?->rentable)->count();
+
+                return [
+                    'id' => $condition->id,
+                    'code' => $condition->code,
+                    'label' => $condition->label,
+                    'badge_color' => $condition->badge_color,
+                    'discount_rate' => $condition->discount_rate !== null ? (float) $condition->discount_rate : null,
+                    'rentable' => $condition->rentable,
+                    'disposable' => $condition->disposable,
+                    'is_active' => $condition->is_active,
+                    'total_quantity' => $items->count(),
+                    'available_quantity' => $availableQuantity,
+                    'is_available' => $availableQuantity > 0,
+                    'statuses' => $items
+                        ->groupBy(fn (InventoryItem $inventoryItem): ?string => $inventoryItem->status?->value)
+                        ->map(fn ($statusItems): int => $statusItems->count())
+                        ->all(),
+                ];
+            })
+            ->sortBy('code')
+            ->values()
+            ->all();
     }
 
     protected function transformCatalogInventory(EquipmentProp $item): array

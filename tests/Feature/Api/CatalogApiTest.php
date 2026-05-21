@@ -253,6 +253,33 @@ class CatalogApiTest extends TestCase
 
         $propId = $propResponse->json('id');
 
+        $propCondition = InventoryCondition::query()->create([
+            'code' => 'B',
+            'label' => 'Kha',
+            'discount_rate' => 0.1,
+            'rentable' => true,
+            'disposable' => false,
+            'badge_color' => '#22c55e',
+            'is_active' => true,
+        ]);
+
+        $propWarehouse = Warehouse::query()->create([
+            'code' => 'KDC001',
+            'name' => 'Kho dao cu',
+            'type' => WarehouseType::EQUIPMENT_PROPS,
+            'is_active' => true,
+        ]);
+
+        InventoryItem::query()->create([
+            'sku' => 'DC-1-0001',
+            'item_id' => $propId,
+            'item_type' => ItemCategoryType::EQUIPMENT_PROPS,
+            'inventory_condition_id' => $propCondition->id,
+            'warehouse_id' => $propWarehouse->id,
+            'status' => InventoryItemStatus::AVAILABLE,
+            'is_active' => true,
+        ]);
+
         $this->withHeaders($headers)
             ->patchJson("/api/equipment-props/{$propId}", [
                 'dimensions' => [
@@ -265,9 +292,15 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('dimensions.width_cm', 40);
 
         $this->withHeaders($headers)
-            ->getJson('/api/equipment-props')
+            ->getJson('/api/equipment-props?id:in='.$propId)
             ->assertOk()
-            ->assertJsonCount(1);
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.conditions.0.id', $propCondition->id)
+            ->assertJsonPath('0.conditions.0.code', 'B')
+            ->assertJsonPath('0.conditions.0.label', 'Kha')
+            ->assertJsonPath('0.conditions.0.total_quantity', 1)
+            ->assertJsonPath('0.conditions.0.available_quantity', 1)
+            ->assertJsonPath('0.conditions.0.statuses.AVAILABLE', 1);
     }
 
     public function test_costumes_include_inventory_availability_by_size(): void
@@ -342,7 +375,14 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('0.inventory.by_size.1.is_available', false)
             ->assertJsonPath('0.inventory.by_size.2.size', 'L')
             ->assertJsonPath('0.inventory.by_size.2.available_quantity', 0)
-            ->assertJsonPath('0.inventory.by_size.2.is_available', false);
+            ->assertJsonPath('0.inventory.by_size.2.is_available', false)
+            ->assertJsonPath('0.conditions.0.id', $condition->id)
+            ->assertJsonPath('0.conditions.0.code', 'A')
+            ->assertJsonPath('0.conditions.0.label', 'Tot')
+            ->assertJsonPath('0.conditions.0.total_quantity', 2)
+            ->assertJsonPath('0.conditions.0.available_quantity', 1)
+            ->assertJsonPath('0.conditions.0.statuses.AVAILABLE', 1)
+            ->assertJsonPath('0.conditions.0.statuses.RENTED', 1);
     }
 
     public function test_category_detail_expands_products_by_category_type(): void
