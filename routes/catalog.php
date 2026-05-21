@@ -68,6 +68,10 @@ Route::middleware('auth:api')->group(function (): void {
         Route::post('/import', 'import');
         Route::patch('/condition/{sku}', 'updateCondition');
         Route::get('/conditions', 'conditions');
+        Route::post('/conditions', 'storeCondition');
+        Route::get('/conditions/{id}', 'showCondition');
+        Route::patch('/conditions/{id}', 'updateConditionMaster');
+        Route::delete('/conditions/{id}', 'destroyCondition');
         Route::get('/available', 'available');
     });
 });

@@ -104,6 +104,71 @@ class InventoryController extends Controller
         return $this->rawSuccess($query->orderBy('code')->get()->toArray());
     }
 
+    public function showCondition(int $id): JsonResponse
+    {
+        $condition = InventoryCondition::query()->findOrFail($id);
+
+        return $this->rawSuccess($this->transformInventoryCondition($condition));
+    }
+
+    public function storeCondition(Request $request): JsonResponse
+    {
+        $condition = InventoryCondition::query()->create($this->validatedInventoryCondition($request));
+
+        return $this->success($this->transformInventoryCondition($condition), 'Tạo tình trạng tồn kho thành công!', Response::HTTP_CREATED);
+    }
+
+    public function updateConditionMaster(Request $request, int $id): JsonResponse
+    {
+        $condition = InventoryCondition::query()->findOrFail($id);
+        $data = $this->validatedInventoryCondition($request, $condition->id);
+
+        if ($this->isDefaultInventoryCondition($condition)) {
+            if (array_key_exists('code', $data) && $data['code'] !== $condition->code) {
+                throw ValidationException::withMessages([
+                    'code' => ['Không thể đổi mã tình trạng mặc định A hoặc B.'],
+                ]);
+            }
+
+            if (array_key_exists('is_active', $data) && $data['is_active'] === false) {
+                throw ValidationException::withMessages([
+                    'is_active' => ['Không thể tắt tình trạng mặc định A hoặc B.'],
+                ]);
+            }
+        }
+
+        if ($data !== []) {
+            $condition->update($data);
+        }
+
+        return $this->success($this->transformInventoryCondition($condition->fresh()), 'Cập nhật tình trạng tồn kho thành công!');
+    }
+
+    public function destroyCondition(Request $request, int $id): JsonResponse
+    {
+        $condition = InventoryCondition::query()->findOrFail($id);
+
+        if ($this->isDefaultInventoryCondition($condition)) {
+            throw ValidationException::withMessages([
+                'inventory_condition' => ['Không thể xóa tình trạng mặc định A hoặc B.'],
+            ]);
+        }
+
+        if ($this->shouldDeletePermanently($request)) {
+            if ($condition->inventoryItems()->exists()) {
+                throw ValidationException::withMessages([
+                    'inventory_condition' => ['Không thể xóa vĩnh viễn tình trạng đang được sử dụng.'],
+                ]);
+            }
+
+            $condition->delete();
+        } else {
+            $condition->update(['is_active' => false]);
+        }
+
+        return $this->success(null, 'Xóa tình trạng tồn kho thành công!');
+    }
+
     public function show(int $id): JsonResponse
     {
         $item = InventoryItem::query()
@@ -408,6 +473,51 @@ class InventoryController extends Controller
             'created_at' => $item->created_at?->toISOString(),
             'updated_at' => $item->updated_at?->toISOString(),
         ];
+    }
+
+    private function validatedInventoryCondition(Request $request, ?int $ignoreId = null): array
+    {
+        $required = $ignoreId === null ? 'required' : 'sometimes';
+
+        return $request->validate([
+            'code' => [$required, 'string', 'max:10', Rule::unique('inventory_conditions', 'code')->ignore($ignoreId)],
+            'label' => [$required, 'string', 'max:255'],
+            'discount_rate' => ['sometimes', 'numeric', 'min:0', 'max:1'],
+            'rentable' => ['sometimes', 'boolean'],
+            'disposable' => ['sometimes', 'boolean'],
+            'badge_color' => ['nullable', 'string', 'max:20'],
+            'is_active' => ['sometimes', 'boolean'],
+        ]);
+    }
+
+    private function transformInventoryCondition(InventoryCondition $condition): array
+    {
+        return [
+            'id' => $condition->id,
+            'is_active' => $condition->is_active,
+            'code' => $condition->code,
+            'label' => $condition->label,
+            'discount_rate' => $condition->discount_rate !== null ? (float) $condition->discount_rate : null,
+            'rentable' => $condition->rentable,
+            'disposable' => $condition->disposable,
+            'badge_color' => $condition->badge_color,
+            'created_at' => $condition->created_at?->toISOString(),
+            'updated_at' => $condition->updated_at?->toISOString(),
+        ];
+    }
+
+    private function isDefaultInventoryCondition(InventoryCondition $condition): bool
+    {
+        return in_array($condition->code, ['A', 'B'], true);
+    }
+
+    private function shouldDeletePermanently(Request $request): bool
+    {
+        if ($request->has('permanently') && in_array($request->query('permanently'), [null, ''], true)) {
+            return true;
+        }
+
+        return $request->boolean('permanently');
     }
 
     private function ensureItemType(int $itemId, ItemCategoryType $type): void

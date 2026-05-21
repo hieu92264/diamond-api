@@ -12,6 +12,7 @@ use App\Models\InventoryItem;
 use App\Models\ItemCategory;
 use App\Models\User;
 use App\Models\Warehouse;
+use Database\Seeders\InventoryConditionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -141,6 +142,58 @@ class InventoryWarehouseApiTest extends TestCase
             ])
             ->assertOk()
             ->assertJsonPath('inventory_condition_id', $conditionB->id);
+    }
+
+    public function test_admin_can_manage_inventory_conditions_with_default_a_b_protected(): void
+    {
+        $headers = $this->authenticate();
+
+        $this->seed(InventoryConditionSeeder::class);
+
+        $this->withHeaders($headers)
+            ->getJson('/api/inventory/conditions')
+            ->assertOk()
+            ->assertJsonCount(2)
+            ->assertJsonPath('0.code', 'A')
+            ->assertJsonPath('0.label', 'Còn mới cho thuê')
+            ->assertJsonPath('1.code', 'B')
+            ->assertJsonPath('1.label', 'Cũ cho thanh lý');
+
+        $createResponse = $this->withHeaders($headers)
+            ->postJson('/api/inventory/conditions', [
+                'code' => 'C',
+                'label' => 'Cần sửa',
+                'discount_rate' => 0.5,
+                'rentable' => false,
+                'disposable' => false,
+                'badge_color' => '#ef4444',
+            ])
+            ->assertCreated()
+            ->assertJsonPath('code', 'C')
+            ->assertJsonPath('rentable', false);
+
+        $conditionId = $createResponse->json('id');
+
+        $this->withHeaders($headers)
+            ->patchJson('/api/inventory/conditions/'.$conditionId, [
+                'label' => 'Đã sửa',
+                'is_active' => true,
+            ])
+            ->assertOk()
+            ->assertJsonPath('label', 'Đã sửa');
+
+        $this->withHeaders($headers)
+            ->deleteJson('/api/inventory/conditions/'.$conditionId)
+            ->assertOk();
+
+        $this->withHeaders($headers)
+            ->getJson('/api/inventory/conditions')
+            ->assertOk()
+            ->assertJsonCount(2);
+
+        $this->withHeaders($headers)
+            ->deleteJson('/api/inventory/conditions/'.InventoryCondition::query()->where('code', 'A')->value('id'))
+            ->assertUnprocessable();
     }
 
     public function test_costume_inventory_is_grouped_by_costume_and_condition(): void
