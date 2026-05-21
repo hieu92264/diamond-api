@@ -14,20 +14,37 @@ class UploadImageRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $data = $this->input('data');
-
-        if (is_string($data) && $data !== '') {
-            $decoded = json_decode($data, true);
-
-            if (is_array($decoded)) {
-                $this->merge($decoded);
-            }
-        }
+        $this->mergeDataPayload();
 
         $files = $this->file('files', $this->file('file'));
 
         if ($files !== null) {
             $this->files->set('files', is_array($files) ? $files : [$files]);
+        }
+    }
+
+    private function mergeDataPayload(): void
+    {
+        $data = $this->input('data');
+
+        if (is_array($data)) {
+            $this->merge($data);
+
+            return;
+        }
+
+        if (! is_string($data) || trim($data) === '') {
+            return;
+        }
+
+        $decoded = json_decode($data, true);
+
+        if (! is_array($decoded)) {
+            $decoded = json_decode(str_replace("'", '"', $data), true);
+        }
+
+        if (is_array($decoded)) {
+            $this->merge($decoded);
         }
     }
 
