@@ -62,29 +62,9 @@ class EquipmentProp extends Model
         return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
     }
 
-    public function inventoryTransactions(): HasMany
-    {
-        return $this->hasMany(InventoryTransaction::class, 'equipment_prop_id', 'id');
-    }
-
     public function inventoryItems(): HasMany
     {
         return $this->hasMany(InventoryItem::class, 'item_id', 'id');
-    }
-
-    public function internalBorrowDetails(): HasMany
-    {
-        return $this->hasMany(InternalBorrowDetail::class, 'equipment_prop_id', 'id');
-    }
-
-    public function rentalDetails(): HasMany
-    {
-        return $this->hasMany(RentalDetail::class, 'equipment_prop_id', 'id');
-    }
-
-    public function maintenanceTickets(): HasMany
-    {
-        return $this->hasMany(MaintenanceTicket::class, 'item_id', 'id');
     }
 
     public function galleryImages(): BelongsToMany

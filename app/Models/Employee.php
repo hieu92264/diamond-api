@@ -60,21 +60,6 @@ class Employee extends Model
         return $this->hasOne(User::class, 'employee_id', 'id');
     }
 
-    public function contracts(): HasMany
-    {
-        return $this->hasMany(Contract::class, 'employee_id', 'id');
-    }
-
-    public function internalBorrowSlips(): HasMany
-    {
-        return $this->hasMany(InternalBorrowSlip::class, 'employee_id', 'id');
-    }
-
-    public function internal_borrow_slips(): HasMany
-    {
-        return $this->internalBorrowSlips();
-    }
-
     public function warehouses(): HasMany
     {
         return $this->hasMany(Warehouse::class, 'manager_employee_id', 'id');

@@ -57,34 +57,4 @@ class InventoryItem extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
     }
-
-    public function internalBorrowDetailItems(): HasMany
-    {
-        return $this->hasMany(InternalBorrowDetailItem::class, 'inventory_item_id', 'id');
-    }
-
-    public function rentalDetailItems(): HasMany
-    {
-        return $this->hasMany(RentalDetailItem::class, 'inventory_item_id', 'id');
-    }
-
-    public function internalIncidents(): HasMany
-    {
-        return $this->hasMany(InternalIncident::class, 'inventory_item_id', 'id');
-    }
-
-    public function rentalIncidents(): HasMany
-    {
-        return $this->hasMany(RentalIncident::class, 'inventory_item_id', 'id');
-    }
-
-    public function maintenanceTickets(): HasMany
-    {
-        return $this->hasMany(MaintenanceTicket::class, 'inventory_item_id', 'id');
-    }
-
-    public function inventoryTransactions(): HasMany
-    {
-        return $this->hasMany(InventoryTransaction::class, 'inventory_item_id', 'id');
-    }
 }

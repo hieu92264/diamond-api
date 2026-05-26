@@ -8,11 +8,6 @@ use App\Http\Controllers\Api\ItemCategoryController;
 use App\Http\Controllers\Api\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('upload/{folder}/{fileName}', [ImageGalleryController::class, 'file']);
-Route::get('upload/{folder}/{subfolder}/{fileName}', [ImageGalleryController::class, 'nestedFile']);
-
-Route::get('item-categories', [ItemCategoryController::class, 'index']);
-Route::get('item-categories/{id}', [ItemCategoryController::class, 'show']);
 Route::get('categories', [ItemCategoryController::class, 'index']);
 Route::get('categories/{id}', [ItemCategoryController::class, 'show']);
 Route::get('costumes', [CostumeController::class, 'index']);
@@ -21,12 +16,6 @@ Route::get('equipment-props', [EquipmentPropController::class, 'index']);
 Route::get('equipment-props/{id}', [EquipmentPropController::class, 'show']);
 
 Route::middleware('auth:api')->group(function (): void {
-    Route::prefix('item-categories')->controller(ItemCategoryController::class)->group(function (): void {
-        Route::post('/', 'store');
-        Route::patch('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
-    });
-
     Route::post('categories', [ItemCategoryController::class, 'store']);
     Route::patch('categories/{id}', [ItemCategoryController::class, 'update']);
     Route::delete('categories/{id}', [ItemCategoryController::class, 'destroy']);
@@ -49,10 +38,7 @@ Route::middleware('auth:api')->group(function (): void {
         Route::get('/{id}', 'show');
         Route::patch('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
-        Route::patch('/update/{id}', 'update');
     });
-
-    Route::delete('images/delete/{id}', [ImageGalleryController::class, 'destroy']);
 
     Route::prefix('warehouses')->controller(WarehouseController::class)->group(function (): void {
         Route::get('/', 'index');
@@ -67,13 +53,7 @@ Route::middleware('auth:api')->group(function (): void {
         Route::get('/props', 'props');
         Route::post('/import', 'import');
         Route::patch('/status/{sku}', 'updateStatus');
-        Route::patch('/condition/{sku}', 'updateCondition');
         Route::delete('/delete/{sku}', 'destroyBySku');
         Route::get('/conditions', 'conditions');
-        Route::post('/conditions', 'storeCondition');
-        Route::get('/conditions/{id}', 'showCondition');
-        Route::patch('/conditions/{id}', 'updateConditionMaster');
-        Route::delete('/conditions/{id}', 'destroyCondition');
-        Route::get('/available', 'available');
     });
 });

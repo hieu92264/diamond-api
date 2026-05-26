@@ -66,7 +66,7 @@ class UserApiTest extends TestCase
         ];
 
         $this->withHeaders($this->authenticateAs())
-            ->postJson('/api/users/create', $payload)
+            ->postJson('/api/users', $payload)
             ->assertCreated()
             ->assertJsonPath('statusCode', 201)
             ->assertJsonPath('username', 'new-admin')
@@ -93,7 +93,7 @@ class UserApiTest extends TestCase
         ];
 
         $this->withHeaders($this->authenticateAs())
-            ->patchJson("/api/users/update/{$targetUser->id}", $payload)
+            ->patchJson("/api/users/{$targetUser->id}", $payload)
             ->assertOk()
             ->assertJsonPath('statusCode', 200)
             ->assertJsonPath('username', 'updated-name')
@@ -115,7 +115,7 @@ class UserApiTest extends TestCase
         ]);
 
         $this->withHeaders($this->authenticateAs())
-            ->deleteJson("/api/users/delete/{$targetUser->id}")
+            ->deleteJson("/api/users/{$targetUser->id}")
             ->assertOk()
             ->assertJsonPath('statusCode', 200)
             ->assertJsonMissingPath('metadata');
@@ -139,7 +139,7 @@ class UserApiTest extends TestCase
         ];
 
         $this->withHeaders($this->authenticateAs())
-            ->postJson('/api/users/create', $payload)
+            ->postJson('/api/users', $payload)
             ->assertUnprocessable()
             ->assertJsonPath('statusCode', 422)
             ->assertJsonStructure(['username']);

@@ -32,7 +32,7 @@ class EmployeeApiTest extends TestCase
         $headers = $this->authenticate();
 
         $createResponse = $this->withHeaders($headers)
-            ->postJson('/api/employees/create', [
+            ->postJson('/api/employees', [
                 'full_name' => 'Nguyen Van A',
                 'citizen_id_number' => '123123123123',
                 'phone' => '0336089900',
@@ -51,7 +51,7 @@ class EmployeeApiTest extends TestCase
         $employeeId = $createResponse->json('id');
 
         $this->withHeaders($headers)
-            ->patchJson("/api/employees/update/{$employeeId}", [
+            ->patchJson("/api/employees/{$employeeId}", [
                 'phone' => '0988123456',
                 'address' => 'Ha Noi',
                 'work_status' => Work::ON_LEAVE->value,

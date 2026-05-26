@@ -41,7 +41,7 @@ class CatalogApiTest extends TestCase
         $headers = $this->authenticate();
 
         $createResponse = $this->withHeaders($headers)
-            ->postJson('/api/item-categories', [
+            ->postJson('/api/categories', [
                 'name' => 'Trang phuc truyen thong',
                 'type' => ItemCategoryType::COSTUME->value,
             ]);
@@ -55,7 +55,7 @@ class CatalogApiTest extends TestCase
         $categoryId = $createResponse->json('id');
 
         $this->withHeaders($headers)
-            ->patchJson("/api/item-categories/{$categoryId}", [
+            ->patchJson("/api/categories/{$categoryId}", [
                 'name' => 'Ao dai',
                 'type' => ItemCategoryType::COSTUME->value,
             ])
@@ -71,7 +71,7 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('0.equipment_props', []);
 
         $this->withHeaders($headers)
-            ->deleteJson("/api/item-categories/{$categoryId}")
+            ->deleteJson("/api/categories/{$categoryId}")
             ->assertOk()
             ->assertJsonMissingPath('metadata');
 

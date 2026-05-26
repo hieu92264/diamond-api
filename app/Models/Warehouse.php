@@ -54,19 +54,4 @@ class Warehouse extends Model
     {
         return $this->hasMany(EquipmentProp::class, 'warehouse_id', 'id');
     }
-
-    public function internalBorrowSlips(): HasMany
-    {
-        return $this->hasMany(InternalBorrowSlip::class, 'warehouse_id', 'id');
-    }
-
-    public function rentalSlips(): HasMany
-    {
-        return $this->hasMany(RentalSlip::class, 'warehouse_id', 'id');
-    }
-
-    public function inventoryTransactions(): HasMany
-    {
-        return $this->hasMany(InventoryTransaction::class, 'warehouse_id', 'id');
-    }
 }

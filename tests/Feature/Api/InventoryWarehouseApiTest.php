@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Enums\InventoryItemStatus;
 use App\Enums\ItemCategoryType;
 use App\Enums\UserRole;
 use App\Models\Employee;
@@ -103,14 +104,6 @@ class InventoryWarehouseApiTest extends TestCase
             'is_active' => true,
         ]);
 
-        $conditionB = InventoryCondition::query()->create([
-            'code' => 'B',
-            'label' => 'Trung binh',
-            'discount_rate' => 0.2,
-            'rentable' => true,
-            'is_active' => true,
-        ]);
-
         $importResponse = $this->withHeaders($headers)
             ->postJson('/api/inventory/import', [
                 'item_id' => $prop->id,
@@ -137,14 +130,14 @@ class InventoryWarehouseApiTest extends TestCase
             ->assertJsonPath('0.item.images.0.dest', "/{$category->id}/prop.jpg");
 
         $this->withHeaders($headers)
-            ->patchJson('/api/inventory/condition/'.$sku, [
-                'inventory_condition_id' => $conditionB->id,
+            ->patchJson('/api/inventory/status/'.$sku, [
+                'status' => InventoryItemStatus::MAINTENANCE->value,
             ])
             ->assertOk()
-            ->assertJsonPath('inventory_condition_id', $conditionB->id);
+            ->assertJsonPath('status', InventoryItemStatus::MAINTENANCE->value);
     }
 
-    public function test_admin_can_manage_inventory_conditions_with_default_a_b_protected(): void
+    public function test_admin_can_list_inventory_conditions(): void
     {
         $headers = $this->authenticate();
 
@@ -155,45 +148,7 @@ class InventoryWarehouseApiTest extends TestCase
             ->assertOk()
             ->assertJsonCount(2)
             ->assertJsonPath('0.code', 'A')
-            ->assertJsonPath('0.label', 'Còn mới cho thuê')
-            ->assertJsonPath('1.code', 'B')
-            ->assertJsonPath('1.label', 'Cũ cho thanh lý');
-
-        $createResponse = $this->withHeaders($headers)
-            ->postJson('/api/inventory/conditions', [
-                'code' => 'C',
-                'label' => 'Cần sửa',
-                'discount_rate' => 0.5,
-                'rentable' => false,
-                'disposable' => false,
-                'badge_color' => '#ef4444',
-            ])
-            ->assertCreated()
-            ->assertJsonPath('code', 'C')
-            ->assertJsonPath('rentable', false);
-
-        $conditionId = $createResponse->json('id');
-
-        $this->withHeaders($headers)
-            ->patchJson('/api/inventory/conditions/'.$conditionId, [
-                'label' => 'Đã sửa',
-                'is_active' => true,
-            ])
-            ->assertOk()
-            ->assertJsonPath('label', 'Đã sửa');
-
-        $this->withHeaders($headers)
-            ->deleteJson('/api/inventory/conditions/'.$conditionId)
-            ->assertOk();
-
-        $this->withHeaders($headers)
-            ->getJson('/api/inventory/conditions')
-            ->assertOk()
-            ->assertJsonCount(2);
-
-        $this->withHeaders($headers)
-            ->deleteJson('/api/inventory/conditions/'.InventoryCondition::query()->where('code', 'A')->value('id'))
-            ->assertUnprocessable();
+            ->assertJsonPath('1.code', 'B');
     }
 
     public function test_costume_inventory_is_grouped_by_costume_and_condition(): void

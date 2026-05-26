@@ -2,38 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Enums\IncidentStatus;
-use App\Enums\IncidentType;
-use App\Enums\InventoryItemStatus;
-use App\Enums\InventoryReferenceType;
-use App\Enums\InventoryTransactionType;
-use App\Enums\MaintenanceStatus;
-use App\Enums\MaintenanceType;
-use App\Enums\PaymentStatus;
-use App\Enums\RentalPaymentType;
-use App\Enums\RentalStatus;
-use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\EquipmentProp;
 use App\Models\GalleryImage;
 use App\Models\InventoryCondition;
 use App\Models\InventoryItem;
-use App\Models\InventoryTransaction;
-use App\Models\InternalBorrowDetail;
-use App\Models\InternalBorrowDetailItem;
-use App\Models\InternalBorrowSlip;
-use App\Models\InternalIncident;
 use App\Models\Invoice;
 use App\Models\ItemCategory;
 use App\Models\LoanForm;
 use App\Models\LoanFormItem;
-use App\Models\MaintenanceTicket;
 use App\Models\PenaltyForm;
-use App\Models\RentalDetail;
-use App\Models\RentalDetailItem;
-use App\Models\RentalIncident;
-use App\Models\RentalPayment;
-use App\Models\RentalSlip;
 use App\Models\ReturnForm;
 use App\Models\ReturnFormItem;
 use App\Models\User;
@@ -81,9 +59,7 @@ class JsonMockDataSeeder extends Seeder
                 $this->seedCatalogItems($data['costumes'] ?? [], true);
                 $this->seedCatalogItems($data['equipment_props'] ?? [], false);
                 $this->seedInventory($data['inventory'] ?? []);
-                $this->seedCustomers();
                 $this->seedFrontendWorkflow($data);
-                $this->seedWorkflowSamples();
             });
         });
     }
@@ -183,6 +159,31 @@ class JsonMockDataSeeder extends Seeder
 
     private function seedInventoryConditions(array $conditions): void
     {
+        if ($conditions === []) {
+            $conditions = [
+                [
+                    'id' => 1,
+                    'is_active' => true,
+                    'code' => 'A',
+                    'label' => 'Con moi cho thue',
+                    'discount_rate' => 0,
+                    'rentable' => true,
+                    'disposable' => false,
+                    'badge_color' => '#22c55e',
+                ],
+                [
+                    'id' => 2,
+                    'is_active' => true,
+                    'code' => 'B',
+                    'label' => 'Cu cho thanh ly',
+                    'discount_rate' => 0,
+                    'rentable' => false,
+                    'disposable' => true,
+                    'badge_color' => '#eab308',
+                ],
+            ];
+        }
+
         foreach ($conditions as $condition) {
             InventoryCondition::query()->updateOrCreate(
                 ['id' => $condition['id']],
@@ -269,10 +270,11 @@ class JsonMockDataSeeder extends Seeder
         foreach ($items as $item) {
             $resolvedItemId = $this->mappedCatalogIdForType((int) $item['item_id'], (string) $item['item_type'])
                 ?? (int) $item['item_id'];
+            $inventoryConditionId = (int) ($item['inventory_condition_id'] ?? $this->defaultInventoryConditionId());
 
             if (
                 ! EquipmentProp::query()->whereKey($resolvedItemId)->exists()
-                || ! InventoryCondition::query()->whereKey($item['inventory_condition_id'])->exists()
+                || ! InventoryCondition::query()->whereKey($inventoryConditionId)->exists()
                 || ! Warehouse::query()->whereKey($item['warehouse_id'])->exists()
             ) {
                 continue;
@@ -285,74 +287,12 @@ class JsonMockDataSeeder extends Seeder
                     'sku' => $item['sku'],
                     'item_id' => $resolvedItemId,
                     'item_type' => $item['item_type'],
-                    'inventory_condition_id' => $item['inventory_condition_id'],
+                    'inventory_condition_id' => $inventoryConditionId,
                     'warehouse_id' => $item['warehouse_id'],
                     'status' => $item['status'] ?? 'AVAILABLE',
                     'size' => $item['size'] ?? null,
                     'created_at' => $item['created_at'] ?? now(),
                     'updated_at' => $item['updated_at'] ?? now(),
-                ]
-            );
-        }
-    }
-
-    private function seedCustomers(): void
-    {
-        $customers = [
-            [
-                'id' => 1,
-                'code' => 'KH0001',
-                'type' => 'INDIVIDUAL',
-                'full_name' => 'Nguyen Minh Chau',
-                'phone' => '0901234567',
-                'email' => 'chau@example.com',
-                'address' => 'Quan 1, TP.HCM',
-                'identity_no' => '079123456789',
-                'remarks' => 'Khach le thuong xuyen',
-            ],
-            [
-                'id' => 2,
-                'code' => 'KH0002',
-                'type' => 'COMPANY',
-                'full_name' => 'Cong ty TNHH Anh Sao',
-                'company_name' => 'Cong ty TNHH Anh Sao',
-                'contact_person' => 'Tran Thu Ha',
-                'phone' => '02838445566',
-                'email' => 'booking@anhsao.vn',
-                'tax_code' => '0312345678',
-                'address' => 'Quan 3, TP.HCM',
-                'remarks' => 'Khach doanh nghiep',
-            ],
-            [
-                'id' => 3,
-                'code' => 'KH0003',
-                'type' => 'INDIVIDUAL',
-                'full_name' => 'Le Hoang Phuc',
-                'phone' => '0911112233',
-                'email' => 'phuc@example.com',
-                'address' => 'Thu Duc, TP.HCM',
-                'identity_no' => '079987654321',
-            ],
-        ];
-
-        foreach ($customers as $customer) {
-            Customer::query()->updateOrCreate(
-                ['id' => $customer['id']],
-                [
-                    'is_active' => true,
-                    'code' => $customer['code'],
-                    'type' => $customer['type'],
-                    'full_name' => $customer['full_name'],
-                    'company_name' => $customer['company_name'] ?? null,
-                    'contact_person' => $customer['contact_person'] ?? null,
-                    'phone' => $customer['phone'] ?? null,
-                    'email' => $customer['email'] ?? null,
-                    'tax_code' => $customer['tax_code'] ?? null,
-                    'address' => $customer['address'] ?? null,
-                    'identity_no' => $customer['identity_no'] ?? null,
-                    'remarks' => $customer['remarks'] ?? null,
-                    'created_at' => now(),
-                    'updated_at' => now(),
                 ]
             );
         }
@@ -507,602 +447,6 @@ class JsonMockDataSeeder extends Seeder
         }
     }
 
-    private function seedWorkflowSamples(): void
-    {
-        $conditionGoodId = (int) InventoryCondition::query()->where('code', 'A')->value('id');
-        $createdBy = User::query()->orderBy('id')->value('id');
-
-        if ($conditionGoodId <= 0) {
-            return;
-        }
-
-        $this->seedInternalBorrowBorrowingSample($conditionGoodId, $createdBy);
-        $this->seedInternalBorrowLostSample($conditionGoodId, $createdBy);
-        $this->seedRentalActiveSample($conditionGoodId, $createdBy);
-        $this->seedRentalDamagedSample($conditionGoodId, $createdBy);
-    }
-
-    private function seedInternalBorrowBorrowingSample(int $conditionGoodId, ?int $createdBy): void
-    {
-        $equipmentPropId = $this->mappedCatalogId(1);
-
-        if ($equipmentPropId === null) {
-            return;
-        }
-
-        $inventoryItem = InventoryItem::query()
-            ->where('warehouse_id', 2)
-            ->where('item_id', $equipmentPropId)
-            ->orderBy('id')
-            ->first();
-
-        if ($inventoryItem === null) {
-            return;
-        }
-
-        $slip = InternalBorrowSlip::query()->updateOrCreate(
-            ['code' => 'PMN-SAMPLE-001'],
-            [
-                'is_active' => true,
-                'employee_id' => 2,
-                'employee_name' => Employee::query()->find(2)?->full_name ?? 'Nhan vien kho',
-                'warehouse_id' => 2,
-                'borrow_date' => now()->subDays(2)->toDateString(),
-                'due_date' => now()->addDays(5)->toDateString(),
-                'return_date' => null,
-                'status' => 'BORROWING',
-                'created_by' => $createdBy,
-                'purpose' => 'Sample API internal borrow',
-                'remarks' => 'Dang muon',
-                'created_at' => now()->subDays(2),
-                'updated_at' => now(),
-            ]
-        );
-
-        $detail = InternalBorrowDetail::query()->updateOrCreate(
-            [
-                'internal_borrow_slip_id' => $slip->id,
-                'equipment_prop_id' => $equipmentPropId,
-            ],
-            [
-                'is_active' => true,
-                'borrowed_quantity' => 1,
-                'returned_quantity' => 0,
-                'lost_quantity' => 0,
-                'damaged_quantity' => 0,
-                'condition_on_borrow' => 'Tot',
-                'condition_on_return' => null,
-                'remarks' => 'Mau dang muon',
-                'created_at' => now()->subDays(2),
-                'updated_at' => now(),
-            ]
-        );
-
-        InternalBorrowDetailItem::query()->updateOrCreate(
-            [
-                'internal_borrow_detail_id' => $detail->id,
-                'inventory_item_id' => $inventoryItem->id,
-            ],
-            [
-                'is_active' => true,
-                'condition_on_borrow_id' => $conditionGoodId,
-                'condition_on_return_id' => null,
-                'borrowed_at' => now()->subDays(2),
-                'returned_at' => null,
-                'remarks' => 'Item dang muon',
-                'created_at' => now()->subDays(2),
-                'updated_at' => now(),
-            ]
-        );
-
-        $this->applyInventoryState(
-            $inventoryItem,
-            InventoryItemStatus::RENTED->value,
-            $conditionGoodId,
-            InventoryTransactionType::INTERNAL_BORROW_OUT->value,
-            InventoryReferenceType::INTERNAL_BORROW_SLIP->value,
-            $slip->id,
-            'Seed internal borrow sample'
-        );
-    }
-
-    private function seedInternalBorrowLostSample(int $conditionGoodId, ?int $createdBy): void
-    {
-        $equipmentPropId = $this->mappedCatalogId(2);
-
-        if ($equipmentPropId === null) {
-            return;
-        }
-
-        $inventoryItem = InventoryItem::query()
-            ->where('warehouse_id', 2)
-            ->where('item_id', $equipmentPropId)
-            ->orderBy('id')
-            ->first();
-
-        if ($inventoryItem === null) {
-            return;
-        }
-
-        $slip = InternalBorrowSlip::query()->updateOrCreate(
-            ['code' => 'PMN-SAMPLE-002'],
-            [
-                'is_active' => true,
-                'employee_id' => 4,
-                'employee_name' => Employee::query()->find(4)?->full_name ?? 'Nhan vien xu ly don',
-                'warehouse_id' => 2,
-                'borrow_date' => now()->subDays(6)->toDateString(),
-                'due_date' => now()->subDays(4)->toDateString(),
-                'return_date' => now()->subDays(3)->toDateString(),
-                'status' => 'RETURNED',
-                'created_by' => $createdBy,
-                'purpose' => 'Sample incident internal borrow',
-                'remarks' => 'That lac',
-                'created_at' => now()->subDays(6),
-                'updated_at' => now(),
-            ]
-        );
-
-        $detail = InternalBorrowDetail::query()->updateOrCreate(
-            [
-                'internal_borrow_slip_id' => $slip->id,
-                'equipment_prop_id' => $equipmentPropId,
-            ],
-            [
-                'is_active' => true,
-                'borrowed_quantity' => 1,
-                'returned_quantity' => 0,
-                'lost_quantity' => 1,
-                'damaged_quantity' => 0,
-                'condition_on_borrow' => 'Tot',
-                'condition_on_return' => null,
-                'remarks' => 'Mat dao cu',
-                'created_at' => now()->subDays(6),
-                'updated_at' => now(),
-            ]
-        );
-
-        InternalBorrowDetailItem::query()->updateOrCreate(
-            [
-                'internal_borrow_detail_id' => $detail->id,
-                'inventory_item_id' => $inventoryItem->id,
-            ],
-            [
-                'is_active' => true,
-                'condition_on_borrow_id' => $conditionGoodId,
-                'condition_on_return_id' => null,
-                'borrowed_at' => now()->subDays(6),
-                'returned_at' => now()->subDays(3),
-                'remarks' => 'Seed lost item',
-                'created_at' => now()->subDays(6),
-                'updated_at' => now(),
-            ]
-        );
-
-        $incident = InternalIncident::query()->updateOrCreate(
-            ['code' => 'SCNB-SAMPLE-001'],
-            [
-                'is_active' => true,
-                'internal_borrow_detail_id' => $detail->id,
-                'inventory_item_id' => $inventoryItem->id,
-                'incident_description' => 'That lac trong qua trinh muon',
-                'incident_type' => IncidentType::LOST->value,
-                'status' => IncidentStatus::OPEN->value,
-                'compensation_amount' => 150000,
-                'resolved_by_id' => null,
-                'resolved_at' => null,
-                'resolution' => null,
-                'created_at' => now()->subDays(3),
-                'updated_at' => now(),
-            ]
-        );
-
-        $this->applyInventoryState(
-            $inventoryItem,
-            InventoryItemStatus::RENTED->value,
-            $conditionGoodId,
-            InventoryTransactionType::INTERNAL_BORROW_OUT->value,
-            InventoryReferenceType::INTERNAL_BORROW_SLIP->value,
-            $slip->id,
-            'Seed internal borrow lost sample out'
-        );
-
-        $this->applyInventoryState(
-            $inventoryItem,
-            InventoryItemStatus::LOST->value,
-            $conditionGoodId,
-            InventoryTransactionType::LOST_WRITE_OFF->value,
-            InventoryReferenceType::INTERNAL_INCIDENT->value,
-            $incident->id,
-            'Seed internal borrow lost sample'
-        );
-    }
-
-    private function seedRentalActiveSample(int $conditionGoodId, ?int $createdBy): void
-    {
-        $equipmentPropId = $this->mappedCatalogId(6);
-
-        if ($equipmentPropId === null) {
-            return;
-        }
-
-        $inventoryItems = InventoryItem::query()
-            ->where('warehouse_id', 1)
-            ->where('item_id', $equipmentPropId)
-            ->orderBy('id')
-            ->take(2)
-            ->get();
-
-        if ($inventoryItems->count() < 2) {
-            return;
-        }
-
-        $slip = RentalSlip::query()->updateOrCreate(
-            ['code' => 'PTH-SAMPLE-001'],
-            [
-                'is_active' => true,
-                'customer_id' => 1,
-                'customer_name' => Customer::query()->find(1)?->full_name ?? 'Khach hang 1',
-                'customer_phone' => Customer::query()->find(1)?->phone,
-                'warehouse_id' => 1,
-                'rental_date' => now()->subDay()->toDateString(),
-                'start_date' => now()->subDay()->toDateString(),
-                'due_date' => now()->addDays(4)->toDateString(),
-                'return_date' => null,
-                'deposit_amount' => 300000,
-                'total_rental_amount' => 1080000,
-                'total_compensation_amount' => 0,
-                'total_discount_amount' => 0,
-                'final_amount' => 1080000,
-                'paid_amount' => 300000,
-                'remaining_amount' => 780000,
-                'payment_status' => PaymentStatus::PARTIALLY_PAID->value,
-                'status' => RentalStatus::ACTIVE->value,
-                'approved_user_id' => $createdBy,
-                'approved_at' => now()->subDay(),
-                'created_by' => $createdBy,
-                'terms_and_conditions' => 'Seed sample active rental',
-                'remarks' => 'Dang cho tra',
-                'created_at' => now()->subDay(),
-                'updated_at' => now(),
-            ]
-        );
-
-        $detail = RentalDetail::query()->updateOrCreate(
-            [
-                'rental_slip_id' => $slip->id,
-                'equipment_prop_id' => $equipmentPropId,
-            ],
-            [
-                'is_active' => true,
-                'rented_quantity' => 2,
-                'returned_quantity' => 0,
-                'lost_quantity' => 0,
-                'damaged_quantity' => 0,
-                'rental_unit_price' => 180000,
-                'rental_days' => 3,
-                'line_rental_amount' => 1080000,
-                'deposit_amount' => 300000,
-                'compensation_amount' => 0,
-                'condition_on_rent' => 'Tot',
-                'condition_on_return' => null,
-                'remarks' => 'Mau dang thue',
-                'created_at' => now()->subDay(),
-                'updated_at' => now(),
-            ]
-        );
-
-        foreach ($inventoryItems as $inventoryItem) {
-            RentalDetailItem::query()->updateOrCreate(
-                [
-                    'rental_detail_id' => $detail->id,
-                    'inventory_item_id' => $inventoryItem->id,
-                ],
-                [
-                    'is_active' => true,
-                    'condition_on_rent_id' => $conditionGoodId,
-                    'condition_on_return_id' => null,
-                    'rented_at' => now()->subDay(),
-                    'returned_at' => null,
-                    'remarks' => 'Seed active rental item',
-                    'created_at' => now()->subDay(),
-                    'updated_at' => now(),
-                ]
-            );
-
-            $this->applyInventoryState(
-                $inventoryItem,
-                InventoryItemStatus::RENTED->value,
-                $conditionGoodId,
-                InventoryTransactionType::RENTAL_OUT->value,
-                InventoryReferenceType::RENTAL_SLIP->value,
-                $slip->id,
-                'Seed active rental sample'
-            );
-        }
-
-        RentalPayment::query()->updateOrCreate(
-            [
-                'rental_slip_id' => $slip->id,
-                'payment_type' => RentalPaymentType::DEPOSIT->value,
-                'reference_no' => 'SEED-DEP-001',
-            ],
-            [
-                'is_active' => true,
-                'payment_date' => now()->subDay(),
-                'amount' => 300000,
-                'payment_method' => 'CASH',
-                'received_by' => $createdBy,
-                'note' => 'Tien coc mau',
-                'created_at' => now()->subDay(),
-                'updated_at' => now(),
-            ]
-        );
-    }
-
-    private function seedRentalDamagedSample(int $conditionGoodId, ?int $createdBy): void
-    {
-        $equipmentPropId = $this->mappedCatalogId(7);
-
-        if ($equipmentPropId === null) {
-            return;
-        }
-
-        $inventoryItems = InventoryItem::query()
-            ->where('warehouse_id', 1)
-            ->where('item_id', $equipmentPropId)
-            ->orderBy('id')
-            ->take(2)
-            ->get()
-            ->values();
-
-        if ($inventoryItems->count() < 2) {
-            return;
-        }
-
-        $returnedItem = $inventoryItems[0];
-        $damagedItem = $inventoryItems[1];
-
-        $slip = RentalSlip::query()->updateOrCreate(
-            ['code' => 'PTH-SAMPLE-002'],
-            [
-                'is_active' => true,
-                'customer_id' => 2,
-                'customer_name' => Customer::query()->find(2)?->full_name ?? 'Khach hang 2',
-                'customer_phone' => Customer::query()->find(2)?->phone,
-                'warehouse_id' => 1,
-                'rental_date' => now()->subDays(7)->toDateString(),
-                'start_date' => now()->subDays(7)->toDateString(),
-                'due_date' => now()->subDays(3)->toDateString(),
-                'return_date' => now()->subDays(2)->toDateString(),
-                'deposit_amount' => 100000,
-                'total_rental_amount' => 480000,
-                'total_compensation_amount' => 250000,
-                'total_discount_amount' => 0,
-                'final_amount' => 730000,
-                'paid_amount' => 300000,
-                'remaining_amount' => 430000,
-                'payment_status' => PaymentStatus::PARTIALLY_PAID->value,
-                'status' => RentalStatus::RETURNED->value,
-                'approved_user_id' => $createdBy,
-                'approved_at' => now()->subDays(7),
-                'created_by' => $createdBy,
-                'terms_and_conditions' => 'Seed sample damaged rental',
-                'remarks' => 'Da tra, con xu ly hu hong',
-                'created_at' => now()->subDays(7),
-                'updated_at' => now(),
-            ]
-        );
-
-        $detail = RentalDetail::query()->updateOrCreate(
-            [
-                'rental_slip_id' => $slip->id,
-                'equipment_prop_id' => $equipmentPropId,
-            ],
-            [
-                'is_active' => true,
-                'rented_quantity' => 2,
-                'returned_quantity' => 1,
-                'lost_quantity' => 0,
-                'damaged_quantity' => 1,
-                'rental_unit_price' => 120000,
-                'rental_days' => 2,
-                'line_rental_amount' => 480000,
-                'deposit_amount' => 100000,
-                'compensation_amount' => 250000,
-                'condition_on_rent' => 'Tot',
-                'condition_on_return' => 'Rach nhe',
-                'remarks' => 'Mau co hu hong',
-                'created_at' => now()->subDays(7),
-                'updated_at' => now(),
-            ]
-        );
-
-        RentalDetailItem::query()->updateOrCreate(
-            [
-                'rental_detail_id' => $detail->id,
-                'inventory_item_id' => $returnedItem->id,
-            ],
-            [
-                'is_active' => true,
-                'condition_on_rent_id' => $conditionGoodId,
-                'condition_on_return_id' => $conditionGoodId,
-                'rented_at' => now()->subDays(7),
-                'returned_at' => now()->subDays(2),
-                'remarks' => 'Tra binh thuong',
-                'created_at' => now()->subDays(7),
-                'updated_at' => now(),
-            ]
-        );
-
-        RentalDetailItem::query()->updateOrCreate(
-            [
-                'rental_detail_id' => $detail->id,
-                'inventory_item_id' => $damagedItem->id,
-            ],
-            [
-                'is_active' => true,
-                'condition_on_rent_id' => $conditionGoodId,
-                'condition_on_return_id' => $conditionGoodId,
-                'rented_at' => now()->subDays(7),
-                'returned_at' => now()->subDays(2),
-                'remarks' => 'Bi rach khi tra',
-                'created_at' => now()->subDays(7),
-                'updated_at' => now(),
-            ]
-        );
-
-        $incident = RentalIncident::query()->updateOrCreate(
-            ['code' => 'SCTH-SAMPLE-001'],
-            [
-                'is_active' => true,
-                'rental_detail_id' => $detail->id,
-                'inventory_item_id' => $damagedItem->id,
-                'incident_description' => 'Trang phuc bi rach khi tra',
-                'incident_type' => IncidentType::DAMAGED->value,
-                'status' => IncidentStatus::OPEN->value,
-                'compensation_amount' => 250000,
-                'resolved_by_id' => null,
-                'resolved_at' => null,
-                'resolution' => null,
-                'created_at' => now()->subDays(2),
-                'updated_at' => now(),
-            ]
-        );
-
-        MaintenanceTicket::query()->updateOrCreate(
-            ['code' => 'PBH-SAMPLE-001'],
-            [
-                'is_active' => true,
-                'item_id' => $equipmentPropId,
-                'inventory_item_id' => $damagedItem->id,
-                'maintenance_type' => MaintenanceType::REPAIR->value,
-                'reported_date' => now()->subDays(2)->toDateString(),
-                'started_date' => null,
-                'expected_return_date' => now()->addDays(2)->toDateString(),
-                'return_date' => null,
-                'status' => MaintenanceStatus::OPEN->value,
-                'vendor' => 'TiEM SUA MAU',
-                'cost' => null,
-                'remarks' => 'Cho xu ly vet rach',
-                'created_by' => $createdBy,
-                'created_at' => now()->subDays(2),
-                'updated_at' => now(),
-            ]
-        );
-
-        $this->applyInventoryState(
-            $returnedItem,
-            InventoryItemStatus::RENTED->value,
-            $conditionGoodId,
-            InventoryTransactionType::RENTAL_OUT->value,
-            InventoryReferenceType::RENTAL_SLIP->value,
-            $slip->id,
-            'Seed damaged rental sample out returned item'
-        );
-
-        $this->applyInventoryState(
-            $damagedItem,
-            InventoryItemStatus::RENTED->value,
-            $conditionGoodId,
-            InventoryTransactionType::RENTAL_OUT->value,
-            InventoryReferenceType::RENTAL_SLIP->value,
-            $slip->id,
-            'Seed damaged rental sample out damaged item'
-        );
-
-        $this->applyInventoryState(
-            $returnedItem,
-            InventoryItemStatus::AVAILABLE->value,
-            $conditionGoodId,
-            InventoryTransactionType::RENTAL_RETURN->value,
-            InventoryReferenceType::RENTAL_SLIP->value,
-            $slip->id,
-            'Seed damaged rental sample normal return'
-        );
-
-        $this->applyInventoryState(
-            $damagedItem,
-            InventoryItemStatus::MAINTENANCE->value,
-            $conditionGoodId,
-            InventoryTransactionType::MAINTENANCE_OUT->value,
-            InventoryReferenceType::RENTAL_INCIDENT->value,
-            $incident->id,
-            'Seed damaged rental sample maintenance'
-        );
-
-        RentalPayment::query()->updateOrCreate(
-            [
-                'rental_slip_id' => $slip->id,
-                'payment_type' => RentalPaymentType::RENTAL_PAYMENT->value,
-                'reference_no' => 'SEED-PAY-002',
-            ],
-            [
-                'is_active' => true,
-                'payment_date' => now()->subDays(2),
-                'amount' => 300000,
-                'payment_method' => 'BANK_TRANSFER',
-                'received_by' => $createdBy,
-                'note' => 'Thanh toan mau',
-                'created_at' => now()->subDays(2),
-                'updated_at' => now(),
-            ]
-        );
-    }
-
-    private function applyInventoryState(
-        InventoryItem $inventoryItem,
-        string $status,
-        int $conditionId,
-        string $transactionType,
-        string $referenceType,
-        int $referenceId,
-        string $note
-    ): void {
-        $freshItem = $inventoryItem->fresh();
-
-        if ($freshItem === null) {
-            return;
-        }
-
-        $before = InventoryItem::query()
-            ->where('item_id', $freshItem->item_id)
-            ->where('warehouse_id', $freshItem->warehouse_id)
-            ->where('status', InventoryItemStatus::AVAILABLE->value)
-            ->count();
-
-        $freshItem->update([
-            'inventory_condition_id' => $conditionId,
-            'status' => $status,
-        ]);
-
-        $after = InventoryItem::query()
-            ->where('item_id', $freshItem->item_id)
-            ->where('warehouse_id', $freshItem->warehouse_id)
-            ->where('status', InventoryItemStatus::AVAILABLE->value)
-            ->count();
-
-        InventoryTransaction::query()->updateOrCreate(
-            [
-                'inventory_item_id' => $freshItem->id,
-                'transaction_type' => $transactionType,
-                'reference_type' => $referenceType,
-                'reference_id' => $referenceId,
-            ],
-            [
-                'equipment_prop_id' => $freshItem->item_id,
-                'warehouse_id' => $freshItem->warehouse_id,
-                'quantity' => 1,
-                'quantity_before' => $before,
-                'quantity_after' => $after,
-                'note' => $note,
-                'performed_by' => User::query()->orderBy('id')->value('id'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
-    }
-
     private function mappedCatalogId(int $jsonItemId): ?int
     {
         return $this->catalogItemIdMap[$jsonItemId] ?? null;
@@ -1144,6 +488,15 @@ class JsonMockDataSeeder extends Seeder
         $warehouseId = (int) $id;
 
         return Warehouse::query()->whereKey($warehouseId)->exists() ? $warehouseId : null;
+    }
+
+    private function defaultInventoryConditionId(): int
+    {
+        return (int) (
+            InventoryCondition::query()->where('code', 'A')->value('id')
+            ?? InventoryCondition::query()->orderBy('id')->value('id')
+            ?? 0
+        );
     }
 
     private function warehouseCode(array $warehouse): string

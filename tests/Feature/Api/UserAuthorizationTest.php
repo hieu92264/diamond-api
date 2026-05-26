@@ -54,7 +54,7 @@ class UserAuthorizationTest extends TestCase
         $targetUser = User::factory()->create();
 
         $this->withHeaders($this->authenticateAs(UserRole::MANAGER))
-            ->postJson('/api/users/create', [
+            ->postJson('/api/users', [
                 'username' => 'blocked-user',
                 'password' => 'secret123',
                 'role' => UserRole::USER->value,
@@ -62,13 +62,13 @@ class UserAuthorizationTest extends TestCase
             ->assertForbidden();
 
         $this->withHeaders($this->authenticateAs(UserRole::USER))
-            ->patchJson("/api/users/update/{$targetUser->id}", [
+            ->patchJson("/api/users/{$targetUser->id}", [
                 'username' => 'updated-by-user',
             ])
             ->assertForbidden();
 
         $this->withHeaders($this->authenticateAs(UserRole::USER))
-            ->deleteJson("/api/users/delete/{$targetUser->id}")
+            ->deleteJson("/api/users/{$targetUser->id}")
             ->assertForbidden();
     }
 }
