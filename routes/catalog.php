@@ -66,7 +66,9 @@ Route::middleware('auth:api')->group(function (): void {
         Route::get('/costumes', 'costumes');
         Route::get('/props', 'props');
         Route::post('/import', 'import');
+        Route::patch('/status/{sku}', 'updateStatus');
         Route::patch('/condition/{sku}', 'updateCondition');
+        Route::delete('/delete/{sku}', 'destroyBySku');
         Route::get('/conditions', 'conditions');
         Route::post('/conditions', 'storeCondition');
         Route::get('/conditions/{id}', 'showCondition');

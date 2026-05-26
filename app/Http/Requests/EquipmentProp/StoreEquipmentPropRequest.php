@@ -45,6 +45,7 @@ class StoreEquipmentPropRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')],
             'category_id' => ['required', 'integer', Rule::exists('item_categories', 'id')],
             'unit' => ['nullable', 'string', 'max:50'],
+            'price' => ['nullable', 'numeric', 'min:0'],
             'rental_price_per_day' => ['required', 'numeric', 'min:0'],
             'weight_kg' => ['nullable', 'numeric', 'min:0'],
             'dimensions' => ['nullable', 'array'],

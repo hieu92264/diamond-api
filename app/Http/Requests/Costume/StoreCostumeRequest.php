@@ -57,6 +57,7 @@ class StoreCostumeRequest extends FormRequest
             'gender' => ['nullable', Rule::enum(Gender::class)],
             'image_ids' => ['nullable', 'array'],
             'image_ids.*' => ['integer', Rule::exists('gallery_images', 'id')],
+            'price' => ['nullable', 'numeric', 'min:0'],
             'rental_price_per_day' => ['required', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],
             'hashtags' => ['nullable', 'array'],

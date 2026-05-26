@@ -94,6 +94,7 @@ trait HandlesCatalogItems
             'gender' => $isCostume ? ($data['gender'] ?? null) : null,
             'category_id' => $data['category_id'],
             'unit' => $data['unit'] ?? ($isCostume ? 'SET' : null),
+            'price' => $data['price'] ?? 0,
             'rental_price_per_day' => $data['rental_price_per_day'] ?? null,
             'weight_kg' => $isCostume ? null : ($data['weight_kg'] ?? null),
             'dimensions' => $isCostume ? null : ($data['dimensions'] ?? null),
@@ -130,6 +131,10 @@ trait HandlesCatalogItems
 
         if (array_key_exists('rental_price_per_day', $data)) {
             $payload['rental_price_per_day'] = $data['rental_price_per_day'];
+        }
+
+        if (array_key_exists('price', $data)) {
+            $payload['price'] = $data['price'];
         }
 
         if (array_key_exists('description', $data)) {
@@ -210,6 +215,7 @@ trait HandlesCatalogItems
                 'type' => $item->itemCategory->type?->value,
             ] : null,
             'unit' => $item->unit,
+            'price' => $item->price !== null ? (float) $item->price : 0,
             'color' => $item->color,
             'sizes' => $item->sizes ?? [],
             'inventory' => $this->transformCatalogInventory($item),

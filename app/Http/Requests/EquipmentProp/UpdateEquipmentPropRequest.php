@@ -45,6 +45,7 @@ class UpdateEquipmentPropRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('equipment_props', 'slug')->ignore($this->route('id'))],
             'category_id' => ['sometimes', 'required', 'integer', Rule::exists('item_categories', 'id')],
             'unit' => ['nullable', 'string', 'max:50'],
+            'price' => ['sometimes', 'numeric', 'min:0'],
             'rental_price_per_day' => ['sometimes', 'required', 'numeric', 'min:0'],
             'weight_kg' => ['nullable', 'numeric', 'min:0'],
             'dimensions' => ['nullable', 'array'],

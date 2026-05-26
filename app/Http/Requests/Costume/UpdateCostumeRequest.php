@@ -57,6 +57,7 @@ class UpdateCostumeRequest extends FormRequest
             'gender' => ['nullable', Rule::enum(Gender::class)],
             'image_ids' => ['nullable', 'array'],
             'image_ids.*' => ['integer', Rule::exists('gallery_images', 'id')],
+            'price' => ['sometimes', 'numeric', 'min:0'],
             'rental_price_per_day' => ['sometimes', 'required', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],
             'hashtags' => ['nullable', 'array'],

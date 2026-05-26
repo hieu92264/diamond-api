@@ -23,13 +23,19 @@ use App\Models\InternalBorrowDetail;
 use App\Models\InternalBorrowDetailItem;
 use App\Models\InternalBorrowSlip;
 use App\Models\InternalIncident;
+use App\Models\Invoice;
 use App\Models\ItemCategory;
+use App\Models\LoanForm;
+use App\Models\LoanFormItem;
 use App\Models\MaintenanceTicket;
+use App\Models\PenaltyForm;
 use App\Models\RentalDetail;
 use App\Models\RentalDetailItem;
 use App\Models\RentalIncident;
 use App\Models\RentalPayment;
 use App\Models\RentalSlip;
+use App\Models\ReturnForm;
+use App\Models\ReturnFormItem;
 use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Model;
@@ -45,6 +51,11 @@ class JsonMockDataSeeder extends Seeder
      * @var array<int, int>
      */
     private array $catalogItemIdMap = [];
+
+    /**
+     * @var array<string, array<int, int>>
+     */
+    private array $catalogItemIdMapByType = [];
 
     public function run(): void
     {
@@ -71,6 +82,7 @@ class JsonMockDataSeeder extends Seeder
                 $this->seedCatalogItems($data['equipment_props'] ?? [], false);
                 $this->seedInventory($data['inventory'] ?? []);
                 $this->seedCustomers();
+                $this->seedFrontendWorkflow($data);
                 $this->seedWorkflowSamples();
             });
         });
@@ -221,6 +233,7 @@ class JsonMockDataSeeder extends Seeder
                     'name' => $item['name'],
                     'category_id' => $item['category_id'],
                     'unit' => $item['unit'] ?? ($isCostume ? 'SET' : null),
+                    'price' => $item['price'] ?? 0,
                     'color' => $isCostume ? $this->normalizeColor($item['color'] ?? null) : null,
                     'sizes' => $isCostume ? ($item['sizes'] ?? []) : null,
                     'gender' => $isCostume ? ($item['gender'] ?? null) : null,
@@ -244,7 +257,9 @@ class JsonMockDataSeeder extends Seeder
             $catalogItem->galleryImages()->sync($imageIds);
 
             if (isset($item['id'])) {
-                $this->catalogItemIdMap[(int) $item['id']] = $catalogItem->id;
+                $type = $isCostume ? 'COSTUME' : 'EQUIPMENT_PROPS';
+                $this->catalogItemIdMapByType[$type][(int) $item['id']] = $catalogItem->id;
+                $this->catalogItemIdMap[(int) $item['id']] ??= $catalogItem->id;
             }
         }
     }
@@ -252,7 +267,8 @@ class JsonMockDataSeeder extends Seeder
     private function seedInventory(array $items): void
     {
         foreach ($items as $item) {
-            $resolvedItemId = $this->catalogItemIdMap[(int) $item['item_id']] ?? (int) $item['item_id'];
+            $resolvedItemId = $this->mappedCatalogIdForType((int) $item['item_id'], (string) $item['item_type'])
+                ?? (int) $item['item_id'];
 
             if (
                 ! EquipmentProp::query()->whereKey($resolvedItemId)->exists()
@@ -337,6 +353,155 @@ class JsonMockDataSeeder extends Seeder
                     'remarks' => $customer['remarks'] ?? null,
                     'created_at' => now(),
                     'updated_at' => now(),
+                ]
+            );
+        }
+    }
+
+    private function seedFrontendWorkflow(array $data): void
+    {
+        foreach ($data['loan_forms'] ?? [] as $row) {
+            LoanForm::query()->updateOrCreate(
+                ['code' => $row['code']],
+                [
+                    'id' => $row['id'] ?? null,
+                    'is_active' => $row['is_active'] ?? true,
+                    'borrower_name' => $row['borrower_name'],
+                    'borrower_phone' => $row['borrower_phone'],
+                    'borrower_citizen_id_number' => $row['borrower_citizen_id_number'] ?? null,
+                    'borrower_role' => $row['borrower_role'],
+                    'method' => $row['method'],
+                    'due_date' => $row['due_date'] ?? null,
+                    'rental_days' => $row['rental_days'] ?? 0,
+                    'total_rental_amount' => $row['total_rental_amount'] ?? 0,
+                    'total_item_price_amount' => $row['total_item_price_amount'] ?? 0,
+                    'deposit_amount' => $row['deposit_amount'] ?? 0,
+                    'created_by' => $this->existingEmployeeId($row['created_by'] ?? null),
+                    'updated_by' => $this->existingEmployeeId($row['updated_by'] ?? null),
+                    'status' => $row['status'] ?? 'DEPOSIT_PENDING',
+                    'remark' => $row['remark'] ?? null,
+                    'created_at' => $row['created_at'] ?? now(),
+                    'updated_at' => $row['updated_at'] ?? now(),
+                ]
+            );
+        }
+
+        foreach ($data['loan_form_items'] ?? [] as $row) {
+            LoanFormItem::query()->updateOrCreate(
+                ['id' => $row['id']],
+                [
+                    'is_active' => $row['is_active'] ?? true,
+                    'loan_form_code' => $row['loan_form_code'],
+                    'sku' => $row['sku'],
+                    'loan_item_name' => $row['loan_item_name'],
+                    'rental_price_per_day' => $row['rental_price_per_day'] ?? 0,
+                    'item_price' => $row['item_price'] ?? 0,
+                    'inventory_id' => $this->existingInventoryId($row['inventory_id'] ?? null),
+                    'item_id' => $this->mappedCatalogIdForType((int) ($row['item_id'] ?? 0), (string) ($row['item_type'] ?? '')) ?? null,
+                    'item_type' => $row['item_type'] ?? null,
+                    'warehouse_id' => $this->existingWarehouseId($row['warehouse_id'] ?? null),
+                    'size' => $row['size'] ?? null,
+                    'is_returned' => $row['is_returned'] ?? false,
+                    'created_by' => $this->existingEmployeeId($row['created_by'] ?? null),
+                    'updated_by' => $this->existingEmployeeId($row['updated_by'] ?? null),
+                    'remark' => $row['remark'] ?? null,
+                    'created_at' => $row['created_at'] ?? now(),
+                    'updated_at' => $row['updated_at'] ?? now(),
+                ]
+            );
+        }
+
+        foreach ($data['return_forms'] ?? [] as $row) {
+            ReturnForm::query()->updateOrCreate(
+                ['code' => $row['code']],
+                [
+                    'id' => $row['id'] ?? null,
+                    'is_active' => $row['is_active'] ?? true,
+                    'loan_form_code' => $row['loan_form_code'],
+                    'returnee_name' => $row['returnee_name'],
+                    'returnee_phone' => $row['returnee_phone'],
+                    'returnee_citizen_id_number' => $row['returnee_citizen_id_number'] ?? null,
+                    'remark' => $row['remark'] ?? null,
+                    'returnee_role' => $row['returnee_role'] ?? null,
+                    'method' => $row['method'] ?? null,
+                    'created_by' => $this->existingEmployeeId($row['created_by'] ?? null),
+                    'updated_by' => $this->existingEmployeeId($row['updated_by'] ?? null),
+                    'status' => $row['status'] ?? 'INSPECTED',
+                    'created_at' => $row['created_at'] ?? now(),
+                    'updated_at' => $row['updated_at'] ?? now(),
+                ]
+            );
+        }
+
+        foreach ($data['return_form_items'] ?? [] as $row) {
+            ReturnFormItem::query()->updateOrCreate(
+                ['id' => $row['id']],
+                [
+                    'is_active' => $row['is_active'] ?? true,
+                    'return_form_code' => $row['return_form_code'],
+                    'sku' => $row['sku'],
+                    'return_item_name' => $row['return_item_name'],
+                    'rental_price_per_day' => $row['rental_price_per_day'] ?? 0,
+                    'condition_on_return' => $row['condition_on_return'] ?? 'GOOD',
+                    'inventory_id' => $this->existingInventoryId($row['inventory_id'] ?? null),
+                    'item_id' => $this->mappedCatalogIdForType((int) ($row['item_id'] ?? 0), (string) ($row['item_type'] ?? '')) ?? null,
+                    'item_type' => $row['item_type'] ?? null,
+                    'warehouse_id' => $this->existingWarehouseId($row['warehouse_id'] ?? null),
+                    'size' => $row['size'] ?? null,
+                    'created_by' => $this->existingEmployeeId($row['created_by'] ?? null),
+                    'updated_by' => $this->existingEmployeeId($row['updated_by'] ?? null),
+                    'remark' => $row['remark'] ?? null,
+                    'created_at' => $row['created_at'] ?? now(),
+                    'updated_at' => $row['updated_at'] ?? now(),
+                ]
+            );
+        }
+
+        foreach ($data['penalty_forms'] ?? [] as $row) {
+            PenaltyForm::query()->updateOrCreate(
+                ['code' => $row['code']],
+                [
+                    'id' => $row['id'] ?? null,
+                    'is_active' => $row['is_active'] ?? true,
+                    'loan_form_code' => $row['loan_form_code'] ?? null,
+                    'return_form_code' => $row['return_form_code'] ?? null,
+                    'reason' => $row['reason'],
+                    'amount' => $row['amount'] ?? 0,
+                    'created_by' => $this->existingEmployeeId($row['created_by'] ?? null),
+                    'updated_by' => $this->existingEmployeeId($row['updated_by'] ?? null),
+                    'status' => $row['status'] ?? 'ISSUED',
+                    'remark' => $row['remark'] ?? null,
+                    'created_at' => $row['created_at'] ?? now(),
+                    'updated_at' => $row['updated_at'] ?? now(),
+                ]
+            );
+        }
+
+        foreach ($data['invoices'] ?? [] as $row) {
+            Invoice::query()->updateOrCreate(
+                ['code' => $row['code']],
+                [
+                    'id' => $row['id'] ?? null,
+                    'is_active' => $row['is_active'] ?? true,
+                    'loan_form_code' => $row['loan_form_code'] ?? null,
+                    'return_form_code' => $row['return_form_code'] ?? null,
+                    'penalty_form_code' => $row['penalty_form_code'] ?? null,
+                    'total_amount' => $row['total_amount'] ?? 0,
+                    'payment_amount' => $row['payment_amount'] ?? 0,
+                    'rental_amount' => $row['rental_amount'] ?? 0,
+                    'penalty_amount' => $row['penalty_amount'] ?? 0,
+                    'refund_amount' => $row['refund_amount'] ?? 0,
+                    'payment_method' => $row['payment_method'] ?? null,
+                    'payer_name' => $row['payer_name'] ?? null,
+                    'payer_phone' => $row['payer_phone'] ?? null,
+                    'payer_citizen_id_number' => $row['payer_citizen_id_number'] ?? null,
+                    'paid_at' => $row['paid_at'] ?? null,
+                    'note' => $row['note'] ?? null,
+                    'created_by' => $this->existingEmployeeId($row['created_by'] ?? null),
+                    'updated_by' => $this->existingEmployeeId($row['updated_by'] ?? null),
+                    'status' => $row['status'] ?? 'ISSUED',
+                    'created_at' => $row['created_at'] ?? now(),
+                    'updated_at' => $row['updated_at'] ?? now(),
                 ]
             );
         }
@@ -941,6 +1106,44 @@ class JsonMockDataSeeder extends Seeder
     private function mappedCatalogId(int $jsonItemId): ?int
     {
         return $this->catalogItemIdMap[$jsonItemId] ?? null;
+    }
+
+    private function mappedCatalogIdForType(int $jsonItemId, string $itemType): ?int
+    {
+        return $this->catalogItemIdMapByType[$itemType][$jsonItemId] ?? null;
+    }
+
+    private function existingEmployeeId(mixed $id): ?int
+    {
+        if ($id === null || $id === '') {
+            return null;
+        }
+
+        $employeeId = (int) $id;
+
+        return Employee::query()->whereKey($employeeId)->exists() ? $employeeId : null;
+    }
+
+    private function existingInventoryId(mixed $id): ?int
+    {
+        if ($id === null || $id === '') {
+            return null;
+        }
+
+        $inventoryId = (int) $id;
+
+        return InventoryItem::query()->whereKey($inventoryId)->exists() ? $inventoryId : null;
+    }
+
+    private function existingWarehouseId(mixed $id): ?int
+    {
+        if ($id === null || $id === '') {
+            return null;
+        }
+
+        $warehouseId = (int) $id;
+
+        return Warehouse::query()->whereKey($warehouseId)->exists() ? $warehouseId : null;
     }
 
     private function warehouseCode(array $warehouse): string
