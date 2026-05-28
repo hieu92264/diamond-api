@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -39,6 +40,24 @@ class AuthTest extends TestCase
             ->assertOk()
             ->assertJsonPath('username', 'admin')
             ->assertJsonPath('role', UserRole::ADMIN->value);
+    }
+
+    public function test_login_with_wrong_password_returns_bad_request(): void
+    {
+        User::factory()->create([
+            'username' => 'admin',
+            'password' => 'secret123',
+            'role' => UserRole::ADMIN,
+            'is_active' => true,
+        ]);
+
+        $this->postJson('/api/auth/login', [
+            'username' => 'admin',
+            'password' => 'wrong-password',
+        ])
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertJsonPath('statusCode', Response::HTTP_BAD_REQUEST)
+            ->assertJsonMissingPath('access_token');
     }
 
     public function test_role_middleware_blocks_non_matching_roles(): void

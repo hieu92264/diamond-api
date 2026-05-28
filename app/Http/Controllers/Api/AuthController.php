@@ -20,7 +20,7 @@ class AuthController extends Controller
             'password' => $data['password'],
             'is_active' => true,
         ])) {
-            return $this->error(null, 'Tên đăng nhập hoặc mật khẩu không đúng, hoặc tài khoản đang bị khóa.', Response::HTTP_UNAUTHORIZED);
+            return $this->error(null, 'Tên đăng nhập hoặc mật khẩu không đúng, hoặc tài khoản đang bị khóa.', Response::HTTP_BAD_REQUEST);
         }
 
         /** @var User $user */
